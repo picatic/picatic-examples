@@ -12,4 +12,4 @@ Visit http://developer.picatic.com to learn more.
 Picatic Anywhere: http://promo.picatic.com/anywhere/
 
 React Checkout: https://picatic-react-demo.now.sh/
-[![image](/assets/react-example-v2.gif)](https://picatic-react-demo.now.sh/)
+[![Checkout Gif](/assets/react-checkout.gif)](https://picatic-react-demo.now.sh/)
