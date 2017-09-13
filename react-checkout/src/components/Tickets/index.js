@@ -27,11 +27,14 @@ class Tickets extends Component {
 
     const roundPrice = parseFloat(price)
 
-    const ticketsRemaining = quantity - quantity_sold
+    const ticketsRemaining = Math.max(quantity - quantity_sold, 0)
+
     const maxQuantity =
       max_quantity > 0
         ? Math.min(max_quantity, ticketsRemaining)
         : ticketsRemaining
+
+    const soldOut = maxQuantity === 0
 
     return (
       <div key={ticket.id} className="mdl-grid align-items-center">
@@ -40,20 +43,25 @@ class Tickets extends Component {
           <div className="form-row align-items-center float-right">
             {/* TODO: Replace static currency with dynamic value */}
             <div className="col-auto">${roundPrice}</div>
-            <div className="col-auto">x</div>
-            <div className="col-auto">
-              <div className="input-group">
-                <input
-                  type="number"
-                  className="form-control text-center"
-                  value={selectedQuantity}
-                  onChange={this.selectTicket}
-                  placeholder="0"
-                  min="0"
-                  max={maxQuantity}
-                />
+            {!soldOut && <div className="col-auto">x</div>}
+
+            {!soldOut && (
+              <div className="col-auto">
+                <div className="input-group">
+                  <input
+                    type="number"
+                    className="form-control text-center"
+                    value={selectedQuantity}
+                    onChange={this.selectTicket}
+                    placeholder="0"
+                    min="0"
+                    max={maxQuantity}
+                  />
+                </div>
               </div>
-            </div>
+            )}
+
+            {soldOut && <div className="col-auto">SOLD OUT</div>}
           </div>
         </div>
       </div>

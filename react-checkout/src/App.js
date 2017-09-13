@@ -16,9 +16,6 @@ const host = 'https://api-staging.picatic.com/v2'
 
 class App extends Component {
   state = {
-    // TODO: Replace with your event id
-    eventId: 74701,
-
     event: null,
     tickets: [],
     checkoutObj: null,
@@ -28,8 +25,17 @@ class App extends Component {
   }
 
   componentWillMount = () => {
-    this.getEvent()
-    this.getTickets()
+    const paramsId = this.props.match.params.id
+    const hasParamsId = paramsId !== undefined
+
+    // TODO: Replace with your event id
+    let eventId = 74701
+
+    eventId = hasParamsId ? paramsId : eventId
+
+    this.setState({ eventId }, () => {
+      this.getEvent()
+    })
   }
 
   /**
@@ -44,11 +50,13 @@ class App extends Component {
   getEvent = () => {
     const { eventId } = this.state
 
-    const url = `${host}/event/${eventId}`
+    const url = `${host}/event?filter[id]=${eventId}&page[limit]=10&page[offset]=0&include=event_owner`
 
     fetch(url, { method: 'GET' })
       .then(res => res.json())
-      .then(event => this.setState({ event: event.data }))
+      .then(event => this.setState({ event: event.data[0] }, () => {
+        this.getTickets()
+      }))
       .catch(err => console.log(err))
   }
 
@@ -63,7 +71,8 @@ class App extends Component {
    * http://developer.picatic.com/v2/api/#methods-ticketprice-find
    */
   getTickets = () => {
-    const { eventId } = this.state
+    const { event } = this.state
+    const eventId = Number(event.id)
     const url = `${host}/ticket_price?filter[event_id]=${eventId}&page[limit]=10&page[offset]=0`
 
     fetch(url, { method: 'GET' })
@@ -83,7 +92,7 @@ class App extends Component {
    * http://developer.picatic.com/v2/api/#methods-checkout-create
    */
   createCheckout = ticket => {
-    const { eventId, selectedTickets } = this.state
+    const { event, selectedTickets } = this.state
     const url = `${host}/checkout`
 
     let tickets = []
@@ -101,7 +110,7 @@ class App extends Component {
     const body = JSON.stringify({
       data: {
         attributes: {
-          event_id: eventId,
+          event_id: Number(event.id),
           tickets
         },
         type: 'checkout'
@@ -157,14 +166,14 @@ class App extends Component {
       return false
     }
 
-    const { eventId, checkoutObj } = this.state
+    const { event, checkoutObj } = this.state
 
     const url = `${host}/checkout/${checkoutObj.id}/payment`
 
     const body = JSON.stringify({
       data: {
         attributes: {
-          event_id: eventId,
+          event_id: Number(event.id),
           payment: {
             source: {
               card_token: payload.token.id
