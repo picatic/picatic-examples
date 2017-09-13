@@ -21,7 +21,7 @@ class App extends Component {
     checkoutObj: null,
     formSubmitted: false,
     selectedTickets: [],
-    checkoutStatus: null
+    checkoutStatus: null,
   }
 
   componentWillMount = () => {
@@ -29,13 +29,11 @@ class App extends Component {
     const hasParamsId = paramsId !== undefined
 
     // TODO: Replace with your event id
-    let eventId = 74701
+    let eventSlug = 74701
 
-    eventId = hasParamsId ? paramsId : eventId
+    eventSlug = hasParamsId ? paramsId : eventSlug
 
-    this.setState({ eventId }, () => {
-      this.getEvent()
-    })
+    this.getEvent(eventSlug)
   }
 
   /**
@@ -47,16 +45,31 @@ class App extends Component {
    * API Doc Reference:
    * http://developer.picatic.com/v2/api/#methods-event-read
    */
-  getEvent = () => {
-    const { eventId } = this.state
+  getEvent = eventSlug => {
+    const url = `${host}/event/${eventSlug}`
 
+    fetch(url, { method: 'GET' })
+      .then(res => res.json())
+      .then(json => {
+        const event = json.data
+
+        this.getStripeKey(event.id)
+        this.getTickets(event.id)
+        this.setState({ event })
+      })
+      .catch(err => console.log(err))
+  }
+
+  getStripeKey = eventId => {
     const url = `${host}/event?filter[id]=${eventId}&page[limit]=10&page[offset]=0&include=event_owner`
 
     fetch(url, { method: 'GET' })
       .then(res => res.json())
-      .then(event => this.setState({ event: event.data[0] }, () => {
-        this.getTickets()
-      }))
+      .then(event =>
+        this.setState({
+          stripeKey: event.included[0].attributes.stripe_publishable_key
+        })
+      )
       .catch(err => console.log(err))
   }
 
@@ -70,9 +83,7 @@ class App extends Component {
    * API Doc Reference:
    * http://developer.picatic.com/v2/api/#methods-ticketprice-find
    */
-  getTickets = () => {
-    const { event } = this.state
-    const eventId = Number(event.id)
+  getTickets = eventId => {
     const url = `${host}/ticket_price?filter[event_id]=${eventId}&page[limit]=10&page[offset]=0`
 
     fetch(url, { method: 'GET' })
@@ -284,7 +295,8 @@ class App extends Component {
       checkoutObj,
       formSubmitted,
       status,
-      selectedTickets
+      selectedTickets,
+      stripeKey
     } = this.state
 
     const noEvent = event === null
@@ -342,6 +354,7 @@ class App extends Component {
         <StripeCheckout
           checkoutPayment={this.checkoutPayment}
           checkoutObj={checkoutObj}
+          stripeKey={stripeKey}
         />
       )
     } else {
