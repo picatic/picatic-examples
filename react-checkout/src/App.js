@@ -21,7 +21,7 @@ class App extends Component {
     checkoutObj: null,
     formSubmitted: false,
     selectedTickets: [],
-    checkoutStatus: null,
+    checkoutStatus: null
   }
 
   componentWillMount = () => {
