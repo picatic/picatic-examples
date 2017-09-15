@@ -1,20 +1,21 @@
 import React, { Component } from 'react'
 import moment from 'moment'
 import './App.css'
+import Button from './components/Button'
 
-const host = 'https://api-staging.picatic.com/v2'
+const host = 'https://api.picatic.com/v2'
 
 class App extends Component {
   state = {
     event: false
   }
-  componentWillMount() {
-    const { match } = this.props
 
-    const eventSlug = match.params.slug
+  componentWillMount() {
+    const eventSlug = this.props.match.params.slug
 
     this.getEvent(eventSlug)
   }
+
   getEvent = eventSlug => {
     const url = `${host}/event/${eventSlug}`
     fetch(url, { method: 'GET' })
@@ -22,6 +23,7 @@ class App extends Component {
       .then(event => this.setState({ event: event.data }))
       .catch(err => console.log(err))
   }
+
   render() {
     const { event } = this.state
 
@@ -55,10 +57,11 @@ class App extends Component {
     const endDate = moment(end_date).format('MMMM Do, YYYY')
     const endTime = `- ${end_time}`
 
+
     return (
       <div className="container-fluid">
-        <header className="header" style={styles.headerBackground}>
-          <section className="row h-100 text-center">
+        <header>
+          <section className="row text-center header" style={styles.headerBackground}>
             <div className="col-12 align-self-center">
               <h1 className="text-white">{title}</h1>
             </div>
@@ -81,9 +84,7 @@ class App extends Component {
 
         <section className="row ticket">
           <div className="col align-self-center">
-            <a href="#" className="btn btn-primary">
-              Get Tickets
-            </a>
+            <Button eventId={event.id} />
           </div>
         </section>
       </div>
