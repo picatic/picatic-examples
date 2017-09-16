@@ -108,6 +108,10 @@ class App extends Component {
       </div>
     )
   }
+    // Render js classes for Material Design Lite
+    componentDidUpdate() {
+      window.componentHandler.upgradeDom()
+    }
 }
 
 export default App
