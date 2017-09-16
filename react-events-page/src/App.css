@@ -1,20 +1,33 @@
 .header {
   height: calc(100vh - 80px);
+  text-align: center;
 }
+
 .header-content {
   height: 100%;
 }
 
+.header-title {
+  color: #fff;
+  font-weight: 300;
+}
+
 .header-footer {
   position: absolute;
-  bottom: 90px;
-  width: 100%
-}
-h6 {
-  color: white;
+  bottom: 95px;
+  min-width: 100%;
+  color: #fff;
 }
 
 .ticket {
   height: 80px;
   text-align: center;
+}
+
+.hero-nav {
+  height: 80px;
+}
+
+.lead-subtitle {
+  color: rgba(255, 255, 255, 0.7);
 }
