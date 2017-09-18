@@ -26,6 +26,10 @@ class App extends Component {
       .catch(err => console.log(err))
   }
 
+  createMarkUp = description => {
+    return { __html: description }
+  }
+
   render() {
     const { event } = this.state
 
@@ -43,6 +47,7 @@ class App extends Component {
       end_date,
       end_time,
       intro_box_opacity,
+      summary,
       venue_name,
       venue_street
     } = event.attributes
@@ -102,16 +107,18 @@ class App extends Component {
             </div>
           </div>
           <div className="row">
-            <div className="col">{description}</div>
+            <div className="col-8">
+              <div className="description" dangerouslySetInnerHTML={this.createMarkUp(description)} />
+            </div>
           </div>
         </section>
       </div>
     )
   }
-    // Render js classes for Material Design Lite
-    componentDidUpdate() {
-      window.componentHandler.upgradeDom()
-    }
+  // Render js classes for Material Design Lite
+  componentDidUpdate() {
+    window.componentHandler.upgradeDom()
+  }
 }
 
 export default App
