@@ -1,0 +1,14 @@
+.mdl-button {
+  &:hover,
+  &:active {
+    text-decoration: none;
+  }
+  &-anywhere {
+    font-size: 17px;
+    height: 56px;
+    line-height: 56px;
+    min-width: 88px;
+    padding: 0 24px;
+    width: 100%;
+  }
+}

@@ -1,3 +1,9 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
 .header {
   height: calc(100vh - 80px);
   text-align: center;
@@ -30,4 +36,28 @@
 
 .lead-subtitle {
   color: rgba(255, 255, 255, 0.7);
+}
+
+.description {
+  h1 {
+    font-size: 34px;
+    font-weight: 500;
+    line-height: 33px;
+  }
+
+  p {
+    color: #535454;
+    font-size: 17px;
+    line-height: 1.47;
+  }
+
+  a {
+    color: #3f51b5;
+    text-decoration: none;
+    &:hover,
+    &:active {
+      color: #303f9f;
+      text-decoration: none;
+    }
+  }
 }
