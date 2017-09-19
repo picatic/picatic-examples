@@ -7,31 +7,27 @@ body {
 .header {
   height: calc(100vh - 80px);
   text-align: center;
+  &-content {
+    height: 100%;
+  }
+  &-title {
+    color: #fff;
+    font-weight: 300;
+  }
+  &-footer {
+    position: absolute;
+    bottom: 95px;
+    min-width: 100%;
+    color: #fff;
+  }
 }
 
-.header-content {
-  height: 100%;
-}
-
-.header-title {
-  color: #fff;
-  font-weight: 300;
-}
-
-.header-footer {
-  position: absolute;
-  bottom: 95px;
-  min-width: 100%;
-  color: #fff;
-}
-
-.ticket {
-  height: 80px;
-  text-align: center;
-}
-
-.hero-nav {
-  height: 80px;
+.nav {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 6px 4px 0 rgba(0, 0, 0, 0.03);
+  background: #FFF;
+  .row {
+    height: 80px;
+  }
 }
 
 .lead-subtitle {
@@ -48,7 +44,6 @@ body {
   p {
     color: #535454;
     font-size: 17px;
-    line-height: 1.47;
   }
 
   a {
@@ -59,5 +54,20 @@ body {
       color: #303f9f;
       text-decoration: none;
     }
+  }
+}
+
+.sidebar {
+  .row {
+    margin-top: 40px;
+  }
+  i {
+    padding-top: 3px;
+  }
+  p {
+    color: #535454;
+    font-size: 17px;
+    margin-bottom: 10px;
+    padding-left: 16px;
   }
 }

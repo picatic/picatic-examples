@@ -72,8 +72,8 @@ class App extends Component {
     const endTime = moment(eventEnd).format('h:mm A')
 
     return (
-      <div className="container-fluid">
-        <header>
+      <div>
+        <header className="container-fluid">
           <section className="row header" style={styles.headerBackground}>
             <div className="col-12 align-self-center">
               <h1 className="header-title">{title}</h1>
@@ -95,20 +95,59 @@ class App extends Component {
           </section>
         </header>
 
-        <section className="container">
-          <div className="row hero-nav">
-            <div className="col-md-8 align-self-center">
-              <button className="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--primary">
-                Details
-              </button>
-            </div>
-            <div className="col-md-4 align-self-center">
-              <Button eventId={event.id} />
+        <nav className="nav sticky-top">
+          <div className="container">
+            <div className="row">
+              <div className="col-md-8 align-self-center">
+                <a
+                  className="mdl-button mdl-js-button mdl-js-ripple-effect"
+                  href="#details"
+                >
+                  Details
+                </a>
+              </div>
+              <div className="col-md-4 align-self-center">
+                <Button eventId={event.id} />
+              </div>
             </div>
           </div>
+        </nav>
+
+        <section className="container mt-4" id="details">
           <div className="row">
             <div className="col-8">
-              <div className="description" dangerouslySetInnerHTML={this.createMarkUp(description)} />
+              <div
+                className="description"
+                dangerouslySetInnerHTML={this.createMarkUp(description)}
+              />
+            </div>
+            <div className="col-4 sidebar">
+              <div className="row">
+                <div className="col-1">
+                  <i className="material-icons">event</i>
+                </div>
+                <div className="col-11">
+                  <p>
+                    {startDate} {start_time && startTime} to
+                    <br />
+                    {endDate} {end_date && endTime}
+                  </p>
+                  <a href="#" className="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored">Add to Calendar</a>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-1">
+                  <i className="material-icons">event</i>
+                </div>
+                <div className="col-11">
+                  <p>
+                    {startDate} {start_time && startTime} to
+                    <br />
+                    {endDate} {end_date && endTime}
+                  </p>
+                  <a href="#" className="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored">Add to Calendar</a>
+                </div>
+              </div>
             </div>
           </div>
         </section>
