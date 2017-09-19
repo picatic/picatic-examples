@@ -12,7 +12,7 @@ body {
   }
   &-title {
     color: #fff;
-    font-weight: 300;
+    font-weight: 500;
   }
   &-footer {
     position: absolute;
@@ -60,6 +60,7 @@ body {
 .sidebar {
   .row {
     margin-top: 40px;
+    margin-bottom: 40px;
   }
   i {
     padding-top: 3px;
