@@ -49,6 +49,7 @@ class App extends Component {
       intro_box_opacity,
       summary,
       venue_name,
+      venue_locality,
       venue_street
     } = event.attributes
 
@@ -71,6 +72,17 @@ class App extends Component {
     const startTime = moment(eventStart).format('h:mm A')
     const endTime = moment(eventEnd).format('h:mm A')
 
+    // Event Spans over different days
+    let lineOne = `${startDate}, ${startTime} - `
+    let lineTwo = `${endDate}${end_time && `, ${endTime}`}`
+
+    // Event is only on one day
+    const sameDay = start_date === end_date
+    if (sameDay) {
+      lineOne = `${startDate}, ${startTime}${end_date && ' -'}`
+      lineTwo = `${endDate} - ${end_time && ` - ${endTime}`}`
+    }
+
     return (
       <div>
         <header className="container-fluid">
@@ -82,11 +94,8 @@ class App extends Component {
 
           <section className="row header-footer justify-content-around">
             <div className="col-5 header-left">
-              <div className="lead">{startDate}</div>
-              <p className="lead-subtitle">
-                {start_time && `${startTime}`}
-                {end_time && ` - ${endTime}`}
-              </p>
+              <div className="lead">{lineOne}</div>
+              <p className="lead-subtitle">{lineTwo}</p>
             </div>
             <div className="col-5 text-right">
               <div className="lead">{venue_name}</div>
@@ -128,24 +137,36 @@ class App extends Component {
                 </div>
                 <div className="col-11">
                   <p>
-                    {startDate} {start_time && startTime} to
+                    {lineOne}
                     <br />
-                    {endDate} {end_date && endTime}
+                    {lineTwo}
                   </p>
-                  <a href="#" className="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored">Add to Calendar</a>
+                  <a
+                    href="#"
+                    className="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored"
+                  >
+                    Add to Calendar
+                  </a>
                 </div>
               </div>
               <div className="row">
                 <div className="col-1">
-                  <i className="material-icons">event</i>
+                  <i className="material-icons">room</i>
                 </div>
                 <div className="col-11">
                   <p>
-                    {startDate} {start_time && startTime} to
+                    {venue_name}
                     <br />
-                    {endDate} {end_date && endTime}
+                    {venue_street}
+                    {venue_street && venue_locality && ', '}
+                    {venue_locality}
                   </p>
-                  <a href="#" className="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored">Add to Calendar</a>
+                  <a
+                    href="#"
+                    className="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored"
+                  >
+                    View Map
+                  </a>
                 </div>
               </div>
             </div>
