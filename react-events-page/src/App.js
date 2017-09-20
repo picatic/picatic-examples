@@ -46,6 +46,7 @@ class App extends Component {
       start_time,
       end_date,
       end_time,
+      logo_uri,
       intro_box_opacity,
       summary,
       venue_name,
@@ -53,7 +54,10 @@ class App extends Component {
       venue_street
     } = event.attributes
 
+    const map = `https://www.google.com/maps?q=${venue_name} ${venue_street} ${venue_locality}`
+
     const imageURI = cover_image_uri.substring(50)
+
 
     const styles = {
       headerBackground: {
@@ -88,6 +92,7 @@ class App extends Component {
         <header className="container-fluid">
           <section className="row header" style={styles.headerBackground}>
             <div className="col-12 align-self-center">
+              {logo_uri}
               <h1 className="header-title">{title}</h1>
             </div>
           </section>
@@ -141,12 +146,6 @@ class App extends Component {
                     <br />
                     {lineTwo}
                   </p>
-                  <a
-                    href="#"
-                    className="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored"
-                  >
-                    Add to Calendar
-                  </a>
                 </div>
               </div>
               <div className="row">
@@ -162,7 +161,8 @@ class App extends Component {
                     {venue_locality}
                   </p>
                   <a
-                    href="#"
+                    href={map}
+                    target="_blank"
                     className="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored"
                   >
                     View Map

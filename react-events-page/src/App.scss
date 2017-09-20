@@ -35,10 +35,23 @@ body {
 }
 
 .description {
+  margin-bottom: 80px;
   h1 {
     font-size: 34px;
     font-weight: 500;
     line-height: 33px;
+  }
+
+  h2 {
+    font-size: 30px;
+  }
+
+  h3 {
+    font-size: 28px;
+  }
+
+  h4 {
+    font-size: 26px;
   }
 
   p {
