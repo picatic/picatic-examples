@@ -57,8 +57,6 @@ class App extends Component {
     const map = `https://www.google.com/maps?q=${venue_name} ${venue_street} ${venue_locality}`
 
     const imageURI = cover_image_uri.substring(50)
-
-
     const styles = {
       headerBackground: {
         background: `url(https://picatic.global.ssl.fastly.net/events/${imageURI}?filter=overlay&colors=070826&opacity=${intro_box_opacity *
@@ -83,8 +81,8 @@ class App extends Component {
     // Event is only on one day
     const sameDay = start_date === end_date
     if (sameDay) {
-      lineOne = `${startDate}, ${startTime}${end_date && ' -'}`
-      lineTwo = `${endDate} - ${end_time && ` - ${endTime}`}`
+      lineOne = startDate
+      lineTwo = `${startTime}${end_time && ` - ${endTime}`}`
     }
 
     return (
@@ -127,7 +125,8 @@ class App extends Component {
           </div>
         </nav>
 
-        <section className="container mt-4" id="details">
+        <span className="anchor" id="details"></span>
+        <section className="container mt-4">
           <div className="row">
             <div className="col-8">
               <div
