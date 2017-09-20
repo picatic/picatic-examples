@@ -126,7 +126,8 @@ class App extends Component {
         </nav>
 
         <span className="anchor" id="details"></span>
-        <section className="container mt-4">
+
+        <section className="container">
           <div className="row">
             <div className="col-8">
               <div
@@ -174,6 +175,7 @@ class App extends Component {
       </div>
     )
   }
+  
   // Render js classes for Material Design Lite
   componentDidUpdate() {
     window.componentHandler.upgradeDom()
