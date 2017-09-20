@@ -35,7 +35,7 @@ body {
 }
 
 .description {
-  margin-bottom: 80px;
+  padding-bottom: 40px;
   h1 {
     font-size: 34px;
     font-weight: 500;
@@ -84,4 +84,11 @@ body {
     margin-bottom: 10px;
     padding-left: 16px;
   }
+}
+
+.anchor {
+  display: block;
+  height: 80px; /* same height as nav */
+  margin-top: -80px; /* same height as nav */
+  visibility: hidden;
 }
