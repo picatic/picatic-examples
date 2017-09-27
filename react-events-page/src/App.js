@@ -64,14 +64,15 @@ class App extends Component {
       }
     }
 
-    // Event Time
-    const eventStart = `${start_date}:${start_time}`
-    const eventEnd = `${end_date}:${end_time}`
+    // Format Days
+    const startDate = moment(start_date).format('MMMM Do, 2017')
+    const endDate = moment(end_date).format('MMMM Do, 2017')
 
-    // Format Event Times
-    const startDate = moment(eventStart).format('MMMM Do, 2017')
-    const endDate = moment(eventEnd).format('MMMM Do, 2017')
+    // Format Times
+    const eventStart = `${start_date}:${start_time}`
     const startTime = moment(eventStart).format('h:mm A')
+
+    const eventEnd = `${end_date}:${end_time}`
     const endTime = moment(eventEnd).format('h:mm A')
 
     // Event Spans over different days
@@ -82,8 +83,10 @@ class App extends Component {
     const sameDay = start_date === end_date
     if (sameDay) {
       lineOne = startDate
-      lineTwo = `${startTime}${end_time && ` - ${endTime}`}`
+      lineTwo = start_time ? `${startTime}${end_time && ` - ${endTime}`}` : ''
     }
+
+    const renderMap = venue_name || venue_street || venue_locality
 
     return (
       <div>
@@ -91,18 +94,28 @@ class App extends Component {
           <section className="row header" style={styles.headerBackground}>
             <div className="col-12 align-self-center">
               {logo_uri}
-              <h1 className="header-title">{title}</h1>
+              <h1 className="header-title">
+                {title}
+              </h1>
             </div>
           </section>
 
           <section className="row header-footer justify-content-around">
             <div className="col-5 header-left">
-              <div className="lead">{lineOne}</div>
-              <p className="lead-subtitle">{lineTwo}</p>
+              <div className="lead">
+                {lineOne}
+              </div>
+              <p className="lead-subtitle">
+                {lineTwo}
+              </p>
             </div>
             <div className="col-5 text-right">
-              <div className="lead">{venue_name}</div>
-              <p className="lead-subtitle">{venue_street}</p>
+              <div className="lead">
+                {venue_name}
+              </div>
+              <p className="lead-subtitle">
+                {venue_street}
+              </p>
             </div>
           </section>
         </header>
@@ -125,7 +138,7 @@ class App extends Component {
           </div>
         </nav>
 
-        <span className="anchor" id="details"></span>
+        <span className="anchor" id="details" />
 
         <section className="container">
           <div className="row">
@@ -148,34 +161,35 @@ class App extends Component {
                   </p>
                 </div>
               </div>
-              <div className="row">
-                <div className="col-1">
-                  <i className="material-icons">room</i>
-                </div>
-                <div className="col-11">
-                  <p>
-                    {venue_name}
-                    <br />
-                    {venue_street}
-                    {venue_street && venue_locality && ', '}
-                    {venue_locality}
-                  </p>
-                  <a
-                    href={map}
-                    target="_blank"
-                    className="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored"
-                  >
-                    View Map
-                  </a>
-                </div>
-              </div>
+              {renderMap &&
+                <div className="row">
+                  <div className="col-1">
+                    <i className="material-icons">room</i>
+                  </div>
+                  <div className="col-11">
+                    <p>
+                      {venue_name}
+                      <br />
+                      {venue_street}
+                      {venue_street && venue_locality && ', '}
+                      {venue_locality}
+                    </p>
+                    <a
+                      href={map}
+                      target="_blank"
+                      className="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored"
+                    >
+                      View Map
+                    </a>
+                  </div>
+                </div>}
             </div>
           </div>
         </section>
       </div>
     )
   }
-  
+
   // Render js classes for Material Design Lite
   componentDidUpdate() {
     window.componentHandler.upgradeDom()
