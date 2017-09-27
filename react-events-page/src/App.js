@@ -9,13 +9,16 @@ const host = 'https://api.picatic.com/v2'
 
 class App extends Component {
   state = {
-    event: false
+    event: false,
+    width: 0
   }
 
   componentWillMount() {
     const eventSlug = this.props.match.params.slug
 
     this.getEvent(eventSlug)
+
+    this.setState({ width: window.innerWidth })
   }
 
   getEvent = eventSlug => {
@@ -31,7 +34,7 @@ class App extends Component {
   }
 
   render() {
-    const { event } = this.state
+    const { event, width } = this.state
 
     const noEvent = !event
     if (noEvent) {
@@ -60,7 +63,7 @@ class App extends Component {
     const styles = {
       headerBackground: {
         background: `url(https://picatic.global.ssl.fastly.net/events/${imageURI}?filter=overlay&colors=070826&opacity=${intro_box_opacity *
-          100}) no-repeat center center / cover`
+          100}&width=${width}) no-repeat center center / cover #070826`
       }
     }
 

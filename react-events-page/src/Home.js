@@ -40,7 +40,7 @@ export default class Home extends Component {
         cardBackground: {
           color: '#fff',
           height: '176px',
-          background: `url(https://picatic.global.ssl.fastly.net/events/${imageURI}?filter=overlay&colors=070826&opacity=35&width=1024) no-repeat center center / cover`
+          background: `url(https://picatic.global.ssl.fastly.net/events/${imageURI}?filter=overlay&colors=070826&opacity=35&type=fit&width=512) no-repeat center center / cover #070826`
         }
       }
 
