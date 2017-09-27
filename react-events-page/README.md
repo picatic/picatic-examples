@@ -6,7 +6,7 @@ Built with [create-react-app](https://github.com/facebookincubator/create-react-
 
 #### Demo
 
-[https://react-event-page.now.sh/](https://react-event-page.now.sh/)
+https://react-event-page.now.sh/
 
 # Getting Started
 
