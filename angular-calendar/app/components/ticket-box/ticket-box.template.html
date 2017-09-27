@@ -1,0 +1,20 @@
+<section class="ticket-box">
+	<div ng-hide="!$ctrl.selectedEvent.event_id" class="ng-hide">
+		<div class="event-cover-image" ng-style="{'background-image': 'url(' + $ctrl.selectedEvent.cover_image_uri + ')'}">
+			<h2 class="event-title">{{ $ctrl.selectedEvent.title }}</h2>
+		</div>
+		<p>
+			<a ng-href="https://www.picatic.com/{{$ctrl.selectedEvent.event_id}}" class="picatic-widget-button pwb-small pwb-shamrock">Buy Now</a>
+		</p>
+		<p class="muted">
+			<span>{{ $ctrl.selectedEvent.start.format('dddd MMMM Do YYYY h:mmA') }} - {{ $ctrl.selectedEvent.end.format('h:mmA') }}</span>
+		</p>
+		<p class="muted">{{ $ctrl.selectedEvent.venueName }}, {{ $ctrl.selectedEvent.venueStreet }}, {{ $ctrl.selectedEvent.venueLocality }}</p>
+		<h3>{{ $ctrl.selectedEvent.summary }}</h3>
+		<p ng-bind-html="$ctrl.selectedEvent.description"></p>
+	</div>
+	<p class="ticket-box-placeholder" ng-hide="!!$ctrl.selectedEvent.event_id">
+		Select an event from the calendar to view the event details
+	</p>
+</section>
+<script async src="https://widget.picatic.com/latest/js/embed.min.js" id="picatic-widget-script"></script>
