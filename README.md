@@ -11,5 +11,7 @@ Visit http://developer.picatic.com to learn more.
 
 Picatic Anywhere: http://promo.picatic.com/anywhere/
 
+Event Page: https://react-event-page.now.sh/
+
 React Checkout: https://picatic-react-demo.now.sh/
 [![image](/assets/react-example-v2.gif)](https://picatic-react-demo.now.sh/)
