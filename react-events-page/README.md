@@ -4,6 +4,10 @@ This project is an event page with data pulled from the Picatic Ticketing API.
 
 Built with [create-react-app](https://github.com/facebookincubator/create-react-app), a global command-line utility used to create React projects.
 
+#### Demo
+
+[https://react-event-page.now.sh/](https://react-event-page.now.sh/)
+
 # Getting Started
 
 **1. Download Dependencies:**
@@ -48,7 +52,3 @@ Only files inside `public` can be used from `public/index.html`.<br>
 
 You can, however, create more top-level directories.<br>
 They will be included in the production build so you can use them for things like documentation.
-
-# Event Page
-
-
