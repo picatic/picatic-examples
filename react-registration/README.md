@@ -55,9 +55,9 @@ They will be included in the production build so you can use them for things lik
 
 The ticket checkout process is created through Picatic's Ticketing API and Stripe Elements.
 
-## Step 1: Get Tickets
+## Step 1: Get Event
 
-By updating the `eventId` initial state, the `getTickets()` method will execute on load to `GET` the list of tickets available for your event.
+By updating the `eventSlug` initial state, the `getEvent()` method will execute on load to `GET` the event and list of tickets available for your event.
 
 [Get tickets reference](http://developer.picatic.com/v2/api/#methods-ticketprice-find)
 
@@ -75,19 +75,7 @@ The User is now required to submit there email, first and last name to the check
 
 [Update Checkout reference](http://developer.picatic.com/v2/api/#methods-checkout-update)
 
-## Step 4: Checkout Payment
-
-The payment checkout process is handled by Stripe Elements.<br>
-In this application, we use a Stripe library that loads the Stripe Elements
-as React components. The library is called [react-stripe-elements.](https://github.com/azmenak/react-stripe-checkout)
-
-To learn more about Stripe Elements go [here.](https://stripe.com/docs/elements)
-
-Once the user has filled in the Stripe Elements forms, the `checkoutPayment()` method will `POST` the Stripe `card_token` and Picatic `event_id` to the current checkout.
-
-[Checkout Payment reference](http://developer.picatic.com/v2/api/#methods-checkout-payment)
-
-## Step 5: Confirm Checkout
+## Step 4: Confirm Checkout
 
 The user now confirms their checkout. The `confirmCheckout()` will `POST` the completion of the registration process and validate their purchase.
 
