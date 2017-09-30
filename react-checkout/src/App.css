@@ -1,5 +1,6 @@
 /* Event Card */
 .event-card-wide.mdl-card {
+  margin-top: 30px;
   width: 512px;
 }
 
@@ -40,4 +41,17 @@
 input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 30px white inset;
   -webkit-text-fill-color: #212529 !important;
+}
+
+@media (max-width: 512px) {
+  .event-card-wide.mdl-card {
+    margin-top: 0px;
+    width: 100%;
+  }
+  .mdl-shadow--1dp {
+    border-radius: 0px;
+  }
+  .ticket-form {
+    text-align: center;
+  }
 }

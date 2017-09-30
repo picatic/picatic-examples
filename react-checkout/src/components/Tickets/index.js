@@ -5,7 +5,17 @@ export default class Tickets extends Component {
     const { ticket, handleClick } = this.props
     const { name, quantity, quantity_sold } = this.props.ticket.attributes
 
-    const soldOut = quantity - quantity_sold
+    const soldOut = quantity - quantity_sold < 1
+
+    const button = (
+      <button
+        className="mdl-button mdl-button--raised mdl-button--primary mdl-js-button mdl-js-ripple-effect"
+        onClick={() => handleClick(ticket)}
+      >
+        Register
+      </button>
+    )
+    const ticketRegistration = soldOut ? 'Sold Out' : button
 
     return (
       <div key={ticket.id} className="row p-3">
@@ -13,12 +23,7 @@ export default class Tickets extends Component {
           {name}
         </div>
         <div className="col-4 text-right">
-          <button
-            className="mdl-button mdl-button--raised mdl-button--primary mdl-js-button mdl-js-ripple-effect"
-            onClick={() => handleClick(ticket)}
-          >
-            Register
-          </button>
+          {ticketRegistration}
         </div>
       </div>
     )
