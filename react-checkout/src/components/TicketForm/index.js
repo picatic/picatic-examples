@@ -1,17 +1,12 @@
 import React, { Component } from 'react'
 import Button from '../Button'
 
-class TicketForm extends Component {
+export default class TicketForm extends Component {
   state = {
     first_name: '',
     last_name: '',
     email: '',
     validForm: false
-  }
-
-  // Render js classes for Material Design Lite
-  componentDidMount() {
-    window.componentHandler.upgradeDom()
   }
 
   handleChange = ev => {
@@ -98,6 +93,8 @@ class TicketForm extends Component {
       </form>
     )
   }
+  // Render js classes for Material Design Lite
+  componentDidMount() {
+    window.componentHandler.upgradeDom()
+  }
 }
-
-export default TicketForm

@@ -3,72 +3,45 @@ import update from 'immutability-helper'
 import _ from 'lodash'
 import './App.css'
 
-import Button from './components/Button'
 import Tickets from './components/Tickets'
 import TicketForm from './components/TicketForm'
-import StripeCheckout from './components/StripeCheckout'
 
-// Production Picatic API host
-// const host = 'https://api.picatic.com/v2'
+const host = 'https://api.picatic.com/v2'
 
-// Picatic API Staging Host
-const host = 'https://api-staging.picatic.com/v2'
-
-class App extends Component {
+export default class App extends Component {
   state = {
-    // TODO: Replace with your event id
-    eventId: 74701,
+    eventSlug: "eduhacks-workshop",
 
     event: null,
     tickets: [],
     checkoutObj: null,
-    formSubmitted: false,
-    selectedTickets: [],
-    checkoutStatus: null
+    checkoutStatus: null,
+    formSubmitted: false
   }
 
   componentWillMount = () => {
     this.getEvent()
-    this.getTickets()
   }
 
   /**
    * getEvent() gets information about an event.
-   * 
+   *
    * Example endpoint:
    * https://api.picatic.com/v2/event/74701
-   * 
+   *
    * API Doc Reference:
    * http://developer.picatic.com/v2/api/#methods-event-read
    */
   getEvent = () => {
-    const { eventId } = this.state
+    const { eventSlug } = this.state
 
-    const url = `${host}/event/${eventId}`
-
-    fetch(url, { method: 'GET' })
-      .then(res => res.json())
-      .then(event => this.setState({ event: event.data }))
-      .catch(err => console.log(err))
-  }
-
-  /**
-   * getTickets() sets an array of tickets to state.
-   * The array of tickets are filtered by a particular event
-   *
-   * Example endpoint:
-   * https://api.picatic.com/v2/ticket_price?filter[event_id]=49366&page[limit]=10&page[offset]=0
-   *
-   * API Doc Reference:
-   * http://developer.picatic.com/v2/api/#methods-ticketprice-find
-   */
-  getTickets = () => {
-    const { eventId } = this.state
-    const url = `${host}/ticket_price?filter[event_id]=${eventId}&page[limit]=10&page[offset]=0`
+    const url = `${host}/event/${eventSlug}?fields[event]=title,summary,cover_image_uri&include=ticket_prices&fields[ticket_price]=name`
 
     fetch(url, { method: 'GET' })
       .then(res => res.json())
-      .then(response => this.setState({ tickets: response.data }))
+      .then(event =>
+        this.setState({ event: event.data, tickets: event.included })
+      )
       .catch(err => console.log(err))
   }
 
@@ -83,26 +56,21 @@ class App extends Component {
    * http://developer.picatic.com/v2/api/#methods-checkout-create
    */
   createCheckout = ticket => {
-    const { eventId, selectedTickets } = this.state
+    const { event } = this.state
+
     const url = `${host}/checkout`
-
-    let tickets = []
-
-    // Create array of selected tickets
-    selectedTickets.map(ticket => {
-      for (let i = 0; i < ticket.quantity; i++) {
-        tickets.push({
-          ticket_price: { ticket_price_id: Number(ticket.ticket_id) }
-        })
-      }
-      return tickets
-    })
 
     const body = JSON.stringify({
       data: {
         attributes: {
-          event_id: eventId,
-          tickets
+          event_id: Number(event.id),
+          tickets: [
+            {
+              ticket_price: {
+                ticket_price_id: Number(ticket.id)
+              }
+            }
+          ]
         },
         type: 'checkout'
       }
@@ -136,53 +104,19 @@ class App extends Component {
       body: JSON.stringify({ data: checkoutObj })
     })
       .then(res => res.json())
-      .then(response => this.setState({ checkoutObj: response.data }))
+      .then(response =>
+        this.setState(
+          {
+            checkoutObj: response.data
+          },
+          () => {
+            this.confirmCheckout()
+          }
+        )
+      )
       .catch(err => console.log(err))
 
     this.setState({ formSubmitted: true })
-  }
-
-  /**
-   * checkoutPayment() must pass a Stripe card token and the event id.
-   *
-   * Example endpoint:
-   * https://api.picatic.com/v2/checkout/:id/payment
-   *
-   * API Doc Reference:
-   * http://developer.picatic.com/v2/api/#methods-checkout-update
-   */
-  checkoutPayment = payload => {
-    const cardError = payload.error
-    if (cardError) {
-      return false
-    }
-
-    const { eventId, checkoutObj } = this.state
-
-    const url = `${host}/checkout/${checkoutObj.id}/payment`
-
-    const body = JSON.stringify({
-      data: {
-        attributes: {
-          event_id: eventId,
-          payment: {
-            source: {
-              card_token: payload.token.id
-            }
-          }
-        },
-        id: checkoutObj.id,
-        type: 'checkout'
-      }
-    })
-
-    fetch(url, {
-      method: 'POST',
-      body: body
-    })
-      .then(res => res.json())
-      .then(response => this.confirmCheckout())
-      .catch(err => console.log(err))
   }
 
   /**
@@ -244,38 +178,13 @@ class App extends Component {
     this.setState({ checkoutObj: newCheckoutObj })
   }
 
-  selectTickets = (id, quantity) => {
-    const { selectedTickets } = this.state
-
-    // Check if ticket has been selected
-    const index = _.findIndex(
-      selectedTickets,
-      selected => selected.ticket_id === id
-    )
-
-    const ticketIndex = index === -1 ? selectedTickets.length : index
-
-    // Update quantity of ticket selection
-    const updatedSelection = update(selectedTickets, {
-      [ticketIndex]: {
-        $set: {
-          ticket_id: id,
-          quantity: quantity
-        }
-      }
-    })
-
-    this.setState({ selectedTickets: updatedSelection })
-  }
-
   render() {
     const {
       event,
       tickets,
       checkoutObj,
-      formSubmitted,
-      status,
-      selectedTickets
+      checkoutStatus,
+      formSubmitted
     } = this.state
 
     const noEvent = event === null
@@ -292,16 +201,12 @@ class App extends Component {
         .attributes.cover_image_uri}) no-repeat center center / cover`
     }
 
-    const renderTickets = tickets.map(ticket => (
+    const renderTickets = tickets.map(ticket =>
       <Tickets
         key={ticket.id}
         ticket={ticket}
-        selectTickets={this.selectTickets}
+        handleClick={this.createCheckout}
       />
-    ))
-
-    const hasSelectedTickets = !(
-      _.sumBy(selectedTickets, ticket => ticket.quantity) > 0
     )
 
     let step = null
@@ -312,11 +217,6 @@ class App extends Component {
       step = (
         <section>
           {renderTickets}
-          <Button
-            label="Continue"
-            handleClick={this.createCheckout}
-            disabled={hasSelectedTickets}
-          />
         </section>
       )
     } else if (!formSubmitted) {
@@ -327,25 +227,17 @@ class App extends Component {
           handleSubmit={this.updateCheckout}
         />
       )
-    } else if (status !== 'completed') {
-      // Step 3: Input credit card information
-      step = (
-        <StripeCheckout
-          checkoutPayment={this.checkoutPayment}
-          checkoutObj={checkoutObj}
-        />
-      )
     } else {
-      // Step 4: Checkout complete
+      // Step 3: Checkout complete
       step = (
         <div className="mdl-card__supporting-text">
-          Congratulations on your purchase!
+          {`Congratulations ${checkoutObj.attributes.invoice.first_name}! You are now registered for the course.`}
         </div>
       )
     }
 
     return (
-      <div className="container pt-4">
+      <div className="pt-4">
         <div className="event-card-wide mdl-card mdl-shadow--1dp m-auto">
           <div className="mdl-card__title" style={cardBackground}>
             <h2 className="mdl-card__title-text text-white">
@@ -358,5 +250,3 @@ class App extends Component {
     )
   }
 }
-
-export default App
