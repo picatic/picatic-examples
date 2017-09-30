@@ -51,15 +51,15 @@ Only files inside `public` can be used from `public/index.html`.<br>
 You can, however, create more top-level directories.<br>
 They will be included in the production build so you can use them for things like documentation.
 
-# Checkout process
+# Checkout flow
 
-The ticket checkout process is created through Picatic's Ticketing API and Stripe Elements.
+The ticket registration flow is created through Picatic's Ticketing API.
 
-## Step 1: Get Event
+## Step 1: Get Event and List of Tickets
 
 By updating the `eventSlug` initial state, the `getEvent()` method will execute on load to `GET` the event and list of tickets available for your event.
 
-[Get tickets reference](http://developer.picatic.com/v2/api/#methods-ticketprice-find)
+`https://api.picatic.com/v2/event/eduhacks-workshop?fields[event]=title,summary,cover_image_uri&include=ticket_prices&fields[ticket_price]=name`
 
 ## Step 2: Create Checkout
 
