@@ -145,9 +145,10 @@ export default class App extends Component {
       )
     }
 
+    const imageURI = event.attributes.cover_image_uri.substring(50)
     const cardBackground = {
-      background: `linear-gradient(rgba(7,8,38,.28), rgba(7,8,38,.28)), url(${event
-        .attributes.cover_image_uri}) no-repeat center center / cover`
+      background: `linear-gradient(rgba(7,8,38,.28), rgba(7,8,38,.28)),
+      url(https://picatic.global.ssl.fastly.net/events/${imageURI}?type=fit&width=512) no-repeat center center / cover`
     }
 
     const renderTickets = tickets.map(ticket =>
@@ -183,7 +184,7 @@ export default class App extends Component {
           <p>
             {`Congratulations ${checkoutObj.attributes.invoice.first_name}!`}
           </p>
-          <p>You are now registered for the course.</p>
+          <p>{`You are now registered for ${event.attributes.title}.`}</p>
         </div>
       )
     }
