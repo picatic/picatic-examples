@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import Button from '../Button'
 
 export default class TicketForm extends Component {
   state = {
@@ -9,10 +8,10 @@ export default class TicketForm extends Component {
     validForm: false
   }
 
-  handleChange = ev => {
-    const { name, value } = ev.target
+  handleChange = event => {
+    const { name, value } = event.target
 
-    ev.preventDefault()
+    event.preventDefault()
 
     this.setState({ [name]: value })
     this.props.updateCheckoutObj(name, value)
@@ -32,12 +31,17 @@ export default class TicketForm extends Component {
     this.setState({ validForm })
   }
 
+  handleSubmit = event => {
+    event.preventDefault()
+
+    this.props.updateCheckout()
+  }
+
   render() {
     const { first_name, last_name, email, validForm } = this.state
-    const { handleSubmit } = this.props
 
     return (
-      <form id="form">
+      <form id="form" className="ticket-form" onSubmit={this.handleSubmit}>
         <div className="mdl-grid">
           <div className="mdl-cell mdl-cell--6-col">
             <div className="mdl-textfield mdl-js-textfield">
@@ -85,11 +89,14 @@ export default class TicketForm extends Component {
             </div>
           </div>
         </div>
-        <Button
-          label="Submit"
-          handleClick={handleSubmit}
-          disabled={!validForm}
-        />
+        <div className="mdl-card__actions mdl-card--border text-right">
+          <button
+            className="mdl-button mdl-button--raised mdl-button--primary mdl-js-button mdl-js-ripple-effect"
+            disabled={!validForm}
+          >
+            Submit
+          </button>
+        </div>
       </form>
     )
   }

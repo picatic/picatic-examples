@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import update from 'immutability-helper'
-import _ from 'lodash'
 import './App.css'
 
+// Components
 import Tickets from './components/Tickets'
 import TicketForm from './components/TicketForm'
 
@@ -10,28 +10,16 @@ const host = 'https://api.picatic.com/v2'
 
 export default class App extends Component {
   state = {
-    eventSlug: "eduhacks-workshop",
-
+    eventSlug: 'eduhacks-workshop',
     event: null,
     tickets: [],
-    checkoutObj: null,
-    checkoutStatus: null,
-    formSubmitted: false
+    checkoutObj: null
   }
 
   componentWillMount = () => {
     this.getEvent()
   }
 
-  /**
-   * getEvent() gets information about an event.
-   *
-   * Example endpoint:
-   * https://api.picatic.com/v2/event/74701
-   *
-   * API Doc Reference:
-   * http://developer.picatic.com/v2/api/#methods-event-read
-   */
   getEvent = () => {
     const { eventSlug } = this.state
 
@@ -45,16 +33,6 @@ export default class App extends Component {
       .catch(err => console.log(err))
   }
 
-  /**
-   * createCheckout() creates a checkout order and reserve tickets for an event.
-   * Mandatory body fields: event id and ticket id
-   *
-   * Example endpoint:
-   * https://api.picatic.com/v2/checkout
-   *
-   * API Doc Reference:
-   * http://developer.picatic.com/v2/api/#methods-checkout-create
-   */
   createCheckout = ticket => {
     const { event } = this.state
 
@@ -85,16 +63,7 @@ export default class App extends Component {
       .catch(err => console.log(err))
   }
 
-  /**
-   * updateCheckout() PATCH checkout object with invoice and tickets information
-   *
-   * Example endpoint:
-   * https://api.picatic.com/v2/checkout/:id
-   *
-   * API Doc Reference:
-   * http://developer.picatic.com/v2/api/#methods-checkout-update
-   */
-  updateCheckout = form => {
+  updateCheckout = () => {
     const { checkoutObj } = this.state
 
     const url = `${host}/checkout/${checkoutObj.id}`
@@ -115,21 +84,8 @@ export default class App extends Component {
         )
       )
       .catch(err => console.log(err))
-
-    this.setState({ formSubmitted: true })
   }
 
-  /**
-   * confirmCheckout() confirm validates and completes a registration/purchase
-   * of a checkout.
-   * Unconfirmed checkouts expire after 20 minutes
-   *
-   * Example endpoint:
-   * https://api.picatic.com/v2/checkout/:id/confirm
-   *
-   * API Doc Reference:
-   * http://developer.picatic.com/v2/api/#methods-checkout-confirm
-   */
   confirmCheckout = () => {
     const { checkoutObj } = this.state
 
@@ -139,9 +95,7 @@ export default class App extends Component {
       method: 'POST'
     })
       .then(res => res.json())
-      .then(response =>
-        this.setState({ status: response.data.attributes.status })
-      )
+      .then(response => this.setState({ checkoutObj: response.data }))
       .catch(err => console.log(err))
   }
 
@@ -179,15 +133,10 @@ export default class App extends Component {
   }
 
   render() {
-    const {
-      event,
-      tickets,
-      checkoutObj,
-      checkoutStatus,
-      formSubmitted
-    } = this.state
+    const { event, tickets, checkoutObj } = this.state
 
     const noEvent = event === null
+
     if (noEvent) {
       return (
         <section className="container mt-5 text-center">
@@ -219,33 +168,34 @@ export default class App extends Component {
           {renderTickets}
         </section>
       )
-    } else if (!formSubmitted) {
+    } else if (checkoutObj.attributes.status === 'reserved') {
       // Step 2: Update personal information
       step = (
         <TicketForm
           updateCheckoutObj={this.updateCheckoutObj}
-          handleSubmit={this.updateCheckout}
+          updateCheckout={this.updateCheckout}
         />
       )
     } else {
       // Step 3: Checkout complete
       step = (
         <div className="mdl-card__supporting-text">
-          {`Congratulations ${checkoutObj.attributes.invoice.first_name}! You are now registered for the course.`}
+          <p>
+            {`Congratulations ${checkoutObj.attributes.invoice.first_name}!`}
+          </p>
+          <p>You are now registered for the course.</p>
         </div>
       )
     }
 
     return (
-      <div className="pt-4">
-        <div className="event-card-wide mdl-card mdl-shadow--1dp m-auto">
-          <div className="mdl-card__title" style={cardBackground}>
-            <h2 className="mdl-card__title-text text-white">
-              {event.attributes.title}
-            </h2>
-          </div>
-          {step}
+      <div className="event-card-wide mdl-card mdl-shadow--1dp mx-auto">
+        <div className="mdl-card__title" style={cardBackground}>
+          <h2 className="mdl-card__title-text text-white">
+            {event.attributes.title}
+          </h2>
         </div>
+        {step}
       </div>
     )
   }
