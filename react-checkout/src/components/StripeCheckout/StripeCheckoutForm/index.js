@@ -11,7 +11,6 @@ class StripeCheckoutForm extends Component {
   }
 
   render() {
-    const { checkoutObj } = this.props
     const amount = parseFloat(
       this.props.checkoutObj.attributes.order_summary.total
     )

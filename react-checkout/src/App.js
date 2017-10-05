@@ -38,10 +38,10 @@ class App extends Component {
 
   /**
    * getEvent() gets information about an event.
-   * 
+   *
    * Example endpoint:
    * https://api.picatic.com/v2/event/74701
-   * 
+   *
    * API Doc Reference:
    * http://developer.picatic.com/v2/api/#methods-event-read
    */
@@ -174,6 +174,7 @@ class App extends Component {
   checkoutPayment = payload => {
     const cardError = payload.error
     if (cardError) {
+      console.log(cardError)
       return false
     }
 
