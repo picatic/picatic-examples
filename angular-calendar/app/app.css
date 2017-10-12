@@ -2,73 +2,73 @@
 
 html,
 body {
-	background-color: #f5f5f5;
-	margin: 0;
-	padding: 0;
-	height: 100%;
-	line-height: 1.5;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  line-height: 1.5;
 }
 
 .content-inner {
-	background-color: white;
-	display: flex;
-	margin: 16px 24px;
-	position: fixed;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
+  background-color: white;
+  display: flex;
+  margin: 16px 24px;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 .calendar-component {
-	overflow: scroll;
-	padding: 16px 24px;
-	width: 70%;
+  overflow: scroll;
+  padding: 16px 24px;
+  width: 70%;
 }
 
 .ticket-box-component {
-	max-height: 100%;
-	overflow: scroll;
-	width: 30%;
+  max-height: 100%;
+  overflow: scroll;
+  width: 30%;
 }
 
 .event-cover-image {
-	align-items: center;
-	background-position: center center;
-	background-size: cover;
-	color: white;
-	display: flex;
-	justify-content: center;
-	text-align: center;
-	position: relative;
-	height: 200px;
-	width: 100%;
+  align-items: center;
+  background-position: center center;
+  background-size: cover;
+  color: white;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  height: 200px;
+  width: 100%;
 }
 
 .event-cover-image::before {
-	background-color: rgba(7, 8, 38, 0.54);
-	content: '';
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: 0;
-	height: 100%;
-	width: 100%;
-	z-index: 1;
+  background-color: rgba(7, 8, 38, 0.54);
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 1;
 }
 
 .event-title {
-	margin: 0;
-	width: 70%;
-	z-index: 1;
+  margin: 0;
+  width: 70%;
+  z-index: 1;
 }
 
 .ticket-box-placeholder {
-	padding-top: 64px;
-	text-align: center;
-	font-size: 24px;
+  padding-top: 64px;
+  text-align: center;
+  font-size: 24px;
 }
 
 .muted {
-	color: rgba(0, 0, 0, 0.54);
+  color: rgba(0, 0, 0, 0.54);
 }
