@@ -11,13 +11,19 @@ import Toolbar from 'material-ui/Toolbar'
 import TextField from 'material-ui/TextField'
 import Typography from 'material-ui/Typography'
 
+import { DateRangePicker } from 'react-dates'
+
 const API_KEY = 'Bearer sk_live_4481fd77f109eb6622beec721b9d1f5a'
 
 class App extends Component {
   state = {
     title: '',
     event: null,
-    ticketName: ''
+    ticketName: '',
+
+    startDate: null,
+    endDate: null,
+    focusInput: null
   }
   handleChange = name => event => {
     this.setState({ [name]: event.target.value })
@@ -120,6 +126,19 @@ class App extends Component {
                 fullWidth
               />
               <Description className="my-5" />
+            </section>
+          </Paper>
+          <Paper className="px-5 my-5">
+            <section>
+              When and where is your event?
+              <DateRangePicker
+                startDate={this.state.startDate} // momentPropTypes.momentObj or null,
+                endDate={this.state.endDate} // momentPropTypes.momentObj or null,
+                onDatesChange={({ startDate, endDate }) =>
+                  this.setState({ startDate, endDate })} // PropTypes.func.isRequired,
+                focusedInput={this.state.focusedInput} // PropTypes.oneOf([START_DATE, END_DATE]) or null,
+                onFocusChange={focusedInput => this.setState({ focusedInput })} // PropTypes.func.isRequired,
+              />
             </section>
           </Paper>
         </div>

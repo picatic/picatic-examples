@@ -4,7 +4,10 @@
   "private": true,
   "dependencies": {
     "draft-js": "^0.10.3",
+    "moment": "^2.19.1",
     "react": "^16.0.0",
+    "react-addons-shallow-compare": "^15.6.2",
+    "react-dates": "^13.0.3",
     "react-dom": "^16.0.0",
     "react-scripts": "1.0.14"
   },
