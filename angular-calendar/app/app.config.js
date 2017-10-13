@@ -18,7 +18,7 @@ app.
 
       $routeProvider.
         when('/', {
-          template: '<div class="content-inner"><calendar class="calendar-component"></calendar><ticket-box class="ticket-box-component"></ticket-box></div>',
+          template: '<home-page></home-page>',
         }).
         otherwise('/');
     }

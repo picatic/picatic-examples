@@ -25,7 +25,7 @@ bower install
 Start the development server with:
 
 ```
-npm start:dev
+npm run start:dev
 ```
 
 Now browse to the app at [`localhost:8000`][local-app-url]
@@ -44,7 +44,7 @@ End-to-end tests were built with [Jasmine][jasmine] and [Protractor][protractor]
 server must also be running:
 
 ```
-npm start:dev
+npm run start:dev
 
 # in a seperate terminal window
 npm run protractor

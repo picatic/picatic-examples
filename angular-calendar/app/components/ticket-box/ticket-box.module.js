@@ -1,3 +1,3 @@
 'use strict';
 
-angular.module('ticketBox', ['core.event', 'ngSanitize']);
+angular.module('ticketBox', ['ngSanitize']);
