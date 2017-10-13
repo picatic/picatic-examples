@@ -1,0 +1,11 @@
+{
+  "name": "picatic.io",
+  "version": "1.0.0",
+  "description": "Display an index of all the picatic examples",
+  "repository": "https://github.com/picatic/picatic-examples",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "shufflejs": "^5.0.2"
+  }
+}
