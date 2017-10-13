@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import moment from 'moment'
 import './App.css'
 
 // Components
@@ -16,26 +17,37 @@ const API_KEY = 'Bearer sk_live_4481fd77f109eb6622beec721b9d1f5a'
 
 class App extends Component {
   state = {
-    title: '',
-    event: null,
+    user: null,
+    event: false,
     ticketName: '',
-
-    date: null,
-    focus: false
+    startText: null
   }
 
-  handleChange = name => event => {
-    this.setState({ [name]: event.target.value })
+  componentWillMount() {
+    this.getMyUser()
+    fetch(`https://api.picatic.com/v2/event/133837`)
+      .then(res => res.json())
+      .then(event => this.setState({ event: event.data }))
+      .catch(err => console.log(err))
   }
 
-  handleSubmit = event => {
-    event.preventDefault()
-
-    const { title } = this.state
-
-    const body = JSON.stringify({
-      data: { type: 'event', attributes: { title: title } }
+  getMyUser = () => {
+    fetch('https://api.picatic.com/v2/user/me', {
+      method: 'GET',
+      headers: {
+        Authorization: API_KEY
+      }
     })
+      .then(res => res.json())
+      .then(user => this.setState({ user: user.data }))
+      .catch(err => console.log(err))
+  }
+
+  createEvent = () => {
+    const body = JSON.stringify({
+      data: { type: 'event', attributes: { title: 'Your Amazing Event.' } }
+    })
+
     fetch('https://api.picatic.com/v2/event', {
       method: 'POST',
       body: body,
@@ -48,70 +60,53 @@ class App extends Component {
       .catch(err => console.log(err))
   }
 
-  handleActivate = () => {
-    const { event } = this.state
-    const url = `https://api.picatic.com/v2/event/133546/activate`
-    fetch(url, { method: 'POST', headers: { Authorization: API_KEY } })
-  }
-
-  handleAdd = ev => {
-    ev.preventDefault()
-
-    const { event, ticketName } = this.state
-
-    const body = JSON.stringify({
-      data: {
-        type: 'ticket_price',
-        attributes: {
-          event_id: 133546,
-          name: ticketName,
-          status: 'open',
-          who_pays_fees: 'promoter',
-          type: 'free',
-          price: 0
-        }
+  updateEvent = () => {
+    const data = this.state.event
+    fetch(`https://api.picatic.com/v2/event/${data.id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({
+        data
+      }),
+      headers: {
+        Authorization: API_KEY
       }
     })
-
-    fetch('https://api.picatic.com/v2/ticket_price', {
-      method: 'POST',
-      body: body,
-      headers: { Authorization: API_KEY }
-    })
       .then(res => res.json())
-      .then(ticketPrice => this.setState({ ticketPrice: ticketPrice.data }))
+      .then(event => this.setState({ event: event.data }))
       .catch(err => console.log(err))
   }
 
-  renderEvent = () => {
+  handleChange = name => ev => {
     const { event } = this.state
-    const isEvent = event !== null
+    event.attributes[name] = ev.target.value
+    this.setState({ event })
+  }
 
-    let title = ''
-
-    if (isEvent) {
-      title = event.attributes.title
-    }
-    return (
-      <div>
-        <p>
-          Event Title: {title}
-        </p>
-        <input
-          type="button"
-          value="Activate Event"
-          onClick={this.handleActivate}
-        />
-      </div>
-    )
+  handleTimeChange = name => (ev, date) => {
+    const { event } = this.state
+    console.log(date)
+    event.attributes[name] = moment(date).format('HH:mm:ss')
+    this.setState({ event, startText: date })
   }
 
   render() {
-    const { title, ticketName } = this.state
+    const { ticketName } = this.state
+
+    const { event } = this.state
+
+    if (!event) {
+      return false
+    }
+
+    const { title, start_date, start_time, end_time } = event.attributes
+
+    const startDate = new Date(moment(start_date, 'YYYY-MM-DD').toISOString());
+    const startTime = new Date(moment(start_time, 'HH:mm:ss').toISOString());
+    const endTime = new Date(moment(end_time, 'HH:mm:ss').toISOString());
 
     const tickets = [
       {
-        name: 'GA',
+        name: 'GA'
       }
     ]
 
@@ -119,18 +114,11 @@ class App extends Component {
       return (
         <div>
           <div className="row mb-3">
-            <div className="col-4 lead">
-              Ticket Name
-            </div>
-            <div className="col-2 lead">
-              Max Quantity
-            </div>
-            <div className="col-2 lead">
-              Price
-            </div>
+            <div className="col-4 lead">Ticket Name</div>
+            <div className="col-2 lead">Max Quantity</div>
+            <div className="col-2 lead">Price</div>
           </div>
           <Ticket />
-
         </div>
       )
     })
@@ -143,17 +131,8 @@ class App extends Component {
               <span className="mdl-layout-title">Create Your Event</span>
               <div className="mdl-layout-spacer" />
               <nav className="mdl-navigation mdl-layout--large-screen-only">
-                <a className="mdl-navigation__link" href="">
-                  Link
-                </a>
-                <a className="mdl-navigation__link" href="">
-                  Link
-                </a>
-                <a className="mdl-navigation__link" href="">
-                  Link
-                </a>
-                <a className="mdl-navigation__link" href="">
-                  Link
+                <a className="mdl-navigation__link" onClick={this.createEvent}>
+                  Create Event
                 </a>
               </nav>
             </div>
@@ -179,15 +158,27 @@ class App extends Component {
               <section className="row p-5">
                 <div className="col">
                   <div className="lead">When is your event?</div>
-                  <DatePicker hintText="Event Date" />
+                  <DatePicker
+                    hintText="Event Date"
+                    value={startDate}
+                    onChange={this.handleTimeChange('start_date')}
+                  />
                   <div className="row mt-4">
                     <div className="col">
                       <div className="lead">Start Time</div>
-                      <TimePicker hintText="5:30 pm" />
+                      <TimePicker
+                        hintText="5:30 pm"
+                        value={startTime}
+                        onChange={this.handleTimeChange('start_time')}
+                      />
                     </div>
                     <div className="col">
                       <div className="lead">End Time</div>
-                      <TimePicker hintText="8:00 pm" />
+                      <TimePicker
+                        hintText="8:00 pm"
+                        value={endTime}
+                        onChange={this.handleTimeChange('end_time')}
+                      />
                     </div>
                   </div>
                 </div>
@@ -217,6 +208,11 @@ class App extends Component {
                 </div>
               </section>
             </Paper>
+          </div>
+          <div className="fixed-bottom text-right m-4">
+            <button className="btn btn-primary" onClick={this.updateEvent}>
+              SAVE
+            </button>
           </div>
         </div>
       </MuiThemeProvider>
