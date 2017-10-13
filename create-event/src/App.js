@@ -11,9 +11,6 @@ import Paper from 'material-ui/Paper'
 import DatePicker from 'material-ui/DatePicker'
 import TimePicker from 'material-ui/TimePicker'
 
-// React Dates
-import { SingleDatePicker } from 'react-dates'
-
 // Picatic API Key
 const API_KEY = 'Bearer sk_live_4481fd77f109eb6622beec721b9d1f5a'
 
