@@ -3,16 +3,18 @@ import './App.css'
 
 // Components
 import Description from './components/Description'
+import Ticket from './components/Ticket'
 
 // Material UI
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import Paper from 'material-ui/Paper'
-import AppBar from 'material-ui/AppBar'
-import Toolbar from 'material-ui/Toolbar'
-import TextField from 'material-ui/TextField'
-import Typography from 'material-ui/Typography'
+import DatePicker from 'material-ui/DatePicker'
+import TimePicker from 'material-ui/TimePicker'
 
-import { DateRangePicker } from 'react-dates'
+// React Dates
+import { SingleDatePicker } from 'react-dates'
 
+// Picatic API Key
 const API_KEY = 'Bearer sk_live_4481fd77f109eb6622beec721b9d1f5a'
 
 class App extends Component {
@@ -21,13 +23,14 @@ class App extends Component {
     event: null,
     ticketName: '',
 
-    startDate: null,
-    endDate: null,
-    focusInput: null
+    date: null,
+    focus: false
   }
+
   handleChange = name => event => {
     this.setState({ [name]: event.target.value })
   }
+
   handleSubmit = event => {
     event.preventDefault()
 
@@ -47,11 +50,13 @@ class App extends Component {
       .then(event => this.setState({ event: event.data }))
       .catch(err => console.log(err))
   }
+
   handleActivate = () => {
     const { event } = this.state
     const url = `https://api.picatic.com/v2/event/133546/activate`
     fetch(url, { method: 'POST', headers: { Authorization: API_KEY } })
   }
+
   handleAdd = ev => {
     ev.preventDefault()
 
@@ -80,6 +85,7 @@ class App extends Component {
       .then(ticketPrice => this.setState({ ticketPrice: ticketPrice.data }))
       .catch(err => console.log(err))
   }
+
   renderEvent = () => {
     const { event } = this.state
     const isEvent = event !== null
@@ -102,47 +108,121 @@ class App extends Component {
       </div>
     )
   }
+
   render() {
     const { title, ticketName } = this.state
-    return (
-      <div>
-        <header>
-          <AppBar position="static">
-            <Toolbar>
-              <Typography type="title" color="inherit">
-                Create Your Event
-              </Typography>
-            </Toolbar>
-          </AppBar>
-        </header>
-        <div className="container mt-4">
-          <Paper className="px-5">
-            <section>
-              <TextField
-                label="Event Title"
-                value={title}
-                onChange={this.handleChange('title')}
-                margin="normal"
-                fullWidth
-              />
-              <Description className="my-5" />
-            </section>
-          </Paper>
-          <Paper className="px-5 my-5">
-            <section>
-              When and where is your event?
-              <DateRangePicker
-                startDate={this.state.startDate} // momentPropTypes.momentObj or null,
-                endDate={this.state.endDate} // momentPropTypes.momentObj or null,
-                onDatesChange={({ startDate, endDate }) =>
-                  this.setState({ startDate, endDate })} // PropTypes.func.isRequired,
-                focusedInput={this.state.focusedInput} // PropTypes.oneOf([START_DATE, END_DATE]) or null,
-                onFocusChange={focusedInput => this.setState({ focusedInput })} // PropTypes.func.isRequired,
-              />
-            </section>
-          </Paper>
+
+    const tickets = [
+      {
+        name: 'GA',
+      }
+    ]
+
+    const renderTickets = tickets.map(ticket => {
+      return (
+        <div>
+          <div className="row mb-3">
+            <div className="col-4 lead">
+              Ticket Name
+            </div>
+            <div className="col-2 lead">
+              Max Quantity
+            </div>
+            <div className="col-2 lead">
+              Price
+            </div>
+          </div>
+          <Ticket />
+
         </div>
-      </div>
+      )
+    })
+
+    return (
+      <MuiThemeProvider>
+        <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+          <header className="mdl-layout__header">
+            <div className="mdl-layout__header-row">
+              <span className="mdl-layout-title">Create Your Event</span>
+              <div className="mdl-layout-spacer" />
+              <nav className="mdl-navigation mdl-layout--large-screen-only">
+                <a className="mdl-navigation__link" href="">
+                  Link
+                </a>
+                <a className="mdl-navigation__link" href="">
+                  Link
+                </a>
+                <a className="mdl-navigation__link" href="">
+                  Link
+                </a>
+                <a className="mdl-navigation__link" href="">
+                  Link
+                </a>
+              </nav>
+            </div>
+          </header>
+          <div className="container mt-4">
+            <Paper className="p-5">
+              <section className="row mb-4">
+                <div className="col-md-6">
+                  <label className="mb-1 lead">Event Title</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={title}
+                    onChange={this.handleChange('title')}
+                  />
+                </div>
+              </section>
+              <div className="row">
+                <Description className="my-5 col-md-6" />
+              </div>
+            </Paper>
+            <Paper className="my-4">
+              <section className="row p-5">
+                <div className="col">
+                  <div className="lead">When is your event?</div>
+                  <DatePicker hintText="Event Date" />
+                  <div className="row mt-4">
+                    <div className="col">
+                      <div className="lead">Start Time</div>
+                      <TimePicker hintText="5:30 pm" />
+                    </div>
+                    <div className="col">
+                      <div className="lead">End Time</div>
+                      <TimePicker hintText="8:00 pm" />
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <hr />
+              <section className="row p-5">
+                <div className="col">
+                  <div className="lead">Where is your event?</div>
+                </div>
+              </section>
+            </Paper>
+            <Paper className="my-4">
+              <section className="row p-5">
+                <div className="col-12">
+                  <h5>What tickets will you offer</h5>
+                </div>
+                <div className="col-12 text-center mb-4">
+                  <a href="#" className="btn btn-primary mr-3">
+                    + Paid ticket
+                  </a>
+                  <a href="#" className="btn btn-primary">
+                    + Free ticket
+                  </a>
+                </div>
+                <div className="col">
+                  {renderTickets}
+                </div>
+              </section>
+            </Paper>
+          </div>
+        </div>
+      </MuiThemeProvider>
     )
   }
 }

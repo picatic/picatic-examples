@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import { Editor, EditorState, RichUtils } from 'draft-js'
 
-import TextField from 'material-ui/TextField'
-
 export default class Description extends Component {
   state = {
     editorState: EditorState.createEmpty()
@@ -23,14 +21,20 @@ export default class Description extends Component {
 
   render() {
     return (
-      <div>
-        Description
-        <Editor
-          editorState={this.state.editorState}
-          handleKeyCommand={this.handleKeyCommand}
-          onChange={this.handleChange}
-        />
-      </div>
+      <section className="col">
+        <label className="mb-1 lead">Description</label>
+        <p className="mb-2 text-muted">
+          This will appear on your event website.
+        </p>
+        <div className="form-control">
+          <Editor
+            editorState={this.state.editorState}
+            handleKeyCommand={this.handleKeyCommand}
+            onChange={this.handleChange}
+            spellCheck={true}
+          />
+        </div>
+      </section>
     )
   }
 }
