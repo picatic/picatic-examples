@@ -20,7 +20,8 @@ class App extends Component {
     user: false,
     event: false,
     tickets: [],
-    deletedTickets: []
+    deletedTickets: [],
+    submitted: false
   }
 
   componentWillMount() {
@@ -69,8 +70,39 @@ class App extends Component {
       .catch(err => console.log(err))
   }
 
+  validation = () => {
+    const { event, tickets } = this.state
+    const noTitle = event.attributes.title === ''
+
+    let validForm = true
+
+    tickets.map(ticket => {
+      const { name, price } = ticket.attributes
+
+      const badPrice = price < 3 && price > 0
+      const inValid = name === '' || price === '' || badPrice
+
+      if (inValid) {
+        validForm = false
+        this.setState({ submitted: true })
+      }
+    })
+
+    if (noTitle) {
+      validForm = false
+      this.setState({ submitted: true })
+    }
+
+    return validForm
+  }
+
   updateEvent = () => {
     const { event, tickets, deletedTickets } = this.state
+
+    if (!this.validation()) {
+      return false
+    }
+
     fetch(`https://api.picatic.com/v2/event/${event.id}`, {
       method: 'PATCH',
       body: JSON.stringify({
@@ -87,6 +119,10 @@ class App extends Component {
       .catch(err => console.log(err))
 
     tickets.map(ticket => {
+      // Convert from paid to free ticket if price is $0
+      const freeTicket = ticket.attributes.price === 0
+      freeTicket ? (ticket.type = 'free') : null
+
       const newTicket = isNaN(ticket.id)
       if (newTicket) {
         fetch('https://api.picatic.com/v2/ticket_price', {
@@ -157,7 +193,7 @@ class App extends Component {
 
     tickets.push(newTicket)
 
-    this.setState({ tickets })
+    this.setState({ tickets, submitted: false })
   }
 
   deleteTicket = index => {
@@ -167,7 +203,6 @@ class App extends Component {
     const isExisting = !isNaN(ticket.id)
     if (isExisting) {
       deletedTickets.push(ticket)
-      console.log(deletedTickets)
     }
 
     tickets.splice(index, 1)
@@ -175,7 +210,7 @@ class App extends Component {
   }
 
   render() {
-    const { event, tickets } = this.state
+    const { event, tickets, submitted } = this.state
     if (!event) {
       return false
     }
@@ -200,6 +235,7 @@ class App extends Component {
               key={index}
               ticket={ticket}
               index={index}
+              submitted={submitted}
               handleTicketChange={this.handleTicketChange}
               deleteTicket={this.deleteTicket}
             />
@@ -228,7 +264,9 @@ class App extends Component {
                   <label className="mb-1 lead">Event Title</label>
                   <input
                     type="text"
-                    className="form-control"
+                    className={`form-control ${submitted && title === ''
+                      ? 'is-invalid'
+                      : ''}`}
                     value={title}
                     onChange={this.handleEventChange('title')}
                   />
@@ -283,20 +321,18 @@ class App extends Component {
                   <h5>What tickets will you offer</h5>
                 </div>
                 <div className="col-12 text-center mb-4">
-                  <a
-                    href="#"
+                  <button
                     className="btn btn-primary mr-3"
                     onClick={ev => this.addTicket(ev, 'regular')}
                   >
                     + Paid ticket
-                  </a>
-                  <a
-                    href="#"
+                  </button>
+                  <button
                     className="btn btn-primary"
                     onClick={ev => this.addTicket(ev, 'free')}
                   >
                     + Free ticket
-                  </a>
+                  </button>
                 </div>
                 <div className="col">
                   {renderTickets}

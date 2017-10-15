@@ -1,11 +1,24 @@
 import React from 'react'
 import './Ticket.css'
 
-const Ticket = ({ ticket, index, handleTicketChange, deleteTicket }) => {
+const Ticket = ({
+  ticket,
+  index,
+  submitted,
+  handleTicketChange,
+  deleteTicket
+}) => {
   const { name, max_quantity, price, type } = ticket.attributes
   const free = type === 'free'
-  const zeroCost = Number(price) === 0 && price !== '' && !free
-  const rowStyle = `row ${zeroCost ? '' : 'ticket-row'}`
+
+  // Input Validation
+  const noName = name === '' && submitted
+  const minPrice = price < 3 && price > 0 && submitted
+  const noPrice = (price === '' || minPrice) && submitted
+
+  const zeroCost = price === 0 && price !== '' && !free
+  const rowStyle = `row ${zeroCost || minPrice ? '' : 'ticket-row'}`
+
   return (
     <section className={rowStyle}>
       <div className="col-4">
@@ -13,9 +26,8 @@ const Ticket = ({ ticket, index, handleTicketChange, deleteTicket }) => {
           type="text"
           value={name}
           onChange={ev => handleTicketChange(ev, index, 'name')}
-          className="form-control"
+          className={`form-control ${noName ? 'is-invalid' : ''}`}
           placeholder="e.g. General Admission"
-          required
         />
       </div>
       <div className="col-2">
@@ -34,13 +46,16 @@ const Ticket = ({ ticket, index, handleTicketChange, deleteTicket }) => {
               <input
                 type="number"
                 value={price}
+                min="3"
                 onChange={ev => handleTicketChange(ev, index, 'price')}
-                className="form-control"
+                className={`form-control ${noPrice ? 'is-invalid' : ''}`}
                 placeholder="Cost"
               />
-              {zeroCost
-                ? <small className="form-text text-muted">Free</small>
-                : null}
+              {zeroCost && <small className="form-text text-muted">Free</small>}
+              {minPrice &&
+                <small className="invalid-feedback">
+                  Minimum ticket price is $3
+                </small>}
             </div>}
       </div>
       <div className="col-4">
