@@ -8,10 +8,20 @@ import Ticket from './components/Ticket'
 
 // Material UI
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
+import { indigo500 } from 'material-ui/styles/colors'
 import Paper from 'material-ui/Paper'
 import DatePicker from 'material-ui/DatePicker'
 import TimePicker from 'material-ui/TimePicker'
 import Snackbar from 'material-ui/Snackbar'
+
+const muiTheme = getMuiTheme({
+  palette: {
+    primary1Color: indigo500,
+    primary2Color: indigo500,
+    pickerHeaderColor: indigo500
+  }
+})
 
 // Picatic API Key
 const API_KEY = 'Bearer sk_live_4481fd77f109eb6622beec721b9d1f5a'
@@ -120,14 +130,12 @@ class App extends Component {
       .then(event => this.setState({ event: event.data }))
       .catch(err => console.log(err))
 
-    tickets.map((ticket, i) => {
+    tickets.map((ticket, index) => {
       // Convert from paid to free ticket if price is $0
       const freeTicket = ticket.attributes.price === 0
       freeTicket ? (ticket.attributes.type = 'free') : null
 
       const newTicket = isNaN(ticket.id)
-
-      const index = tickets[i]
 
       if (newTicket) {
         fetch('https://api.picatic.com/v2/ticket_price', {
@@ -136,7 +144,7 @@ class App extends Component {
           headers: { Authorization: API_KEY }
         })
           .then(res => res.json())
-          .then(response => (tickets[i] = response.data))
+          .then(response => (tickets[index] = response.data))
       } else {
         fetch(`https://api.picatic.com/v2/ticket_price/${ticket.id}`, {
           method: 'PATCH',
@@ -253,7 +261,7 @@ class App extends Component {
       : null
 
     return (
-      <MuiThemeProvider>
+      <MuiThemeProvider muiTheme={muiTheme}>
         <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
           <header className="mdl-layout__header">
             <div className="mdl-layout__header-row">
@@ -287,40 +295,42 @@ class App extends Component {
             </Paper>
             <Paper className="my-4">
               <section className="row p-5">
+                <div className="col-12 mb-4">
+                  <h5 className="display1">When is your event?</h5>
+                </div>
                 <div className="col">
-                  <div className="lead">When is your event?</div>
                   <DatePicker
                     hintText="Event Date"
                     value={startDate}
                     onChange={this.handleTimeChange('start_date', 'YYYY-MM-DD')}
+                    minDate={new Date()}
+                    formatDate={
+                      new Intl.DateTimeFormat('en-US', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric'
+                      }).format
+                    }
+                    floatingLabelText="Event Date"
                   />
-                  <div className="row mt-4">
-                    <div className="col">
-                      <div className="lead">Start Time</div>
-                      <TimePicker
-                        hintText="5:30 pm"
-                        value={startTime}
-                        onChange={this.handleTimeChange(
-                          'start_time',
-                          'HH:mm:ss'
-                        )}
-                      />
-                    </div>
-                    <div className="col">
-                      <div className="lead">End Time</div>
-                      <TimePicker
-                        hintText="8:00 pm"
-                        value={endTime}
-                        onChange={this.handleTimeChange('end_time', 'HH:mm:ss')}
-                      />
-                    </div>
-                  </div>
                 </div>
-              </section>
-              <hr />
-              <section className="row p-5">
+
                 <div className="col">
-                  <div className="lead">Where is your event?</div>
+                  <TimePicker
+                    hintText="5:30 pm"
+                    value={startTime}
+                    onChange={this.handleTimeChange('start_time', 'HH:mm:ss')}
+                    floatingLabelText="Start Time"
+                  />
+                </div>
+
+                <div className="col">
+                  <TimePicker
+                    hintText="8:00 pm"
+                    value={endTime}
+                    onChange={this.handleTimeChange('end_time', 'HH:mm:ss')}
+                    floatingLabelText="End Time"
+                  />
                 </div>
               </section>
             </Paper>
