@@ -17,18 +17,15 @@ const API_KEY = 'Bearer sk_live_4481fd77f109eb6622beec721b9d1f5a'
 
 class App extends Component {
   state = {
-    user: null,
+    user: false,
     event: false,
-    ticketName: '',
-    startText: null
+    tickets: [],
+    deletedTickets: []
   }
 
   componentWillMount() {
     this.getMyUser()
-    fetch(`https://api.picatic.com/v2/event/133837`)
-      .then(res => res.json())
-      .then(event => this.setState({ event: event.data }))
-      .catch(err => console.log(err))
+    this.getEvent()
   }
 
   getMyUser = () => {
@@ -40,6 +37,18 @@ class App extends Component {
     })
       .then(res => res.json())
       .then(user => this.setState({ user: user.data }))
+      .catch(err => console.log(err))
+  }
+
+  getEvent = () => {
+    fetch(`https://api.picatic.com/v2/event/133837?include=ticket_prices`)
+      .then(res => res.json())
+      .then(event =>
+        this.setState({
+          event: event.data,
+          tickets: event.included ? event.included : []
+        })
+      )
       .catch(err => console.log(err))
   }
 
@@ -61,67 +70,142 @@ class App extends Component {
   }
 
   updateEvent = () => {
-    const data = this.state.event
-    fetch(`https://api.picatic.com/v2/event/${data.id}`, {
+    const { event, tickets, deletedTickets } = this.state
+    fetch(`https://api.picatic.com/v2/event/${event.id}`, {
       method: 'PATCH',
       body: JSON.stringify({
-        data
+        data: {
+          attributes: event.attributes,
+          id: event.id,
+          type: 'event'
+        }
       }),
-      headers: {
-        Authorization: API_KEY
-      }
+      headers: { Authorization: API_KEY }
     })
       .then(res => res.json())
       .then(event => this.setState({ event: event.data }))
       .catch(err => console.log(err))
+
+    tickets.map(ticket => {
+      const newTicket = isNaN(ticket.id)
+      if (newTicket) {
+        fetch('https://api.picatic.com/v2/ticket_price', {
+          method: 'POST',
+          body: JSON.stringify({ data: ticket }),
+          headers: { Authorization: API_KEY }
+        })
+      } else {
+        fetch(`https://api.picatic.com/v2/ticket_price/${ticket.id}`, {
+          method: 'PATCH',
+          body: JSON.stringify({ data: ticket }),
+          headers: { Authorization: API_KEY }
+        })
+      }
+    })
+
+    deletedTickets.map(ticket => {
+      fetch(`https://api.picatic.com/v2/ticket_price/${ticket.id}`, {
+        method: 'DELETE',
+        headers: { Authorization: API_KEY }
+      })
+    })
   }
 
-  handleChange = name => ev => {
+  handleEventChange = name => ev => {
     const { event } = this.state
     event.attributes[name] = ev.target.value
     this.setState({ event })
   }
 
-  handleTimeChange = name => (ev, date) => {
+  handleTimeChange = (name, format) => (ev, date) => {
     const { event } = this.state
-    console.log(date)
-    event.attributes[name] = moment(date).format('HH:mm:ss')
-    this.setState({ event, startText: date })
+    event.attributes[name] = moment(date).format(format)
+    if (name === 'start_date') {
+      event.attributes['end_date'] = moment(date).format(format)
+    }
+    this.setState({ event })
+  }
+
+  handleTicketChange = (ev, index, name) => {
+    const { tickets } = this.state
+    const isNumber = ev.target.type === 'number'
+    const value = isNumber ? Number(ev.target.value) : ev.target.value
+
+    tickets[index].attributes[name] = value
+
+    this.setState({ tickets })
+  }
+
+  addTicket = (ev, type) => {
+    ev.preventDefault()
+    const { event, tickets } = this.state
+
+    const free = type === 'free'
+
+    const newTicket = {
+      attributes: {
+        event_id: Number(event.id),
+        name: '',
+        max_quantity: '',
+        status: 'open',
+        who_pays_fees: 'promoter',
+        type: type,
+        price: free ? 0 : ''
+      },
+      type: 'ticket_price'
+    }
+
+    tickets.push(newTicket)
+
+    this.setState({ tickets })
+  }
+
+  deleteTicket = index => {
+    const { tickets, deletedTickets } = this.state
+    const ticket = tickets[index]
+
+    const isExisting = !isNaN(ticket.id)
+    if (isExisting) {
+      deletedTickets.push(ticket)
+      console.log(deletedTickets)
+    }
+
+    tickets.splice(index, 1)
+    this.setState({ tickets, deletedTickets })
   }
 
   render() {
-    const { ticketName } = this.state
-
-    const { event } = this.state
-
+    const { event, tickets } = this.state
     if (!event) {
       return false
     }
 
     const { title, start_date, start_time, end_time } = event.attributes
 
-    const startDate = new Date(moment(start_date, 'YYYY-MM-DD').toISOString());
-    const startTime = new Date(moment(start_time, 'HH:mm:ss').toISOString());
-    const endTime = new Date(moment(end_time, 'HH:mm:ss').toISOString());
+    const startDate = new Date(moment(start_date, 'YYYY-MM-DD').toISOString())
+    const startTime = new Date(moment(start_time, 'HH:mm:ss').toISOString())
+    const endTime = new Date(moment(end_time, 'HH:mm:ss').toISOString())
 
-    const tickets = [
-      {
-        name: 'GA'
-      }
-    ]
+    const hasTickets = tickets.length > 0
 
-    const renderTickets = tickets.map(ticket => {
-      return (
-        <div>
+    const renderTickets = hasTickets
+      ? <div>
           <div className="row mb-3">
             <div className="col-4 lead">Ticket Name</div>
             <div className="col-2 lead">Max Quantity</div>
             <div className="col-2 lead">Price</div>
           </div>
-          <Ticket />
+          {tickets.map((ticket, index) =>
+            <Ticket
+              key={index}
+              ticket={ticket}
+              index={index}
+              handleTicketChange={this.handleTicketChange}
+              deleteTicket={this.deleteTicket}
+            />
+          )}
         </div>
-      )
-    })
+      : null
 
     return (
       <MuiThemeProvider>
@@ -146,7 +230,7 @@ class App extends Component {
                     type="text"
                     className="form-control"
                     value={title}
-                    onChange={this.handleChange('title')}
+                    onChange={this.handleEventChange('title')}
                   />
                 </div>
               </section>
@@ -161,7 +245,7 @@ class App extends Component {
                   <DatePicker
                     hintText="Event Date"
                     value={startDate}
-                    onChange={this.handleTimeChange('start_date')}
+                    onChange={this.handleTimeChange('start_date', 'YYYY-MM-DD')}
                   />
                   <div className="row mt-4">
                     <div className="col">
@@ -169,7 +253,10 @@ class App extends Component {
                       <TimePicker
                         hintText="5:30 pm"
                         value={startTime}
-                        onChange={this.handleTimeChange('start_time')}
+                        onChange={this.handleTimeChange(
+                          'start_time',
+                          'HH:mm:ss'
+                        )}
                       />
                     </div>
                     <div className="col">
@@ -177,7 +264,7 @@ class App extends Component {
                       <TimePicker
                         hintText="8:00 pm"
                         value={endTime}
-                        onChange={this.handleTimeChange('end_time')}
+                        onChange={this.handleTimeChange('end_time', 'HH:mm:ss')}
                       />
                     </div>
                   </div>
@@ -196,10 +283,18 @@ class App extends Component {
                   <h5>What tickets will you offer</h5>
                 </div>
                 <div className="col-12 text-center mb-4">
-                  <a href="#" className="btn btn-primary mr-3">
+                  <a
+                    href="#"
+                    className="btn btn-primary mr-3"
+                    onClick={ev => this.addTicket(ev, 'regular')}
+                  >
                     + Paid ticket
                   </a>
-                  <a href="#" className="btn btn-primary">
+                  <a
+                    href="#"
+                    className="btn btn-primary"
+                    onClick={ev => this.addTicket(ev, 'free')}
+                  >
                     + Free ticket
                   </a>
                 </div>
