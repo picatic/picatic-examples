@@ -11,6 +11,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import Paper from 'material-ui/Paper'
 import DatePicker from 'material-ui/DatePicker'
 import TimePicker from 'material-ui/TimePicker'
+import Snackbar from 'material-ui/Snackbar'
 
 // Picatic API Key
 const API_KEY = 'Bearer sk_live_4481fd77f109eb6622beec721b9d1f5a'
@@ -21,6 +22,7 @@ class App extends Component {
     event: false,
     tickets: [],
     deletedTickets: [],
+    snackbarOpen: false,
     submitted: false
   }
 
@@ -118,18 +120,23 @@ class App extends Component {
       .then(event => this.setState({ event: event.data }))
       .catch(err => console.log(err))
 
-    tickets.map(ticket => {
+    tickets.map((ticket, i) => {
       // Convert from paid to free ticket if price is $0
       const freeTicket = ticket.attributes.price === 0
-      freeTicket ? (ticket.type = 'free') : null
+      freeTicket ? (ticket.attributes.type = 'free') : null
 
       const newTicket = isNaN(ticket.id)
+
+      const index = tickets[i]
+
       if (newTicket) {
         fetch('https://api.picatic.com/v2/ticket_price', {
           method: 'POST',
           body: JSON.stringify({ data: ticket }),
           headers: { Authorization: API_KEY }
         })
+          .then(res => res.json())
+          .then(response => (tickets[i] = response.data))
       } else {
         fetch(`https://api.picatic.com/v2/ticket_price/${ticket.id}`, {
           method: 'PATCH',
@@ -145,6 +152,8 @@ class App extends Component {
         headers: { Authorization: API_KEY }
       })
     })
+
+    this.setState({ tickets, snackbarOpen: true })
   }
 
   handleEventChange = name => ev => {
@@ -182,7 +191,7 @@ class App extends Component {
       attributes: {
         event_id: Number(event.id),
         name: '',
-        max_quantity: '',
+        quantity: '',
         status: 'open',
         who_pays_fees: 'promoter',
         type: type,
@@ -210,7 +219,7 @@ class App extends Component {
   }
 
   render() {
-    const { event, tickets, submitted } = this.state
+    const { event, tickets, snackbarOpen, submitted } = this.state
     if (!event) {
       return false
     }
@@ -227,7 +236,7 @@ class App extends Component {
       ? <div>
           <div className="row mb-3">
             <div className="col-4 lead">Ticket Name</div>
-            <div className="col-2 lead">Max Quantity</div>
+            <div className="col-2 lead">Quantity</div>
             <div className="col-2 lead">Price</div>
           </div>
           {tickets.map((ticket, index) =>
@@ -345,6 +354,12 @@ class App extends Component {
               SAVE
             </button>
           </div>
+          <Snackbar
+            open={snackbarOpen}
+            message="Event saved"
+            autoHideDuration={2000}
+            onRequestClose={() => this.setState({ snackbarOpen: false })}
+          />
         </div>
       </MuiThemeProvider>
     )

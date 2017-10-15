@@ -8,7 +8,7 @@ const Ticket = ({
   handleTicketChange,
   deleteTicket
 }) => {
-  const { name, max_quantity, price, type } = ticket.attributes
+  const { name, quantity, price, type } = ticket.attributes
   const free = type === 'free'
 
   // Input Validation
@@ -18,6 +18,11 @@ const Ticket = ({
 
   const zeroCost = price === 0 && price !== '' && !free
   const rowStyle = `row ${zeroCost || minPrice ? '' : 'ticket-row'}`
+
+  const unlimited = quantity === 0 || quantity === ''
+  let qty = quantity
+
+  unlimited ? (qty = '') : null
 
   return (
     <section className={rowStyle}>
@@ -33,8 +38,9 @@ const Ticket = ({
       <div className="col-2">
         <input
           type="number"
-          value={max_quantity}
-          onChange={ev => handleTicketChange(ev, index, 'max_quantity')}
+          value={qty}
+          min="0"
+          onChange={ev => handleTicketChange(ev, index, 'quantity')}
           className="form-control"
           placeholder="Unlimited"
         />
