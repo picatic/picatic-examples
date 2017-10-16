@@ -1,8 +1,6 @@
 # Picatic Slack Slash Command with Rapid API
 
-## Share Picatic event and allow ticket registration within Slack.
-
-This project utilizes [Rapid API](https://rapidapi.com) and [Picatic API](http://developer.picatic.com/). Here is an example use case.
+This project utilizes [Rapid API](https://rapidapi.com) and [Picatic API](http://developer.picatic.com/). The goal is to allow ticket registration within Slack. Here is an example use case.
 
 1. Listen to [Slack Slash Command](https://api.slack.com/slash-commands) "/p picatic-event-url"
 ![Slack slash command input](https://preview.ibb.co/hjCbWR/Screenshot_2017_10_13_16_08_28.png)
