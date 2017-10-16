@@ -8,7 +8,7 @@ This project utilizes [Rapid API](https://rapidapi.com) and [Picatic API](http:/
 2. Populate a [Slack Interactive Message](https://api.slack.com/docs/message-buttons) with Picatic event information
 ![Slack interactive message](https://image.ibb.co/eVVukm/Screenshot_2017_10_13_16_22_55.png)
 
-3. Click the button and get the ticket, in Slack!
+3. Click the button and get the ticket, in Slack!  
 ![Tikcet](https://image.ibb.co/jcGvrR/Screenshot_2017_10_13_16_24_07.png)
 
 ## Getting Started
