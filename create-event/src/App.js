@@ -170,6 +170,12 @@ class App extends Component {
     this.setState({ event })
   }
 
+  handleDescriptionChange = html => {
+    const { event } = this.state
+    event.attributes.description = html
+    this.setState({ event })
+  }
+
   handleTimeChange = (name, format) => (ev, date) => {
     const { event } = this.state
     event.attributes[name] = moment(date).format(format)
@@ -290,7 +296,11 @@ class App extends Component {
                 </div>
               </section>
               <div className="row">
-                <Description className="my-5 col-md-6" />
+                <Description
+                  event={event}
+                  handleDescriptionChange={this.handleDescriptionChange}
+                  className="my-5 col-md-6"
+                />
               </div>
             </Paper>
             <Paper className="my-4">

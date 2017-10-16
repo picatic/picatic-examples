@@ -1,22 +1,31 @@
 import React, { Component } from 'react'
-import { Editor, EditorState, RichUtils } from 'draft-js'
+import { EditorState, convertToRaw, ContentState } from 'draft-js'
+import { Editor } from 'react-draft-wysiwyg'
+import '/Users/thomasmirmotahari/picatic-local/repos/picatic-examples/create-event/node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
+import draftToHtml from 'draftjs-to-html'
+import htmlToDraft from 'html-to-draftjs'
 
 export default class Description extends Component {
   state = {
     editorState: EditorState.createEmpty()
   }
 
-  handleChange = editorState => {
-    this.setState({ editorState })
+  componentWillMount() {
+    const { description } = this.props.event.attributes
+    const contentBlock = htmlToDraft(description)
+    if (contentBlock) {
+      const contentState = ContentState.createFromBlockArray(
+        contentBlock.contentBlocks
+      )
+      const editorState = EditorState.createWithContent(contentState)
+      this.setState({ editorState })
+    }
   }
 
-  handleKeyCommand = (command, editorState) => {
-    const newState = RichUtils.handleKeyCommand(editorState, command)
-    if (newState) {
-      this.handleChange(newState)
-      return 'handled'
-    }
-    return 'not-handled'
+  onEditorStateChange = editorState => {
+    const html = draftToHtml(convertToRaw(editorState.getCurrentContent()))
+    this.props.handleDescriptionChange(html)
+    this.setState({ editorState })
   }
 
   render() {
@@ -26,14 +35,10 @@ export default class Description extends Component {
         <p className="mb-2 text-muted">
           This will appear on your event website.
         </p>
-        <div className="form-control">
-          <Editor
-            editorState={this.state.editorState}
-            handleKeyCommand={this.handleKeyCommand}
-            onChange={this.handleChange}
-            spellCheck={true}
-          />
-        </div>
+        <Editor
+          editorState={this.state.editorState}
+          onEditorStateChange={this.onEditorStateChange}
+        />
       </section>
     )
   }
