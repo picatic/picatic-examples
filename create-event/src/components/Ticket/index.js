@@ -26,7 +26,7 @@ const Ticket = ({
 
   return (
     <section className={rowStyle}>
-      <div className="col-4">
+      <div className="col-5">
         <input
           type="text"
           value={name}
@@ -64,8 +64,13 @@ const Ticket = ({
                 </small>}
             </div>}
       </div>
-      <div className="col-4">
-        <button onClick={() => deleteTicket(index)}>Delete</button>
+      <div className="col-3 text-right">
+        <button
+          className="mdl-button mdl-js-button mdl-button--icon"
+          onClick={() => deleteTicket(index)}
+        >
+          <i className="material-icons">delete</i>
+        </button>
       </div>
     </section>
   )

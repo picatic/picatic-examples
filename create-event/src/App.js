@@ -248,8 +248,8 @@ class App extends Component {
 
     const renderTickets = hasTickets
       ? <div>
-          <div className="row mb-3">
-            <div className="col-4 lead">Ticket Name</div>
+          <div className="row tickets-header">
+            <div className="col-5 lead">Ticket Name</div>
             <div className="col-2 lead">Quantity</div>
             <div className="col-2 lead">Price</div>
           </div>
@@ -271,11 +271,11 @@ class App extends Component {
         <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
           <header className="mdl-layout__header">
             <div className="mdl-layout__header-row">
-              <span className="mdl-layout-title">Create Your Event</span>
+              <span className="mdl-layout-title">Event Creator</span>
               <div className="mdl-layout-spacer" />
               <nav className="mdl-navigation mdl-layout--large-screen-only">
                 <a className="mdl-navigation__link" onClick={this.createEvent}>
-                  Create Event
+                  Link
                 </a>
               </nav>
             </div>
@@ -284,7 +284,7 @@ class App extends Component {
             <Paper className="p-5">
               <section className="row mb-4">
                 <div className="col-md-6">
-                  <label className="mb-1 lead">Event Title</label>
+                  <label className="mb-2 lead">Event Title</label>
                   <input
                     type="text"
                     className={`form-control ${submitted && title === ''
@@ -305,8 +305,8 @@ class App extends Component {
             </Paper>
             <Paper className="my-4">
               <section className="row p-5">
-                <div className="col-12 mb-4">
-                  <h5 className="display1">When is your event?</h5>
+                <div className="col-12">
+                  <h4>When is your event?</h4>
                 </div>
                 <div className="col">
                   <DatePicker
@@ -343,35 +343,37 @@ class App extends Component {
                   />
                 </div>
               </section>
-            </Paper>
-            <Paper className="my-4">
+              <hr />
               <section className="row p-5">
-                <div className="col-12">
-                  <h5>What tickets will you offer</h5>
+                <div className="col-12 mb-3">
+                  <h4>What tickets will you offer?</h4>
                 </div>
-                <div className="col-12 text-center mb-4">
+                <div className="col-12 d-flex align-items-center">
                   <button
-                    className="btn btn-primary mr-3"
+                    className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary mr-3"
                     onClick={ev => this.addTicket(ev, 'regular')}
                   >
                     + Paid ticket
                   </button>
                   <button
-                    className="btn btn-primary"
+                    className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary"
                     onClick={ev => this.addTicket(ev, 'free')}
                   >
                     + Free ticket
                   </button>
                 </div>
-                <div className="col">
+                <div className="col mt-5">
                   {renderTickets}
                 </div>
               </section>
             </Paper>
           </div>
           <div className="fixed-bottom text-right m-4">
-            <button className="btn btn-primary" onClick={this.updateEvent}>
-              SAVE
+            <button
+              className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+              onClick={this.updateEvent}
+            >
+              Save
             </button>
           </div>
           <Snackbar
@@ -383,6 +385,10 @@ class App extends Component {
         </div>
       </MuiThemeProvider>
     )
+  }
+  componentDidUpdate() {
+    // Render js classes for Material Design Lite
+    window.componentHandler.upgradeDom()
   }
 }
 

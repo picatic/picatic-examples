@@ -1,3 +1,18 @@
 button {
   cursor: pointer;
 }
+
+.tickets-header {
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+}
+
+hr {
+  border-top: 1px solid #ededed;
+}
+
+h4 {
+  font-size: 24px;
+  font-weight: 300;
+  margin-top: 0px;
+}
