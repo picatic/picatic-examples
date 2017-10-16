@@ -6,25 +6,6 @@ import draftToHtml from 'draftjs-to-html'
 import htmlToDraft from 'html-to-draftjs'
 import './Description.css'
 
-function uploadImageCallBack(file) {
-  return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest()
-    xhr.open('POST', 'https://api.imgur.com/3/image')
-    xhr.setRequestHeader('Authorization', 'Client-ID a3cf70c762f9c96')
-    const data = new FormData()
-    data.append('image', file)
-    xhr.send(data)
-    xhr.addEventListener('load', () => {
-      const response = JSON.parse(xhr.responseText)
-      resolve(response)
-    })
-    xhr.addEventListener('error', () => {
-      const error = JSON.parse(xhr.responseText)
-      reject(error)
-    })
-  })
-}
-
 export default class Description extends Component {
   state = {
     editorState: EditorState.createEmpty()
@@ -32,7 +13,13 @@ export default class Description extends Component {
 
   componentWillMount() {
     const { description } = this.props.event.attributes
+
+    if (description === null) {
+      return false
+    }
+
     const contentBlock = htmlToDraft(description)
+
     if (contentBlock) {
       const contentState = ContentState.createFromBlockArray(
         contentBlock.contentBlocks
@@ -40,6 +27,25 @@ export default class Description extends Component {
       const editorState = EditorState.createWithContent(contentState)
       this.setState({ editorState })
     }
+  }
+
+  uploadImageCallBack = file => {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest()
+      xhr.open('POST', 'https://api.imgur.com/3/image')
+      xhr.setRequestHeader('Authorization', 'Client-ID a3cf70c762f9c96')
+      const data = new FormData()
+      data.append('image', file)
+      xhr.send(data)
+      xhr.addEventListener('load', () => {
+        const response = JSON.parse(xhr.responseText)
+        resolve(response)
+      })
+      xhr.addEventListener('error', () => {
+        const error = JSON.parse(xhr.responseText)
+        reject(error)
+      })
+    })
   }
 
   onEditorStateChange = editorState => {
@@ -107,7 +113,7 @@ export default class Description extends Component {
               ]
             },
             image: {
-              uploadCallback: uploadImageCallBack,
+              uploadCallback: this.uploadImageCallBack,
               alt: { present: true, mandatory: true }
             }
           }}

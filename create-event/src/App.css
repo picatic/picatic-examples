@@ -16,3 +16,12 @@ h4 {
   font-weight: 300;
   margin-top: 0px;
 }
+
+.live {
+  background: #34cb7b;
+  height: 28px;
+  margin-right: 20px;
+  width: 28px;
+  border-radius: 50%;
+  box-shadow: 0px 0px 6px 1px #e0e0e0;
+}
