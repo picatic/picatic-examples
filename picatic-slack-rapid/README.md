@@ -20,11 +20,11 @@ a) Sign up a [Rapid API account](https://rapidapi.com/)
 b) Create a [Rapid API App](https://dashboard.rapidapi.com/apps)  
 c) Here are all Rapid endpoints we are using in this example: [Slack slashCommand](https://rapidapi.com/package/Slack/functions/slashCommand), [Slack getUserProfile](https://rapidapi.com/package/Slack/functions/getUserProfile), [Slack postMessage](https://rapidapi.com/package/Slack/functions/postMessage), [Picatic Checkout Create](https://rapidapi.com/user/thomas_mirmo/package/Picatic%20Ticketing) & [Picatic Checkout Confirm](https://rapidapi.com/user/thomas_mirmo/package/Picatic%20Ticketing). Make sure you replace all parts of Rapid API & Masheape (partner with Rapid API) in the code with your Rapid API code. Also put in required Slack tokens as well (covered in Slack Set Up below). 
 
-2. Slack Set up  
+2. Slack Set Up  
 a) Create a [Slack APP](https://api.slack.com/apps) and install it to your workplace. Here we need to enable Interactive Components, Slash Commands and Permissions. ![Slack set up](https://preview.ibb.co/kXJpkm/Screenshot_2017_10_16_12_39_20.png)  
 b) Set up Slash Commands --> Request URL with the link in [Rapid API Slack slashCommand](https://rapidapi.com/package/Slack/functions/slashCommand).![Slash command set up](https://preview.ibb.co/m9ULQm/Screenshot_2017_10_16_13_02_09.png)  
 c) Get your Slack App Token and [Legacy token](https://api.slack.com/custom-integrations/legacy-tokens) and replace it in the code.  
-d) Set up Interactive Components --> Request URL with [ngrok](https://ngrok.com/) local hosting (default port is 8080). Alternatively, you can publish your project with [Now](https://zeit.co/now) or whatever publishing tool you are confortable with.
+d) Set up Interactive Components --> Request URL with [ngrok](https://ngrok.com/) local hosting (default port is 8080). Alternatively, you can publish your project with [Now](https://zeit.co/now) or whatever publishing tool you are comfortable with.
 
 3. Download Dependencies:
 ```bash
