@@ -5,5 +5,6 @@ angular.module('angularCalendar', [
   'calendar',
   'homePage',
   'ticketBox',
-  'ui.calendar'
+  'ui.calendar',
+  'embedContainer'
 ]);

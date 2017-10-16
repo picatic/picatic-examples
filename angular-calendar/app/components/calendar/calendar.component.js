@@ -8,28 +8,6 @@ angular.
       function CalendarController(Event) {
         var self = this;
 
-        var selectEvent = function(event) {
-          var pweSelector = function(id) {
-            return document.getElementById(id);
-          };
-
-          var newEventId = event.event_id;
-          var oldEventId = self.selectedEvent.event_id;
-
-          // the selected event id must be added to the html element id attributes of picatic widget elements
-          var iframe = pweSelector('picatic-widget-iframe-') || pweSelector('picatic-widget-iframe-' + oldEventId);
-          var loadingDiv = pweSelector('picatic-loading-') || pweSelector('picatic-loading-' + oldEventId);
-          var wrapper = pweSelector('picatic-widget-wrapper-') || pweSelector('picatic-widget-wrapper-' + oldEventId);
-
-          iframe.id = 'picatic-widget-iframe-' + newEventId;
-          iframe.removeAttribute('src');
-          loadingDiv.id = 'picatic-loading-' + newEventId;
-          wrapper.id = 'picatic-widget-wrapper-' + newEventId;
-
-          self.selectedEvent = event;
-          self.onEventSelection({$event: {selectedEvent: event}});
-        }
-
         var formatEvents = function(response) {
           if (!response.data) {
             return [];
@@ -65,7 +43,7 @@ angular.
             },
             eventDrop: this.alertOnDrop,
             eventResize: this.alertOnResize,
-            eventClick: selectEvent
+            eventClick: self.onEventSelection({$event: {selectedEvent: event}});
           }
         };
         this.eventSources = [];
@@ -77,7 +55,6 @@ angular.
       }
     ],
     bindings: {
-      selectedEvent: '<',
       onEventSelection: '&'
     }
   });
