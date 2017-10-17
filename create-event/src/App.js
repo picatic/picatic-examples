@@ -1,19 +1,15 @@
 import React, { Component } from 'react'
+import { Route } from 'react-router-dom'
 import moment from 'moment'
 import './App.css'
 
-// Components
-import Ticket from './components/Ticket'
-import Description from './components/Description'
+// components
+import Home from './components/Home'
+import Header from './components/Header'
+import EventCreator from './components/EventCreator'
 
-// Material UI
-import Paper from 'material-ui/Paper'
+// Material UI components
 import Snackbar from 'material-ui/Snackbar'
-import TimePicker from 'material-ui/TimePicker'
-import DatePicker from 'material-ui/DatePicker'
-
-// Picatic API Key
-// const `Bearer ${apiKey}` = 'Bearer sk_live_4481fd77f109eb6622beec721b9d1f5a'
 
 export default class App extends Component {
   state = {
@@ -94,6 +90,7 @@ export default class App extends Component {
         validForm = false
         this.setState({ submitted: true })
       }
+      return true
     })
 
     if (noTitle) {
@@ -130,7 +127,9 @@ export default class App extends Component {
     tickets.map((ticket, index) => {
       // Convert from paid to free ticket if price is $0
       const freeTicket = ticket.attributes.price === 0
-      freeTicket ? (ticket.attributes.type = 'free') : null
+      if (freeTicket) {
+        ticket.attributes.type = 'free'
+      }
 
       const newTicket = isNaN(ticket.id)
 
@@ -149,6 +148,7 @@ export default class App extends Component {
           headers: { Authorization: `Bearer ${apiKey}` }
         })
       }
+      return true
     })
 
     deletedTickets.map(ticket => {
@@ -156,6 +156,7 @@ export default class App extends Component {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${apiKey}` }
       })
+      return true
     })
 
     this.snackbar(message)
@@ -190,6 +191,10 @@ export default class App extends Component {
         )
       )
       .catch(err => console.log('err'))
+  }
+
+  handleStateChange = name => ev => {
+    this.setState({ [name]: ev.target.value })
   }
 
   handleEventChange = name => ev => {
@@ -267,194 +272,38 @@ export default class App extends Component {
   render() {
     const { event, tickets, submitted, apiKey, user } = this.state
 
-    if (user === false) {
-      return (
-        <div className="container mt-4">
-          <div className="row">
-            <div className="col">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Picatic API Key"
-                onChange={ev =>
-                  this.setState(
-                    { apiKey: ev.target.value },
-                    () => this.getMyUser
-                  )}
-              />
-            </div>
-            <div className="col">
-              <button
-                className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary"
-                onClick={this.getMyUser}
-              >
-                Submit
-              </button>
-            </div>
-          </div>
-          <p>sk_live_4481fd77f109eb6622beec721b9d1f5a</p>
-        </div>
-      )
-    }
-
-    if (!event) {
-      return false
-    }
-
-    const { title, start_date, start_time, end_time } = event.attributes
-
-    const startDate = new Date(moment(start_date, 'YYYY-MM-DD').toISOString())
-    const startTime = new Date(moment(start_time, 'HH:mm:ss').toISOString())
-    const endTime = new Date(moment(end_time, 'HH:mm:ss').toISOString())
-
-    const hasTickets = tickets.length > 0
-
-    const renderTickets = hasTickets
-      ? <div>
-          <div className="row tickets-header">
-            <div className="col-5 lead">Ticket Name</div>
-            <div className="col-2 lead">Quantity</div>
-            <div className="col-2 lead">Price</div>
-          </div>
-          {tickets.map((ticket, index) =>
-            <Ticket
-              key={index}
-              ticket={ticket}
-              index={index}
-              submitted={submitted}
-              handleTicketChange={this.handleTicketChange}
-              deleteTicket={this.deleteTicket}
-            />
-          )}
-        </div>
-      : null
-
-    const active = event.attributes.status === 'active'
-
     return (
-      <section>
-        <div className="container mt-4">
-          <Paper className="p-5">
-            <section className="row mb-4">
-              <div className="col-md-6">
-                <label className="mb-2 lead">Event Title</label>
-                <input
-                  type="text"
-                  className={`form-control ${submitted && title === ''
-                    ? 'is-invalid'
-                    : ''}`}
-                  value={title}
-                  onChange={this.handleEventChange('title')}
-                />
-              </div>
-            </section>
-            <div className="row">
-              <Description
-                event={event}
-                handleDescriptionChange={this.handleDescriptionChange}
-                className="my-5 col-md-6"
-              />
-            </div>
-          </Paper>
-          <Paper className="my-4">
-            <section className="row p-5">
-              <div className="col-12">
-                <h4>When is your event?</h4>
-              </div>
-              <div className="col">
-                <DatePicker
-                  hintText="Event Date"
-                  value={startDate}
-                  onChange={this.handleTimeChange('start_date', 'YYYY-MM-DD')}
-                  minDate={new Date()}
-                  formatDate={
-                    new Intl.DateTimeFormat('en-US', {
-                      day: 'numeric',
-                      month: 'long',
-                      year: 'numeric'
-                    }).format
-                  }
-                  floatingLabelText="Event Date"
-                />
-              </div>
-
-              <div className="col">
-                <TimePicker
-                  hintText="5:30 pm"
-                  value={startTime}
-                  onChange={this.handleTimeChange('start_time', 'HH:mm:ss')}
-                  floatingLabelText="Start Time"
-                />
-              </div>
-
-              <div className="col">
-                <TimePicker
-                  hintText="8:00 pm"
-                  value={endTime}
-                  onChange={this.handleTimeChange('end_time', 'HH:mm:ss')}
-                  floatingLabelText="End Time"
-                />
-              </div>
-            </section>
-            <hr />
-            <section className="row p-5">
-              <div className="col-12 mb-3">
-                <h4>What tickets will you offer?</h4>
-              </div>
-              <div className="col-12 d-flex align-items-center">
-                <button
-                  className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary mr-3"
-                  onClick={ev => this.addTicket(ev, 'regular')}
-                >
-                  + Paid ticket
-                </button>
-                <button
-                  className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary"
-                  onClick={ev => this.addTicket(ev, 'free')}
-                >
-                  + Free ticket
-                </button>
-              </div>
-              <div className="col mt-5">
-                {renderTickets}
-              </div>
-            </section>
-          </Paper>
-        </div>
-        <div className="d-flex align-items-center fixed-bottom m-4 justify-content-end">
-          {active &&
-            <div>
-              <div className="live" id="live" />
-              <div
-                className="mdl-tooltip mdl-tooltip--left"
-                data-mdl-for="live"
-              >
-                Event Live
-              </div>
-            </div>}
-
-          <button
-            className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
-            onClick={() => this.updateEvent('Event Saved')}
-          >
-            Save
-          </button>
-
-          {!active &&
-            <button
-              className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary ml-3"
-              onClick={this.activateEvent}
-            >
-              Activate
-            </button>}
-        </div>
+      <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <Header />
+        <Route exact path="/" component={Home} />
+        <Route
+          exact
+          path="/new"
+          render={() =>
+            <EventCreator
+              event={event}
+              tickets={tickets}
+              submitted={submitted}
+              apiKey={apiKey}
+              user={user}
+              handleStateChange={this.handleStateChange}
+              handleEventChange={this.handleEventChange}
+              handleTimeChange={this.handleTimeChange}
+              handleTicketChange={this.handleTicketChange}
+              handleDescriptionChange={this.handleDescriptionChange}
+              addTicket={this.addTicket}
+              deleteTicket={this.deleteTicket}
+              updateEvent={this.updateEvent}
+              activateEvent={this.activateEvent}
+            />}
+        />
         <Snackbar
           open={this.state.snackbarOpen}
           message={this.state.message}
           autoHideDuration={2000}
           onRequestClose={() => this.setState({ snackbarOpen: false })}
         />
-      </section>
+      </div>
     )
   }
   componentDidUpdate() {

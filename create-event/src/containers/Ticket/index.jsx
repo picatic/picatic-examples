@@ -22,7 +22,9 @@ const Ticket = ({
   const unlimited = quantity === 0 || quantity === ''
   let qty = quantity
 
-  unlimited ? (qty = '') : null
+  if (unlimited) {
+    qty = ''
+  }
 
   return (
     <section className={rowStyle}>
