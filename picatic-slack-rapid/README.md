@@ -41,7 +41,7 @@ npm start
 ngrok http 8080
 ```
 
-Now, you can test the slash command with Picatic event! (Test event: https://www.picatic.com/slack. You can also put "slack"(event_slug) or "132389"(event_id) in the command.)
+Now, you can test the slash command with Picatic event! (Test event: https://www.picatic.com/slack. You can also try "/p slack"(event_slug) or "/p 132389"(event_id) in the command.)
 
 ## App Flow
 ### Slash command
