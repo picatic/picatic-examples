@@ -21,20 +21,24 @@ checkout = (data, payload, userid) => {
   var value = payload.actions[0].value
   var eventid = value.split("-")[0];
   var ticketid = value.split("-")[1];
+  var realname = data.real_name;
+  var index = realname.indexOf(" ");
+  var firstname = realname.substr(0, index);
+  var lastname = realname.substr(index + 1);
   const body = {
     "data": {
       "attributes": {
         "event_id": Number(eventid),
         "invoice": {
           "email": data.email,
-          "first_name": data.first_name,
-          "last_name": data.last_name,
+          "first_name": firstname,
+          "last_name": lastname,
         },
         "tickets": [
           {
             "email": data.email,
-            "first_name": data.first_name,
-            "last_name": data.last_name,
+            "first_name": firstname,
+            "last_name": lastname,
             "ticket_price": {
               "ticket_price_id": Number(ticketid)
             }
