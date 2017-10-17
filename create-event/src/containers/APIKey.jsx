@@ -21,7 +21,9 @@ const APIKey = ({ apiKey, handleChange, login }) =>
         </button>
       </div>
     </div>
-    <p>sk_live_4481fd77f109eb6622beec721b9d1f5a</p>
+    <small className="text-muted">
+      Demo API Key: sk_live_4481fd77f109eb6622beec721b9d1f5a
+    </small>
   </div>
 
 export default APIKey

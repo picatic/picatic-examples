@@ -8,13 +8,28 @@ import Home from './components/Home'
 import Header from './components/Header'
 import EventCreator from './components/EventCreator'
 
+// containers
+import APIKey from './containers/APIKey'
+
 // Material UI components
 import Snackbar from 'material-ui/Snackbar'
+
+const host = 'https://api.picatic.com/v2'
 
 export default class App extends Component {
   state = {
     user: false,
-    event: false,
+    event: {
+      attributes: {
+        description: null,
+        end_time: null,
+        start_date: null,
+        end_date: null,
+        start_time: null,
+        title: ''
+      },
+      type: 'event'
+    },
     tickets: [],
     deletedTickets: [],
     snackbarOpen: false,
@@ -24,24 +39,23 @@ export default class App extends Component {
   }
 
   getMyUser = () => {
-    const { apiKey } = this.state
-    fetch('https://api.picatic.com/v2/user/me', {
+    fetch(`${host}/user/me`, {
       method: 'GET',
       headers: {
-        Authorization: `Bearer ${apiKey}`
+        Authorization: `Bearer ${this.state.apiKey}`
       }
     })
       .then(res => res.json())
       .then(user =>
-        this.setState({ user: user.data }, () => this.createEvent())
+        this.setState({ user: user.data }, () =>
+          this.snackbar(`Welcome ${user.data.attributes.first_name}!`)
+        )
       )
-      .catch(err => console.log(err))
+      .catch(err => this.snackbar(`'Unauthorized Access Token'`))
   }
 
   getEvent = () => {
-    const { event } = this.state
-
-    fetch(`https://api.picatic.com/v2/event/${event.id}?include=ticket_prices`)
+    fetch(`${host}/event/${this.state.event.id}?include=ticket_prices`)
       .then(res => res.json())
       .then(event =>
         this.setState({
@@ -52,77 +66,49 @@ export default class App extends Component {
       .catch(err => console.log(err))
   }
 
-  createEvent = () => {
-    const { apiKey } = this.state
-    const body = JSON.stringify({
-      data: { type: 'event', attributes: { title: 'Your Event Title' } }
-    })
-
-    fetch('https://api.picatic.com/v2/event', {
-      method: 'POST',
-      body: body,
-      headers: {
-        Authorization: `Bearer ${apiKey}`
-      }
-    })
-      .then(res => res.json())
-      .then(event =>
-        this.setState({ event: event.data }, () => {
-          this.getEvent()
-        })
-      )
-      .catch(err => console.log(err))
-  }
-
-  validation = () => {
-    const { event, tickets } = this.state
-    const noTitle = event.attributes.title === ''
-
-    let validForm = true
-
-    tickets.map(ticket => {
-      const { name, price } = ticket.attributes
-
-      const badPrice = price < 3 && price > 0
-      const inValid = name === '' || price === '' || badPrice
-
-      if (inValid) {
-        validForm = false
-        this.setState({ submitted: true })
-      }
-      return true
-    })
-
-    if (noTitle) {
-      validForm = false
-      this.setState({ submitted: true })
-    }
-
-    return validForm
-  }
-
   updateEvent = message => {
     const { event, tickets, deletedTickets, apiKey } = this.state
 
     if (!this.validation()) {
-      this.snackbar('Incomplete Form')
       return false
     }
 
-    fetch(`https://api.picatic.com/v2/event/${event.id}`, {
-      method: 'PATCH',
-      body: JSON.stringify({
-        data: {
-          attributes: event.attributes,
-          id: event.id,
-          type: 'event'
+    const noEvent = isNaN(event.id)
+    if (noEvent) {
+      fetch(`${host}/event`, {
+        method: 'POST',
+        body: JSON.stringify({ data: event }),
+        headers: {
+          Authorization: `Bearer ${apiKey}`
         }
-      }),
-      headers: { Authorization: `Bearer ${apiKey}` }
-    })
-      .then(res => res.json())
-      .then(event => this.setState({ event: event.data }))
-      .catch(err => console.log(err))
+      })
+        .then(res => res.json())
+        .then(event => this.setState({ event: event.data }))
+        .catch(err => console.log(err))
+    } else {
+      // FIXME: Pass all event attributes in PATCH
+      fetch(`${host}/event/${event.id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          data: {
+            attributes: {
+              description: event.attributes.description,
+              end_time: event.attributes.end_time,
+              start_date: event.attributes.start_date,
+              end_date: event.attributes.end_date,
+              start_time: event.attributes.start_time,
+              title: event.attributes.title
+            },
+            id: event.id,
+            type: 'event'
+          }
+        }),
+        headers: { Authorization: `Bearer ${apiKey}` }
+      })
+        .then(res => res.json())
+        .then(event => this.setState({ event: event.data }))
+        .catch(err => console.log(err))
+    }
 
     tickets.map((ticket, index) => {
       // Convert from paid to free ticket if price is $0
@@ -134,15 +120,16 @@ export default class App extends Component {
       const newTicket = isNaN(ticket.id)
 
       if (newTicket) {
-        fetch('https://api.picatic.com/v2/ticket_price', {
+        fetch(`${host}/ticket_price`, {
           method: 'POST',
           body: JSON.stringify({ data: ticket }),
           headers: { Authorization: `Bearer ${apiKey}` }
         })
           .then(res => res.json())
           .then(response => (tickets[index] = response.data))
+          .catch(err => console.log(err))
       } else {
-        fetch(`https://api.picatic.com/v2/ticket_price/${ticket.id}`, {
+        fetch(`${host}/ticket_price/${ticket.id}`, {
           method: 'PATCH',
           body: JSON.stringify({ data: ticket }),
           headers: { Authorization: `Bearer ${apiKey}` }
@@ -152,7 +139,7 @@ export default class App extends Component {
     })
 
     deletedTickets.map(ticket => {
-      fetch(`https://api.picatic.com/v2/ticket_price/${ticket.id}`, {
+      fetch(`${host}/ticket_price/${ticket.id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${apiKey}` }
       })
@@ -161,6 +148,7 @@ export default class App extends Component {
 
     this.snackbar(message)
     this.setState({ tickets })
+    return true
   }
 
   activateEvent = () => {
@@ -168,29 +156,63 @@ export default class App extends Component {
 
     const noTickets = tickets.length <= 0
 
-    if (noTickets) {
-      this.snackbar('Add Tickets')
-      return false
-    }
-
     if (!this.validation()) {
       this.snackbar('Incomplete Form')
       return false
     }
 
-    fetch(`https://api.picatic.com/v2/event/${event.id}/activate`, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${apiKey}` }
+    if (noTickets) {
+      this.snackbar('Add Tickets')
+      return false
+    }
+
+    this.updateEvent('Updating...')
+
+    const activateReady = setInterval(() => {
+      const hasTickets = !isNaN(this.state.tickets[0].id)
+      const notLive = this.state.event.attributes.status !== 'active'
+
+      if (hasTickets && notLive) {
+        fetch(`${host}/event/${event.id}/activate`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${apiKey}` }
+        })
+          .then(res => res.json())
+          .then(event =>
+            this.setState({ event: event.data }, () =>
+              this.snackbar('Event Live')
+            )
+          )
+        clearInterval(activateReady)
+      }
+    }, 1000)
+  }
+
+  validation = () => {
+    let validForm = true
+
+    this.state.tickets.map(ticket => {
+      const { name, price } = ticket.attributes
+
+      const badPrice = price < 3 && price > 0
+      const inValid = name === '' || price === '' || badPrice
+
+      if (inValid) {
+        validForm = false
+        this.snackbar('Incomplete Tickets')
+        this.setState({ submitted: true })
+      }
+      return true
     })
-      .then(res => res.json())
-      .then(event =>
-        this.setState(
-          { event: event.data },
-          () => this.snackbar('Event Live'),
-          this.getEvent()
-        )
-      )
-      .catch(err => console.log('err'))
+
+    const smallTitle = this.state.event.attributes.title.length < 3
+    if (smallTitle) {
+      validForm = false
+      this.snackbar('Enter Event Title')
+      this.setState({ submitted: true })
+    }
+
+    return validForm
   }
 
   handleStateChange = name => ev => {
@@ -212,7 +234,10 @@ export default class App extends Component {
   handleTimeChange = (name, format) => (ev, date) => {
     const { event } = this.state
     event.attributes[name] = moment(date).format(format)
-    if (name === 'start_date') {
+
+    // Set start date and end date to same value
+    const startDate = name === 'start_date'
+    if (startDate) {
       event.attributes['end_date'] = moment(date).format(format)
     }
     this.setState({ event })
@@ -221,6 +246,8 @@ export default class App extends Component {
   handleTicketChange = (ev, index, name) => {
     const { tickets } = this.state
     const isNumber = ev.target.type === 'number'
+
+    // Convert value to number
     const value = isNumber ? Number(ev.target.value) : ev.target.value
 
     tickets[index].attributes[name] = value
@@ -230,8 +257,8 @@ export default class App extends Component {
 
   addTicket = (ev, type) => {
     ev.preventDefault()
-    const { event, tickets } = this.state
 
+    const { event, tickets } = this.state
     const free = type === 'free'
 
     const newTicket = {
@@ -256,8 +283,8 @@ export default class App extends Component {
     const { tickets, deletedTickets } = this.state
     const ticket = tickets[index]
 
-    const isExisting = !isNaN(ticket.id)
-    if (isExisting) {
+    const existingTicket = !isNaN(ticket.id)
+    if (existingTicket) {
       deletedTickets.push(ticket)
     }
 
@@ -270,7 +297,36 @@ export default class App extends Component {
   }
 
   render() {
-    const { event, tickets, submitted, apiKey, user } = this.state
+    const {
+      event,
+      tickets,
+      submitted,
+      apiKey,
+      user,
+      snackbarOpen,
+      message
+    } = this.state
+
+    const snackbar = (
+      <Snackbar
+        open={snackbarOpen}
+        message={message}
+        autoHideDuration={2000}
+        onRequestClose={() => this.setState({ snackbarOpen: false })}
+      />
+    )
+    if (user === false) {
+      return (
+        <div>
+          <APIKey
+            apiKey={apiKey}
+            handleChange={this.handleStateChange}
+            login={this.getMyUser}
+          />
+          {snackbar}
+        </div>
+      )
+    }
 
     return (
       <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
@@ -284,9 +340,6 @@ export default class App extends Component {
               event={event}
               tickets={tickets}
               submitted={submitted}
-              apiKey={apiKey}
-              user={user}
-              handleStateChange={this.handleStateChange}
               handleEventChange={this.handleEventChange}
               handleTimeChange={this.handleTimeChange}
               handleTicketChange={this.handleTicketChange}
@@ -297,12 +350,7 @@ export default class App extends Component {
               activateEvent={this.activateEvent}
             />}
         />
-        <Snackbar
-          open={this.state.snackbarOpen}
-          message={this.state.message}
-          autoHideDuration={2000}
-          onRequestClose={() => this.setState({ snackbarOpen: false })}
-        />
+        {snackbar}
       </div>
     )
   }
