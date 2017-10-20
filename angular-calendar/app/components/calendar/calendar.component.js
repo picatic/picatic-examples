@@ -43,7 +43,9 @@ angular.
             },
             eventDrop: this.alertOnDrop,
             eventResize: this.alertOnResize,
-            eventClick: self.onEventSelection({$event: {selectedEvent: event}});
+            eventClick: function(event) {
+              self.onEventSelection({$event: {selectedEvent: event}});
+            }
           }
         };
         this.eventSources = [];
