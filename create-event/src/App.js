@@ -38,6 +38,10 @@ export default class App extends Component {
     apiKey: ''
   }
 
+  componentWillMount() {
+    this.getEvent()
+  }
+
   getMyUser = () => {
     fetch(`${host}/user/me`, {
       method: 'GET',
@@ -55,7 +59,7 @@ export default class App extends Component {
   }
 
   getEvent = () => {
-    fetch(`${host}/event/${this.state.event.id}?include=ticket_prices`)
+    fetch(`${host}/event/134625?include=ticket_prices`)
       .then(res => res.json())
       .then(event =>
         this.setState({

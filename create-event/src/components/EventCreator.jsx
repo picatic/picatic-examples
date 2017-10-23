@@ -3,12 +3,16 @@ import moment from 'moment'
 
 // containers
 import Ticket from '../containers/Ticket'
+import ImgUpload from '../containers/ImgUpload'
 import Description from '../containers/Description'
 
 // Material UI
 import Paper from 'material-ui/Paper'
 import TimePicker from 'material-ui/TimePicker'
 import DatePicker from 'material-ui/DatePicker'
+
+// Filestack API
+const FILESTACK_API_KEY = 'AwQ1CrYCYTo6HCuVyPbTBz'
 
 const EventCreator = props => {
   const {
@@ -102,6 +106,8 @@ const EventCreator = props => {
                 handleDescriptionChange={handleDescriptionChange}
                 className="my-5 col-md-6"
               />
+
+              <ImgUpload apiKey={FILESTACK_API_KEY} event={event} />
             </div>}
         </Paper>
         {hasEvent &&
