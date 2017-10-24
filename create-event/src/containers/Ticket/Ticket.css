@@ -1,0 +1,14 @@
+.ticket-row {
+  margin-bottom: 30px;
+}
+small {
+  margin-bottom: 6.5px;
+}
+
+.mdl-textfield__label {
+  margin-bottom: 0px;
+}
+
+.mdl-textfield {
+  padding-bottom: 0px;
+}

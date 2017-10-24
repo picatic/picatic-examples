@@ -1,0 +1,23 @@
+{
+  "name": "create-event",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "draft-js": "^0.10.3",
+    "draftjs-to-html": "^0.7.6",
+    "html-to-draftjs": "^1.0.1",
+    "material-ui": "^0.19.4",
+    "moment": "^2.19.1",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-draft-wysiwyg": "^1.10.12",
+    "react-router-dom": "^4.2.2",
+    "react-scripts": "1.0.14"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
