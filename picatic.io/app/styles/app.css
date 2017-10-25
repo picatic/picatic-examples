@@ -37,7 +37,7 @@
 }
 
 .heart .mask {
-  background-image: radial-gradient(0% 100%, rgba(69,39,160,0.87) 0%, rgba(103,58,183,0.87) 100%);
+  background-image: linear-gradient(45deg, rgba(69,39,160,0.87) 0%, rgba(103,58,183,0.72) 100%);
 }
 
 .heart .btn {
@@ -54,7 +54,7 @@
 }
 
 .cerulean .mask {
-  background-image: radial-gradient(100% 0%, rgba(63,81,181,0.87) 0%, rgba(40,53,147,0.87) 100%);
+  background-image: linear-gradient(45deg, rgba(40,53,147,0.87) 0%, rgba(63,81,181,0.72) 100%);
 }
 
 .cerulean .btn {
@@ -71,7 +71,7 @@
 }
 
 .dodger .mask {
-  background-image: radial-gradient(100% 0%, rgba(33,150,243,0.87) 0%, rgba(21,101,192,0.87) 100%);
+  background-image: linear-gradient(45deg, rgba(21,101,192,0.87) 0%, rgba(33,150,243,0.72) 100%);
 }
 
 .dodger .btn {
