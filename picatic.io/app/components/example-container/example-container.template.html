@@ -1,15 +1,16 @@
-<figure class="grid__brick mt-3 col-6 col-md-4 col-xl-3 shuffle-item shuffle-item--visible" ng-repeat="example in $ctrl.examples" ng-cloak>
+<figure class="grid__brick col-6 col-md-4 col-xl-3 shuffle-item shuffle-item--visible" ng-repeat="example in $ctrl.examples" ng-cloak>
   <div class="shuffle-item-content-inner {{ example.color }}">
     <a class="icon-container aspect" href="https://checkout.picatic.io/">
       <div class="aspect__inner">
         <img ng-src="{{ example.imgUrl }}"/>
+        <div class="absolute mask"></div>
       </div>
     </a>
     <figcaption class="text-center layout-column">
-      <h5 class=" text-center py-3 mb-0">{{ example.name }}</h5>
-      <p class=" px-3 pb-2 mb-0">{{ example.description }}</p>
+      <h5 class="bold">{{ example.name }}</h5>
+      <p>{{ example.description }}</p>
       <a class="btn btn-default {{ example.color }}" role="button" href="{{ example.demoLink }}">see example</a>
-      <a class="" href="{{ example.sourceLink }}">See Code</a>
+      <a href="{{ example.sourceLink }}">See Code</a>
     </figcaption>
   </div>
 </figure>
