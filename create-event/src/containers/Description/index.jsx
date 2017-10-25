@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { EditorState, convertToRaw, ContentState } from 'draft-js'
 import { Editor } from 'react-draft-wysiwyg'
-import '/Users/thomasmirmotahari/picatic-local/repos/picatic-examples/create-event/node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import draftToHtml from 'draftjs-to-html'
 import htmlToDraft from 'html-to-draftjs'
 import './Description.css'
