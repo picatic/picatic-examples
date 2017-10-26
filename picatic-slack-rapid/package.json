@@ -1,0 +1,29 @@
+{
+  "name": "picatic-slack-rapidapi",
+  "version": "1.0.0",
+  "description": "A slack slash command to render picatic event in slack",
+  "main": "src/server.js",
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "license": "MIT",
+  "scripts": {
+    "start:local": "source .env && npm run start",
+    "start": "node src/server"
+  },
+  "repository": {},
+  "author": {
+    "name": "Jason",
+    "email": "api@picatic.com"
+  },
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "crypto-js": "^3.1.9-1",
+    "express": "^4.15.3",
+    "moment": "^2.19.1",
+    "rapidapi-connect": "0.0.6",
+    "request-promise-native": "^1.0.4",
+    "unirest": "^0.5.1",
+    "request":"^2.34"
+  }
+}
