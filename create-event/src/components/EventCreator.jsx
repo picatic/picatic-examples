@@ -5,13 +5,17 @@ import moment from 'moment'
 import Ticket from '../containers/Ticket'
 import ImgUpload from '../containers/ImgUpload'
 import Description from '../containers/Description'
+import Venue from '../containers/Venue'
 
 // Material UI
 import Paper from 'material-ui/Paper'
 import TimePicker from 'material-ui/TimePicker'
 import DatePicker from 'material-ui/DatePicker'
 
-// Filestack API
+// Filestack API - PICATIC
+// const FILESTACK_API_KEY = 'An8cT0rwoR8O7aDBiPJHrz'
+
+// Filestack API - PERSONAL
 const FILESTACK_API_KEY = 'AwQ1CrYCYTo6HCuVyPbTBz'
 
 const EventCreator = props => {
@@ -20,6 +24,7 @@ const EventCreator = props => {
     tickets,
     submitted,
     handleEventChange,
+    handleEventName,
     handleTimeChange,
     handleTicketChange,
     handleDescriptionChange,
@@ -35,7 +40,13 @@ const EventCreator = props => {
 
   const hasEvent = !isNaN(event.id)
 
-  const { title, start_date, start_time, end_time } = event.attributes
+  const {
+    title,
+    start_date,
+    start_time,
+    end_time,
+    cover_image_uri
+  } = event.attributes
 
   const startDate = start_date
     ? new Date(moment(start_date, 'YYYY-MM-DD').toISOString())
@@ -71,43 +82,52 @@ const EventCreator = props => {
 
   const active = event.attributes.status === 'active'
 
+  const style = {
+    marginLeft: '-15px'
+  }
+
   return (
     <section>
       <div className="container mt-4">
         <Paper className="p-5">
-          <section className="row mb-4">
+          <section className="row mb-4 align-items-center">
             <div className="col-md-6">
-              <label className="mb-2 lead">Event Title</label>
-              <input
-                type="text"
-                pattern=".{3,}"
-                className={`form-control ${submitted && title.length < 3
-                  ? 'is-invalid'
-                  : ''}`}
-                value={title}
-                onChange={handleEventChange('title')}
-                placeholder="Your Amazing Event!"
-              />
+                <label className="mb-2 lead">Event Title</label>
+                <input
+                  type="text"
+                  pattern=".{3,}"
+                  className={`form-control ${submitted && title.length < 3
+                    ? 'is-invalid'
+                    : ''}`}
+                  value={title}
+                  onChange={handleEventChange('title')}
+                  placeholder="Your Amazing Event!"
+                />
+                {!hasEvent &&
+                  <button
+                    className="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored"
+                    style={style}
+                    onClick={() => updateEvent('EventCreator')}>
+                    Continue
+                  </button>}
             </div>
-            <div className="col d-flex align-items-end">
-              {!hasEvent &&
-                <button
-                  className="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored"
-                  onClick={() => updateEvent('Event Created')}
-                >
-                  Continue
-                </button>}
-            </div>
+            {hasEvent &&
+              <div className="col-md-6 text-center">
+                <ImgUpload
+                  image={cover_image_uri}
+                  apiKey={FILESTACK_API_KEY}
+                  event={event}
+                  handleEventName={handleEventName}
+                />
+              </div>}
           </section>
           {hasEvent &&
             <div className="row">
-              <Description
+              {/* <Description
                 event={event}
                 handleDescriptionChange={handleDescriptionChange}
                 className="my-5 col-md-6"
-              />
-
-              <ImgUpload apiKey={FILESTACK_API_KEY} event={event} />
+              /> */}
             </div>}
         </Paper>
         {hasEvent &&
@@ -149,6 +169,12 @@ const EventCreator = props => {
                   onChange={handleTimeChange('end_time', 'HH:mm:ss')}
                   floatingLabelText="End Time"
                 />
+              </div>
+            </section>
+            <hr />
+            <section className="row p-5">
+              <div className="col-12 mb-3">
+                <Venue handleEventName={handleEventName} event={event} />
               </div>
             </section>
             <hr />

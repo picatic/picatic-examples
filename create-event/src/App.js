@@ -38,10 +38,6 @@ export default class App extends Component {
     apiKey: ''
   }
 
-  componentWillMount() {
-    this.getEvent()
-  }
-
   getMyUser = () => {
     fetch(`${host}/user/me`, {
       method: 'GET',
@@ -59,7 +55,7 @@ export default class App extends Component {
   }
 
   getEvent = () => {
-    fetch(`${host}/event/134625?include=ticket_prices`)
+    fetch(`${host}/event/${this.state.event.id}?include=ticket_prices`)
       .then(res => res.json())
       .then(event =>
         this.setState({
@@ -76,6 +72,10 @@ export default class App extends Component {
     if (!this.validation()) {
       return false
     }
+
+    delete event.attributes.modified
+    delete event.attributes.created
+    delete event.attributes.live_on
 
     const noEvent = isNaN(event.id)
     if (noEvent) {
@@ -95,14 +95,7 @@ export default class App extends Component {
         method: 'PATCH',
         body: JSON.stringify({
           data: {
-            attributes: {
-              description: event.attributes.description,
-              end_time: event.attributes.end_time,
-              start_date: event.attributes.start_date,
-              end_date: event.attributes.end_date,
-              start_time: event.attributes.start_time,
-              title: event.attributes.title
-            },
+            attributes: event.attributes,
             id: event.id,
             type: 'event'
           }
@@ -115,6 +108,7 @@ export default class App extends Component {
     }
 
     tickets.map((ticket, index) => {
+      delete ticket.attributes.modified
       // Convert from paid to free ticket if price is $0
       const freeTicket = ticket.attributes.price === 0
       if (freeTicket) {
@@ -226,6 +220,12 @@ export default class App extends Component {
   handleEventChange = name => ev => {
     const { event } = this.state
     event.attributes[name] = ev.target.value
+    this.setState({ event })
+  }
+
+  handleEventName = (name, url) => {
+    const { event } = this.state
+    event.attributes[name] = url
     this.setState({ event })
   }
 
@@ -345,6 +345,7 @@ export default class App extends Component {
               tickets={tickets}
               submitted={submitted}
               handleEventChange={this.handleEventChange}
+              handleEventName={this.handleEventName}
               handleTimeChange={this.handleTimeChange}
               handleTicketChange={this.handleTicketChange}
               handleDescriptionChange={this.handleDescriptionChange}
