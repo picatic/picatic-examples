@@ -1,9 +1,16 @@
 var webpack = require('webpack');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 var extractLess = new ExtractTextPlugin({
   filename: "main.css"
 })
+
+// copy over index.html and icons from /app to /dist
+var copyWeback = new CopyWebpackPlugin([
+  { from: 'index.html', to: 'index.html' },
+  { from: 'img/icons', to: 'img/icons' }
+])
 
 var config = {
   context: __dirname + '/app',
@@ -64,6 +71,7 @@ var config = {
     ]
   },
   plugins: [
+    copyWeback,
     extractLess
   ]
 }

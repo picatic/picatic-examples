@@ -1,6 +1,6 @@
-<figure class="grid__brick col-6 col-md-4 col-xl-3 shuffle-item shuffle-item--visible" ng-repeat="example in $ctrl.examples" ng-cloak>
+<figure ng-class="{'col-md-offset-2': $first}" class="grid__brick col-6 col-sm-6 col-md-4 col-xl-4 shuffle-item shuffle-item--visible" ng-repeat="example in $ctrl.examples" ng-cloak>
   <div class="shuffle-item-content-inner {{ example.color }}">
-    <a class="icon-container aspect" href="https://checkout.picatic.io/">
+    <a class="icon-container aspect" href="{{ example.demoLink }}">
       <div class="aspect__inner">
         <img ng-src="{{ example.imgUrl }}"/>
         <div class="absolute mask"></div>
