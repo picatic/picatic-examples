@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Component } from 'react'
 import { Route } from 'react-router-dom'
 import moment from 'moment'
@@ -6,13 +8,10 @@ import './App.css'
 // components
 import Home from './components/Home'
 import Header from './components/Header'
-import EventCreator from './components/EventCreator'
 
 // containers
 import APIKey from './containers/APIKey'
-
-// Material UI components
-import Snackbar from 'material-ui/Snackbar'
+import EventCreator from './containers/EventCreator'
 
 const host = 'https://api.picatic.com/v2'
 
@@ -35,7 +34,11 @@ export default class App extends Component {
     snackbarOpen: false,
     message: 'Default Message',
     submitted: false,
-    apiKey: ''
+    apiKey: 'sk_live_4481fd77f109eb6622beec721b9d1f5a'
+  }
+
+  componentWillMount() {
+    this.getMyUser()
   }
 
   getMyUser = () => {
@@ -52,18 +55,6 @@ export default class App extends Component {
         )
       )
       .catch(err => this.snackbar(`'Unauthorized Access Token'`))
-  }
-
-  getEvent = () => {
-    fetch(`${host}/event/${this.state.event.id}?include=ticket_prices`)
-      .then(res => res.json())
-      .then(event =>
-        this.setState({
-          event: event.data,
-          tickets: event.included ? event.included : []
-        })
-      )
-      .catch(err => console.log(err))
   }
 
   updateEvent = message => {
@@ -140,7 +131,7 @@ export default class App extends Component {
       fetch(`${host}/ticket_price/${ticket.id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${apiKey}` }
-      })
+      }).then(() => this.setState({ deletedTickets: [] }))
       return true
     })
 
@@ -192,7 +183,7 @@ export default class App extends Component {
     this.state.tickets.map(ticket => {
       const { name, price } = ticket.attributes
 
-      const badPrice = price < 3 && price > 0
+      const badPrice = price < 3
       const inValid = name === '' || price === '' || badPrice
 
       if (inValid) {
@@ -311,14 +302,16 @@ export default class App extends Component {
       message
     } = this.state
 
-    const snackbar = (
-      <Snackbar
-        open={snackbarOpen}
-        message={message}
-        autoHideDuration={2000}
-        onRequestClose={() => this.setState({ snackbarOpen: false })}
-      />
-    )
+    // const snackbar = (
+    //   <Snackbar
+    //     open={snackbarOpen}
+    //     message={message}
+    //     transition={<Slide direction="down" />}
+    //     autoHideDuration={2000}
+    //     onRequestClose={() => this.setState({ snackbarOpen: false })}
+    //   />
+    // )
+
     if (user === false) {
       return (
         <div>
@@ -327,7 +320,7 @@ export default class App extends Component {
             handleChange={this.handleStateChange}
             login={this.getMyUser}
           />
-          {snackbar}
+          {/* {snackbar} */}
         </div>
       )
     }
@@ -339,7 +332,7 @@ export default class App extends Component {
         <Route
           exact
           path="/new"
-          render={() =>
+          render={() => (
             <EventCreator
               event={event}
               tickets={tickets}
@@ -353,9 +346,10 @@ export default class App extends Component {
               deleteTicket={this.deleteTicket}
               updateEvent={this.updateEvent}
               activateEvent={this.activateEvent}
-            />}
+            />
+          )}
         />
-        {snackbar}
+        {/* {snackbar} */}
       </div>
     )
   }
