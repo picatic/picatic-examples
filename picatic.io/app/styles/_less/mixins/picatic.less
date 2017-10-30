@@ -1,0 +1,110 @@
+// Display a div full size of page or pos relative container
+.cover() {
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+// Blur filter
+.blur(@amount) {
+  -webkit-filter: blur(@amount);
+     -moz-filter: blur(@amount);
+      -ms-filter: blur(@amount);
+       -o-filter: blur(@amount);
+          filter: blur(@amount);
+}
+
+// Flexbox
+.flexbox() {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+
+.flex(@values) {
+  -webkit-box-flex: @values;
+  -moz-box-flex:  @values;
+  -webkit-flex:  @values;
+  -ms-flex:  @values;
+  flex:  @values;
+}
+
+.flex-grow(@val) {
+  -webkit-flex-grow: @val;
+  flex-grow: @val;
+}
+
+.flex-flow(@val) {
+  -webkit-flex-flow: @val;
+  flex-flow: @val;
+}
+
+.flex-direction(@val) {
+  -ms-flex-direction: @val;
+  -webkit-flex-direction: @val;
+  flex-direction: @val;
+}
+
+.flex-wrap(@val) {
+  -ms-flex-wrap: @val;
+  -webkit-flex-wrap: @val;
+  flex-wrap: @val;
+}
+
+.order(@val) {
+  -ms-flex-order: @val;
+  -webkit-box-ordinal-group: @val;
+  -moz-box-ordinal-group: @val;
+  -webkit-order: @val;
+  order: @val;
+}
+
+.align-items(@val) {
+  -webkit-box-pack: @val;
+  -webkit-box-align: @val;
+  -moz-box-align: @val;
+  -ms-flex-align: @val;
+  -webkit-flex-pack: @val;
+  -webkit-flex-align: @val;
+  -webkit-align-items: @val;
+  align-items: @val;
+}
+
+.align-self(@val, @ms) {
+  -webkit-align-self: @val;
+  -ms-flex-item-align: @ms;
+  align-self: @val;
+}
+
+.justify-content(@val) {
+  -ms-flex-pack: @val;
+  -webkit-justify-content: @val;
+  justify-content: @val;
+}
+
+.feature-icon-xs {
+  border: 1px solid @teal;
+  border-radius: 50%;
+  height: 40px;
+  position: relative;
+  text-align: center;
+  width: 40px;
+  .transition(~"transform ease-out 0.1s, background 0.2s");
+
+  a {
+    display: block;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+  i {
+    color: @teal;
+    font-size: 18px;
+    line-height: 42px;
+  }
+}
