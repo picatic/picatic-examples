@@ -1,14 +1,26 @@
+// @flow
+
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { BrowserRouter as Router } from 'react-router-dom'
+import { createStore, combineReducers, applyMiddleware } from 'redux'
+import { Provider } from 'react-redux'
+import { ConnectedRouter, routerMiddleware } from 'react-router-redux'
+import createHistory from 'history/createBrowserHistory'
+
 import './index.css'
-import App from './App'
-import registerServiceWorker from './registerServiceWorker'
+import rootReducer from './reducers/index'
+import RootContainer from './containers/RootContainer'
+
+const history = createHistory()
+const middleware = routerMiddleware(history)
+
+const store = createStore(rootReducer, applyMiddleware(middleware))
 
 ReactDOM.render(
-  <Router>
-    <App />
-  </Router>,
-  document.getElementById('root')
+  <Provider store={store}>
+    <ConnectedRouter history={history}>
+      <RootContainer />
+    </ConnectedRouter>
+  </Provider>,
+  document.getElementById('root'),
 )
-registerServiceWorker()
