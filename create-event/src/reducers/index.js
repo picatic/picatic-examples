@@ -1,12 +1,12 @@
 // @flow
 
 import { combineReducers } from 'redux'
-import create from '../reducers/create'
-import { routerReducer } from 'react-router-redux'
+import event from '../reducers/event'
+import { routerReducer as router } from 'react-router-redux'
 
 const rootReducer = combineReducers({
-  create,
-  router: routerReducer,
+  event,
+  router,
 })
 
 export default rootReducer

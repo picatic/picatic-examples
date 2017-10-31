@@ -1,1 +1,3 @@
 export const FAKE_ACTION = 'FAKE_ACTION'
+export const SAVE_EVENT = 'SAVE_EVENT'
+export const FETCH_EVENT_SUCCESS = 'FECTH_EVENT_SUCCESS'

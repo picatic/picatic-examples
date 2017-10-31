@@ -3,8 +3,6 @@
 import React, { Component } from 'react'
 
 import Header from '../components/Header'
-import HomeContainer from '../containers/HomeContainer'
-import CreateEventContainer from '../containers/CreateEventContainer'
 import Routes from '../components/Routes'
 
 class Root extends Component {

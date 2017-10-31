@@ -2,8 +2,9 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { createStore, combineReducers, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
+import thunkMiddleware from 'redux-thunk'
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux'
 import createHistory from 'history/createBrowserHistory'
 
@@ -14,7 +15,10 @@ import RootContainer from './containers/RootContainer'
 const history = createHistory()
 const middleware = routerMiddleware(history)
 
-const store = createStore(rootReducer, applyMiddleware(middleware))
+const store = createStore(
+  rootReducer,
+  applyMiddleware(middleware, thunkMiddleware),
+)
 
 ReactDOM.render(
   <Provider store={store}>
