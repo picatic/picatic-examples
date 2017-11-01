@@ -4,18 +4,27 @@ import React, { Component } from 'react'
 import SingleTextInput from '../components/SingleTextInput'
 
 class EventDetails extends Component {
+  componentWillMount() {
+    // TODO: Check params for event id
+    //       If none then reset event object
+  }
+
   render() {
     const { event, fetchCreateEvent } = this.props
-    return (
-      <div className="container mt-4">
+
+    const hasEvent = !event.id
+    if (hasEvent) {
+      return (
         <SingleTextInput
           value={event.attributes.title}
           placeholder="Your Event Title"
           handleClick={fetchCreateEvent}
           buttonText="Continue"
         />
-      </div>
-    )
+      )
+    }
+
+    return <div>Event Creator</div>
   }
 }
 

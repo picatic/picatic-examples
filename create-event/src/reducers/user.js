@@ -5,7 +5,7 @@ import * as types from '../constants/ActionTypes'
 const initialState = {
   attributes: {},
   id: null,
-  key: 'sk_live_4481fd77f109eb6622beec721b9d1f5a',
+  apiKey: 'sk_live_4481fd77f109eb6622beec721b9d1f5a',
 }
 
 const user = (state = initialState, action) => {
@@ -15,7 +15,7 @@ const user = (state = initialState, action) => {
         ...state,
         attributes: action.user.attributes,
         id: action.user.id,
-        key: action.key,
+        apiKey: action.apiKey,
       }
     default:
       return state

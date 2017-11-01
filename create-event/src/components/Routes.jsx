@@ -5,7 +5,7 @@ import { Route } from 'react-router-dom'
 
 const Routes = ({ paths, components }) => {
   return (
-    <div>
+    <div className="container mt-4">
       {paths.map((path, index) => {
         return (
           <Route key={index} exact path={path} component={components[path]} />

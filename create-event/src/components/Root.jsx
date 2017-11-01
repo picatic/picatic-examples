@@ -16,7 +16,7 @@ class Root extends Component {
     if (noUser) {
       return (
         <SingleTextInput
-          value={user.key}
+          value={user.apiKey}
           placeholder="Please enter your Picatic API key"
           handleClick={fetchUser}
           buttonText="Login"

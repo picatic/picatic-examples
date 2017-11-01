@@ -1,8 +1,8 @@
 // @flow
 // const API_KEY = 'sk_live_4481fd77f109eb6622beec721b9d1f5a'
 
-const callApi = (url, method, key, body) => {
-  const headers = key ? { Authorization: `Bearer ${key}` } : ''
+const callApi = (url, method, apiKey, body) => {
+  const headers = apiKey ? { Authorization: `Bearer ${apiKey}` } : ''
   const options = {
     method: method,
     headers: headers,
@@ -13,9 +13,9 @@ const callApi = (url, method, key, body) => {
     .then(json => ({ json }))
     .catch(error => ({ error }))
 }
-export const getApi = (url, key) => {
-  return callApi(url, 'GET', key)
+export const getApi = (url, apiKey) => {
+  return callApi(url, 'GET', apiKey)
 }
-export const postApi = (url, body, key) => {
-  return callApi(url, 'POST', key, body)
+export const postApi = (url, apiKey, body) => {
+  return callApi(url, 'POST', apiKey, body)
 }

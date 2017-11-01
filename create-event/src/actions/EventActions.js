@@ -15,7 +15,9 @@ const fetchEventSuccess = event => ({
   id: event.id,
 })
 
-export const fetchCreateEvent = title => async dispatch => {
+export const fetchCreateEvent = title => async (dispatch, getState) => {
+  const state = getState()
+  const { apiKey } = state.user
   const body = {
     data: {
       attributes: {
@@ -24,6 +26,6 @@ export const fetchCreateEvent = title => async dispatch => {
       type: 'event',
     },
   }
-  const { json } = await postApi(CREATE_EVENT_URL, body)
+  const { json } = await postApi(CREATE_EVENT_URL, apiKey, body)
   dispatch(fetchEventSuccess(json.data))
 }

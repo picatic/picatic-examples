@@ -4,13 +4,13 @@ import * as types from '../constants/ActionTypes'
 import { USER_URL } from '../constants/ApiConstants'
 import { getApi } from '../utils/ApiUtils'
 
-const fetchUserSuccess = (user, key) => ({
+const fetchUserSuccess = (user, apiKey) => ({
   type: types.FETCH_USER_SUCCESS,
   user,
-  key,
+  apiKey,
 })
 
-export const fetchUser = key => async dispatch => {
-  const { json } = await getApi(USER_URL, key)
-  dispatch(fetchUserSuccess(json.data, key))
+export const fetchUser = apiKey => async dispatch => {
+  const { json } = await getApi(USER_URL, apiKey)
+  dispatch(fetchUserSuccess(json.data, apiKey))
 }
