@@ -1,8 +1,8 @@
 // @flow
 
 import * as types from '../constants/ActionTypes'
+import { CREATE_EVENT_URL } from '../constants/ApiConstants'
 import { postApi } from '../utils/ApiUtils'
-import { CREATE_EVENT } from '../constants/ApiConstants'
 
 export const saveEvent = attributes => ({
   type: types.SAVE_EVENT,
@@ -15,13 +15,15 @@ const fetchEventSuccess = event => ({
   id: event.id,
 })
 
-export const fetchCreateEvent = attributes => async dispatch => {
+export const fetchCreateEvent = title => async dispatch => {
   const body = {
     data: {
-      attributes,
+      attributes: {
+        title: title,
+      },
       type: 'event',
     },
   }
-  const { json } = await postApi(CREATE_EVENT, body)
+  const { json } = await postApi(CREATE_EVENT_URL, body)
   dispatch(fetchEventSuccess(json.data))
 }

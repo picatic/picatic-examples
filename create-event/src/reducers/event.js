@@ -4,7 +4,7 @@ import * as types from '../constants/ActionTypes'
 
 const initialState = {
   attributes: {
-    title: 't',
+    title: 'title',
     description: null,
     end_time: null,
     start_date: null,

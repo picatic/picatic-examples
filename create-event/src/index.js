@@ -15,7 +15,7 @@ import RootContainer from './containers/RootContainer'
 const history = createHistory()
 const middleware = routerMiddleware(history)
 
-const store = createStore(
+export const store = createStore(
   rootReducer,
   applyMiddleware(middleware, thunkMiddleware),
 )

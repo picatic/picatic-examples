@@ -1,14 +1,8 @@
-import camelize from 'camelize'
+// @flow
+// const API_KEY = 'sk_live_4481fd77f109eb6622beec721b9d1f5a'
 
-const API_KEY = 'sk_live_4481fd77f109eb6622beec721b9d1f5a'
-
-const headers = {
-  Authorization: `Bearer ${API_KEY}`,
-  Accept: 'application/json',
-  'Content-type': 'application/json',
-}
-
-const callApi = (url, method, body) => {
+const callApi = (url, method, key, body) => {
+  const headers = key ? { Authorization: `Bearer ${key}` } : ''
   const options = {
     method: method,
     headers: headers,
@@ -16,13 +10,12 @@ const callApi = (url, method, body) => {
   }
   return fetch(url, options)
     .then(response => response.json())
-    .then(json => ({ json: camelize(json) }))
+    .then(json => ({ json }))
     .catch(error => ({ error }))
 }
-export const getApi = url => {
-  return callApi(url, 'GET')
+export const getApi = (url, key) => {
+  return callApi(url, 'GET', key)
 }
-
-export const postApi = (url, body) => {
-  return callApi(url, 'POST', body)
+export const postApi = (url, body, key) => {
+  return callApi(url, 'POST', key, body)
 }
