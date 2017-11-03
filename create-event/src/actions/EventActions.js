@@ -1,26 +1,14 @@
 // @flow
 
 import * as types from '../constants/ActionTypes'
-import { CREATE_EVENT_URL } from '../constants/ApiConstants'
+import { CREATE_EVENT_URL, UPDATE_EVENT_URL } from '../constants/ApiConstants'
 import { eventBody } from '../constants/BodyConstants'
-import { postApi } from '../utils/ApiUtils'
-
-export const saveEvent = attributes => ({
-  type: types.SAVE_EVENT,
-  attributes
-})
+import { postApi, patchApi } from '../utils/ApiUtils'
 
 export const handleEventChange = (name, value) => ({
   type: types.HANDLE_EVENT_CHANGE,
   name,
   value
-})
-
-export const handleTicketChange = (name, value, index) => ({
-  type: types.HANDLE_TICKET_CHANGE,
-  name,
-  value,
-  index
 })
 
 const fetchEventSuccess = event => ({
@@ -29,10 +17,25 @@ const fetchEventSuccess = event => ({
   id: event.id
 })
 
-export const fetchCreateEvent = title => async (dispatch, getState) => {
-  const state = getState()
-  const { apiKey } = state.user
-  const body = eventBody(title)
-  const { json } = await postApi(CREATE_EVENT_URL, apiKey, body)
+export const fetchCreateEvent = () => async (dispatch, getState) => {
+  const { event, user } = getState()
+  const body = eventBody(event)
+  const { json } = await postApi(CREATE_EVENT_URL, user.apiKey, body)
   dispatch(fetchEventSuccess(json.data))
+}
+
+export const fetchUpdateEvent = event => async (dispatch, getState) => {
+  const { user } = getState()
+  const body = eventBody(event)
+  const { json } = await patchApi(
+    UPDATE_EVENT_URL.replace(':id', event.id),
+    user.apiKey,
+    body
+  )
+  dispatch(fetchEventSuccess(json.data))
+}
+
+export const saveEvent = () => async (dispatch, getState) => {
+  const { event } = getState()
+  dispatch(fetchUpdateEvent(event))
 }

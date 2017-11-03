@@ -1,4 +1,4 @@
-export const ticketPriceBody = (event, type) => ({
+export const createTicketBody = (event, type) => ({
   type: 'ticket_price',
   attributes: {
     event_id: Number(event.id),
@@ -10,11 +10,18 @@ export const ticketPriceBody = (event, type) => ({
   }
 })
 
-export const eventBody = title => ({
+export const ticketBody = ({ attributes, id }) => ({
   data: {
-    attributes: {
-      title
-    },
-    type: 'event'
+    attributes,
+    id,
+    type: 'ticket_price'
+  }
+})
+
+export const eventBody = ({ attributes, id }) => ({
+  data: {
+    attributes,
+    type: 'event',
+    id: isNaN(id) ? '' : id
   }
 })

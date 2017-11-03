@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component } from 'react'
+import TicketsContainer from '../containers/TicketsContainer'
 import DialogTextInput from '../components/DialogTextInput'
 import Tickets from '../components/Tickets'
 
@@ -29,12 +30,7 @@ class EventDetails extends Component {
   }
 
   render() {
-    const {
-      event,
-      fetchCreateEvent,
-      addTicket,
-      handleTicketChange
-    } = this.props
+    const { event, fetchCreateEvent, saveEvent } = this.props
 
     const {
       title,
@@ -128,20 +124,9 @@ class EventDetails extends Component {
             />
           </div>
         </section>
-        <Tickets
-          tickets={event.tickets}
-          handleTicketChange={handleTicketChange}
-        />
-        <Button
-          raised
-          color="primary"
-          onClick={() => addTicket('regular')}
-          className="mr-3"
-        >
-          + Paid Ticket
-        </Button>
-        <Button raised color="primary" onClick={() => addTicket('free')}>
-          + Free Ticket
+        <TicketsContainer />
+        <Button raised color="accent" onClick={saveEvent}>
+          Save
         </Button>
       </div>
     )

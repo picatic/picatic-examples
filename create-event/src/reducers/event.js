@@ -14,13 +14,14 @@ const initialState = {
 
 const event = (state = initialState, action) => {
   switch (action.type) {
-    case types.SAVE_EVENT:
+    case types.FETCH_EVENT_SUCCESS:
       return {
         ...state,
-        attributes: action.attributes
+        attributes: action.attributes,
+        id: action.id
       }
 
-    case types.ADD_TICKET:
+    case types.FETCH_TICKET_PRICE_SUCCESS:
       const tickets = update(state.tickets, { $push: [action.ticket] })
       return {
         ...state,
