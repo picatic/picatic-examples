@@ -15,13 +15,14 @@ class SingleTextInput extends Component {
   }
   render() {
     const { value } = this.state
-    const { placeholder, handleClick, buttonText } = this.props
+    const { label, placeholder, handleClick, buttonText } = this.props
     return (
       <section className="row justify-content-md-center">
         <div className="col-md-6">
           <TextField
             type="text"
             placeholder={placeholder}
+            label={label}
             value={value}
             onChange={this.handleChange}
             fullWidth
