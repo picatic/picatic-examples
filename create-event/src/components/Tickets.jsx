@@ -11,6 +11,11 @@ const Tickets = ({ tickets, handleTicketChange }) => {
 
   return (
     <div>
+      <div className="row">
+        <div className="col-md-6 mb-3">Ticket Name</div>
+        <div className="col-md-3 mb-3">Quantity</div>
+        <div className="col-md-3 mb-3">Price</div>
+      </div>
       {tickets.map((ticket, index) => (
         <Ticket
           key={index}

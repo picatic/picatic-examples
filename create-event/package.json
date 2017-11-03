@@ -13,6 +13,7 @@
     "html-to-draftjs": "^1.0.1",
     "immutability-helper": "^2.4.0",
     "material-ui": "^1.0.0-beta.18",
+    "material-ui-icons": "^1.0.0-beta.17",
     "moment": "^2.19.1",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",

@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 
 import TextField from 'material-ui/TextField'
+import IconButton from 'material-ui/IconButton'
+import DeleteIcon from 'material-ui-icons/Delete'
 
 class Ticket extends Component {
   handleChange = ev => {

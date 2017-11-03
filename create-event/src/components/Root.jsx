@@ -4,7 +4,7 @@ import React, { Component } from 'react'
 
 import Header from '../components/Header'
 import Routes from '../components/Routes'
-import SingleTextInput from '../components/SingleTextInput'
+import DialogTextInput from '../components/DialogTextInput'
 
 class Root extends Component {
   componentWillMount() {
@@ -15,11 +15,13 @@ class Root extends Component {
     const noUser = !user.id
     if (noUser) {
       return (
-        <SingleTextInput
+        <DialogTextInput
+          title="Enter Picatic API Key"
           value={user.apiKey}
-          placeholder="Please enter your Picatic API key"
+          placeholder="sk_live_4481fd77f109eb6622beec721b9d1f5a"
           handleClick={fetchUser}
           buttonText="Login"
+          required
         />
       )
     }

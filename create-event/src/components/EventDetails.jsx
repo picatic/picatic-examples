@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react'
-import SingleTextInput from '../components/SingleTextInput'
+import DialogTextInput from '../components/DialogTextInput'
 import Tickets from '../components/Tickets'
 
 import TextField from 'material-ui/TextField'
@@ -48,7 +48,8 @@ class EventDetails extends Component {
     const noEvent = !event.id
     if (noEvent) {
       return (
-        <SingleTextInput
+        <DialogTextInput
+          title="Create an Event"
           value={event.attributes.title}
           placeholder="Your Event Title"
           handleClick={fetchCreateEvent}
@@ -70,7 +71,7 @@ class EventDetails extends Component {
               fullWidth
             />
           </div>
-          <div className="col-md-4 mb-3">
+          <div className="col-md-6 mb-3">
             <TextField
               type="date"
               label="Event Date"
@@ -80,7 +81,7 @@ class EventDetails extends Component {
               fullWidth
             />
           </div>
-          <div className="col-md-4 mb-3">
+          <div className="col-md-3 mb-3">
             <TextField
               type="time"
               label="Start Time"
@@ -93,7 +94,7 @@ class EventDetails extends Component {
               fullWidth
             />
           </div>
-          <div className="col-md-4 mb-3">
+          <div className="col-md-3 mb-3">
             <TextField
               type="time"
               label="End Time"
