@@ -10,7 +10,7 @@ const Tickets = ({ tickets, handleTicketChange }) => {
   }
 
   return (
-    <div className="row">
+    <div>
       {tickets.map((ticket, index) => (
         <Ticket
           key={index}

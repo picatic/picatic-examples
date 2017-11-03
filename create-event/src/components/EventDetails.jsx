@@ -60,17 +60,17 @@ class EventDetails extends Component {
     return (
       <div className="w-50">
         <section className="row">
-          <div className="col-12">
+          <div className="col-12 mb-3">
             <TextField
               type="text"
-              placeholder="Event Title"
+              label="Event Title"
               name="title"
               value={title}
               onChange={this.handleChange}
               fullWidth
             />
           </div>
-          <div className="col-md-4">
+          <div className="col-md-4 mb-3">
             <TextField
               type="date"
               label="Event Date"
@@ -80,7 +80,7 @@ class EventDetails extends Component {
               fullWidth
             />
           </div>
-          <div className="col-md-4">
+          <div className="col-md-4 mb-3">
             <TextField
               type="time"
               label="Start Time"
@@ -93,7 +93,7 @@ class EventDetails extends Component {
               fullWidth
             />
           </div>
-          <div className="col-md-4">
+          <div className="col-md-4 mb-3">
             <TextField
               type="time"
               label="End Time"
@@ -106,7 +106,7 @@ class EventDetails extends Component {
               fullWidth
             />
           </div>
-          <div className="col-md-6">
+          <div className="col-md-6 mb-3">
             <TextField
               type="text"
               label="Venue Name"
@@ -116,7 +116,7 @@ class EventDetails extends Component {
               fullWidth
             />
           </div>
-          <div className="col-md-6">
+          <div className="col-md-6 mb-3">
             <TextField
               type="text"
               label="Address"
@@ -131,8 +131,16 @@ class EventDetails extends Component {
           tickets={event.tickets}
           handleTicketChange={handleTicketChange}
         />
-        <Button raised color="primary" onClick={() => addTicket('regular')}>
-          Add Ticket
+        <Button
+          raised
+          color="primary"
+          onClick={() => addTicket('regular')}
+          className="mr-3"
+        >
+          + Paid Ticket
+        </Button>
+        <Button raised color="primary" onClick={() => addTicket('free')}>
+          + Free Ticket
         </Button>
       </div>
     )

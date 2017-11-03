@@ -11,25 +11,37 @@ class Ticket extends Component {
     handleTicketChange(name, value, index)
   }
   render() {
-    const { name, quantity } = this.props.ticket
+    const { name, quantity, price } = this.props.ticket
     return (
-      <div>
-        <div className="col-md-6">
+      <div className="row">
+        <div className="col-md-6 mb-3">
           <TextField
             type="text"
             placeholder="e.g. General Admission"
             name="name"
             value={name}
             onChange={this.handleChange}
+            fullWidth
           />
         </div>
-        <div className="col-md-6">
+        <div className="col-md-3 mb-3">
           <TextField
             type="number"
             placeholder="Unlimited"
             name="quanity"
             value={quantity}
             onChange={this.handleChange}
+            fullWidth
+          />
+        </div>
+        <div className="col-md-3 mb-3">
+          <TextField
+            type="number"
+            placeholder="Cost"
+            name="price"
+            value={price}
+            onChange={this.handleChange}
+            fullWidth
           />
         </div>
       </div>
