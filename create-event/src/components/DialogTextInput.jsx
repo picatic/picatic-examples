@@ -7,13 +7,10 @@ import TextField from 'material-ui/TextField'
 import Dialog, {
   DialogTitle,
   DialogContent,
-  DialogActions
+  DialogActions,
 } from 'material-ui/Dialog'
 
 class DialogTextInput extends Component {
-  state = {
-    open: true
-  }
   componentWillMount() {
     this.setState({ value: this.props.value })
   }
@@ -21,14 +18,19 @@ class DialogTextInput extends Component {
     ev.preventDefault()
     this.setState({ value: ev.target.value })
   }
-  handleRequestClose = () => {
-    this.setState({ open: this.props.required })
-  }
   render() {
-    const { value, open } = this.state
-    const { title, label, placeholder, handleClick, buttonText } = this.props
+    const { value } = this.state
+    const {
+      open,
+      title,
+      label,
+      placeholder,
+      handleClick,
+      handleRequestClose,
+      buttonText,
+    } = this.props
     return (
-      <Dialog open={open} onRequestClose={this.handleRequestClose} fullWidth>
+      <Dialog open={open} onRequestClose={handleRequestClose} fullWidth>
         <DialogTitle>{title}</DialogTitle>
         <DialogContent>
           <TextField

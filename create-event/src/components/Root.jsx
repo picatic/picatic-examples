@@ -7,8 +7,8 @@ import Routes from '../components/Routes'
 import DialogTextInput from '../components/DialogTextInput'
 
 class Root extends Component {
-  componentWillMount() {
-    // TODO: Add init actions
+  state = {
+    open: true,
   }
   render() {
     const { user, paths, components, fetchUser, fetchCreateEvent } = this.props
@@ -18,9 +18,11 @@ class Root extends Component {
         <DialogTextInput
           title="Enter Picatic API Key"
           value={user.apiKey}
+          open={this.state.open}
           placeholder="sk_live_4481fd77f109eb6622beec721b9d1f5a"
           handleClick={fetchUser}
           buttonText="Login"
+          className="dialog-background"
           required
         />
       )

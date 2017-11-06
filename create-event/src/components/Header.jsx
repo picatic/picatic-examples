@@ -16,33 +16,41 @@ const styles = {
 }
 
 class Header extends Component {
-  handleClick = () => (
-    <DialogTextInput
-      title="Create an Event"
-      value="t"
-      placeholder="Your Event Title"
-      handleClick={this.props.fetchCreateEvent}
-      buttonText="Continue"
-    />
-  )
-  handleLink = url => {
-    this.props.history.push(url)
+  state = {
+    open: false,
+  }
+  handleRequestClose = () => {
+    this.setState({ open: false })
   }
   render() {
     return (
-      <AppBar position="static">
-        <Toolbar>
-          <div style={styles.title}>
-            <Link to={INDEX_PATH}>Event Creator</Link>
-          </div>
-          <Button color="contrast" component={Link} to={EVENTS_PATH}>
-            My Events
-          </Button>
-          <Button onClick={this.handleClick} color="contrast">
-            Create Event
-          </Button>
-        </Toolbar>
-      </AppBar>
+      <header>
+        <AppBar position="static">
+          <Toolbar>
+            <div style={styles.title}>
+              <Link to={INDEX_PATH}>Event Creator</Link>
+            </div>
+            <Button color="contrast" component={Link} to={EVENTS_PATH}>
+              My Events
+            </Button>
+            <Button
+              onClick={() => this.setState({ open: true })}
+              color="contrast"
+            >
+              Create Event
+            </Button>
+          </Toolbar>
+        </AppBar>
+        <DialogTextInput
+          title="Create an Event"
+          value=""
+          open={this.state.open}
+          placeholder="Your Event Title"
+          handleClick={this.props.fetchCreateEvent}
+          handleRequestClose={this.handleRequestClose}
+          buttonText="Continue"
+        />
+      </header>
     )
   }
 }
