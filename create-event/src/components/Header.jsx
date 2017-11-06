@@ -22,12 +22,16 @@ class Header extends Component {
   handleRequestClose = () => {
     this.setState({ open: false })
   }
+  handleCreate = value => {
+    this.props.fetchCreateEvent(value)
+    this.setState({ open: false })
+  }
   render() {
     return (
       <header>
         <AppBar position="static">
           <Toolbar>
-            <div style={styles.title}>
+            <div style={styles.title} className="lead">
               <Link to={INDEX_PATH}>Event Creator</Link>
             </div>
             <Button color="contrast" component={Link} to={EVENTS_PATH}>
@@ -46,7 +50,7 @@ class Header extends Component {
           value=""
           open={this.state.open}
           placeholder="Your Event Title"
-          handleClick={this.props.fetchCreateEvent}
+          handleClick={this.handleCreate}
           handleRequestClose={this.handleRequestClose}
           buttonText="Continue"
         />
