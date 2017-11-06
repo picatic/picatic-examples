@@ -19,7 +19,7 @@ class Root extends Component {
           title="Enter Picatic API Key"
           value={user.apiKey}
           open={this.state.open}
-          placeholder="sk_live_4481fd77f109eb6622beec721b9d1f5a"
+          placeholder="sk_live_210eb57e6b95e5143c492a219091c4e5"
           handleClick={fetchUser}
           buttonText="Login"
           className="dialog-background"
