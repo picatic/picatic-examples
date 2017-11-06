@@ -6,15 +6,15 @@ import { getApi, pageLimit } from '../utils/ApiUtils'
 
 const fetchEventsSuccess = events => ({
   type: types.FETCH_EVENTS_SUCCESS,
-  events
+  events,
 })
 
 export const fetchEvents = () => async (dispatch, getState) => {
   const { user } = getState()
-  const newPageLimit = pageLimit(1, 0)
+  const newPageLimit = pageLimit(20, 0)
   const { json } = await getApi(
     USER_EVENTS_URL.replace(':id', user.id).replace(PAGE_LIMIT, newPageLimit),
-    user.apiKey
+    user.apiKey,
   )
   dispatch(fetchEventsSuccess(json.data))
 }
