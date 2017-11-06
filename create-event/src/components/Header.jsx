@@ -1,22 +1,42 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom'
-import { CREATE_EVENT_PATH, EVENTS_PATH } from '../constants/RouterConstants'
+// @flow
 
-const Header = props => (
-  <header className="mdl-layout__header">
-    <div className="mdl-layout__header-row">
-      <span className="mdl-layout-title">Event Creator</span>
-      <div className="mdl-layout-spacer" />
-      <nav className="mdl-navigation mdl-layout--large-screen-only">
-        <NavLink to={EVENTS_PATH} className="mdl-navigation__link">
-          My Events
-        </NavLink>
-        <NavLink to={CREATE_EVENT_PATH} className="mdl-navigation__link">
-          Create Event
-        </NavLink>
-      </nav>
-    </div>
-  </header>
-)
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
+import { INDEX_PATH, EVENTS_PATH } from '../constants/RouterConstants'
+import DialogTextInput from '../components/DialogTextInput'
+
+import AppBar from 'material-ui/AppBar'
+import Toolbar from 'material-ui/Toolbar'
+import Button from 'material-ui/Button'
+
+class Header extends Component {
+  handleClick = () => (
+    <DialogTextInput
+      title="Create an Event"
+      value="t"
+      placeholder="Your Event Title"
+      handleClick={this.props.fetchCreateEvent}
+      buttonText="Continue"
+    />
+  )
+  handleLink = url => {
+    this.props.history.push(url)
+  }
+  render() {
+    return (
+      <AppBar position="static">
+        <Toolbar>
+          Title
+          <Link to={EVENTS_PATH}>
+            <Button color="contrast">My Events</Button>
+          </Link>
+          <Button onClick={this.handleClick} color="contrast">
+            Create Event
+          </Button>
+        </Toolbar>
+      </AppBar>
+    )
+  }
+}
 
 export default Header

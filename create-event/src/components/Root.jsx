@@ -11,7 +11,7 @@ class Root extends Component {
     // TODO: Add init actions
   }
   render() {
-    const { user, paths, components, fetchUser } = this.props
+    const { user, paths, components, fetchUser, fetchCreateEvent } = this.props
     const noUser = !user.id
     if (noUser) {
       return (
@@ -27,7 +27,7 @@ class Root extends Component {
     }
     return (
       <div>
-        <Header />
+        <Header fetchCreateEvent={fetchCreateEvent} />
         <Routes paths={paths} components={components} />
       </div>
     )

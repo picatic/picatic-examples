@@ -9,9 +9,8 @@ import Table, {
   TablePagination,
   TableRow,
   TableCell,
-  TableSortLabel,
 } from 'material-ui/Table'
-import Checkbox from 'material-ui/Checkbox'
+import { CircularProgress } from 'material-ui/Progress'
 
 const data = [
   { name: 'Name', attribute: 'title' },
@@ -27,12 +26,14 @@ class Events extends Component {
     rowsPerPage: 5,
     page: 0,
   }
+
   componentWillMount() {
     this.props.fetchEvents()
   }
 
-  handleClick = () => {
-    console.log('row')
+  handleClick = (ev, id) => {
+    ev.preventDefault()
+    this.props.history.push(`/event/${id}`)
   }
 
   handleChangePage = (ev, page) => {
@@ -48,7 +49,7 @@ class Events extends Component {
     const { events } = this.props
     const noEvents = events.length <= 0
     if (noEvents) {
-      return 'Loading...'
+      return <CircularProgress />
     }
     return (
       <div>
@@ -62,7 +63,11 @@ class Events extends Component {
             {events
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map(event => (
-                <TableRow key={event.id} hover onClick={this.handleClick}>
+                <TableRow
+                  key={event.id}
+                  hover
+                  onClick={ev => this.handleClick(ev, event.id)}
+                >
                   {data.map((n, i) => (
                     <TableCell key={i}>
                       {event.attributes[n.attribute]}

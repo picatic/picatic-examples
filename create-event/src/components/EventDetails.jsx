@@ -2,22 +2,17 @@
 
 import React, { Component } from 'react'
 import TicketsContainer from '../containers/TicketsContainer'
-import DialogTextInput from '../components/DialogTextInput'
 
 import TextField from 'material-ui/TextField'
 import Button from 'material-ui/Button'
+import { CircularProgress } from 'material-ui/Progress'
 
 class EventDetails extends Component {
   componentWillMount() {
-    const { event } = this.props
-    this.setState({ event })
-    // TODO: Check params for event id
-    //       If none then reset event object
-  }
-  componentWillReceiveProps(nextProps) {
-    const { event } = this.state
-    if (nextProps.event !== event) {
-      this.setState({ event: nextProps.event })
+    const { match, fetchEvent } = this.props
+    const { id } = match.params
+    if (!isNaN(id)) {
+      fetchEvent(id)
     }
   }
 
@@ -29,7 +24,7 @@ class EventDetails extends Component {
   }
 
   render() {
-    const { event, fetchCreateEvent, saveEvent } = this.props
+    const { event, saveEvent } = this.props
 
     const {
       title,
@@ -37,20 +32,12 @@ class EventDetails extends Component {
       start_time,
       end_time,
       venue_name,
-      venue_street
+      venue_street,
     } = event.attributes
 
     const noEvent = !event.id
     if (noEvent) {
-      return (
-        <DialogTextInput
-          title="Create an Event"
-          value={event.attributes.title}
-          placeholder="Your Event Title"
-          handleClick={fetchCreateEvent}
-          buttonText="Continue"
-        />
-      )
+      return <CircularProgress />
     }
 
     return (
@@ -84,7 +71,7 @@ class EventDetails extends Component {
               value={start_time === null ? '16:30' : start_time}
               onChange={this.handleChange}
               inputProps={{
-                step: 300 // 5 min
+                step: 300, // 5 min
               }}
               fullWidth
             />
@@ -97,7 +84,7 @@ class EventDetails extends Component {
               value={end_time === null ? '18:30' : end_time}
               onChange={this.handleChange}
               inputProps={{
-                step: 300 // 5 min
+                step: 300, // 5 min
               }}
               fullWidth
             />

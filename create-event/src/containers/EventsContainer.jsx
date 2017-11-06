@@ -8,7 +8,7 @@ import { fetchEvents } from '../actions/EventsActions'
 const EventsComponent = props => <Events {...props} />
 
 const mapStateToProps = ({ events }) => ({
-  events
+  events,
 })
 
 export default connect(mapStateToProps, { fetchEvents })(EventsComponent)
