@@ -7,7 +7,6 @@ const initialState = {
   attributes: {
     title: 'title'
   },
-  id: null,
   type: 'event',
   tickets: []
 }
@@ -53,13 +52,6 @@ const event = (state = initialState, action) => {
       return {
         ...state,
         updatedTickets
-      }
-
-    case types.FETCH_EVENT_SUCCESS:
-      return {
-        ...state,
-        attributes: action.attributes,
-        id: action.id
       }
 
     default:

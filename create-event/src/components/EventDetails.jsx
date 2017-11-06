@@ -3,7 +3,6 @@
 import React, { Component } from 'react'
 import TicketsContainer from '../containers/TicketsContainer'
 import DialogTextInput from '../components/DialogTextInput'
-import Tickets from '../components/Tickets'
 
 import TextField from 'material-ui/TextField'
 import Button from 'material-ui/Button'

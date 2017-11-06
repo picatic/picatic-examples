@@ -1,7 +1,6 @@
 // @flow
 
 import * as types from '../constants/ActionTypes'
-import { store } from '../index'
 import { createTicketBody, ticketBody } from '../constants/BodyConstants'
 import {
   CREATE_TICKET_PRICE_URL,
@@ -16,9 +15,10 @@ export const handleTicketChange = (name, value, index) => ({
   index
 })
 
-const fetchTicketSuccess = ticket => {
-  type: types.FETCH_TICKET_PRICE_SUCCESS, ticket
-}
+const fetchTicketSuccess = ticket => ({
+  type: types.FETCH_TICKET_PRICE_SUCCESS,
+  ticket
+})
 
 export const fetchCreateTicket = type => async (dispatch, getState) => {
   const { user, event } = getState()
@@ -28,7 +28,7 @@ export const fetchCreateTicket = type => async (dispatch, getState) => {
 }
 
 export const fetchUpdateTicket = ticket => async (dispatch, getState) => {
-  const { event, user } = getState()
+  const { user } = getState()
   const body = ticketBody(ticket)
   const { json } = patchApi(
     UPDATE_TICKET_PRICE_URL.replace(':id', ticket.id),

@@ -12,12 +12,18 @@ const callApi = (url, method, apiKey, body) => {
     .then(json => ({ json }))
     .catch(error => ({ error }))
 }
+
 export const getApi = (url, apiKey) => {
   return callApi(url, 'GET', apiKey)
 }
+
 export const postApi = (url, apiKey, body) => {
   return callApi(url, 'POST', apiKey, body)
 }
+
 export const patchApi = (url, apiKey, body) => {
   return callApi(url, 'PATCH', apiKey, body)
 }
+
+export const pageLimit = (limit, offset) =>
+  `page[limit]=${limit}&page[offset]=${offset}`

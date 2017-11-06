@@ -5,21 +5,27 @@ import { connect } from 'react-redux'
 import Root from '../components/Root'
 import HomeContainer from '../containers/HomeContainer'
 import EventContainer from '../containers/EventContainer'
+import EventsContainer from '../containers/EventsContainer'
 import { fetchUser } from '../actions/UserActions'
 
-import { INDEX_PATH, CREATE_EVENT_PATH } from '../constants/RouterConstants'
+import {
+  INDEX_PATH,
+  EVENTS_PATH,
+  CREATE_EVENT_PATH
+} from '../constants/RouterConstants'
 
 const RootContainer = props => <Root {...props} />
 
 const mapStateToProps = state => {
   const { user } = state
   return {
-    paths: [INDEX_PATH, CREATE_EVENT_PATH],
+    paths: [INDEX_PATH, EVENTS_PATH, CREATE_EVENT_PATH],
     components: {
       [INDEX_PATH]: HomeContainer,
-      [CREATE_EVENT_PATH]: EventContainer,
+      [EVENTS_PATH]: EventsContainer,
+      [CREATE_EVENT_PATH]: EventContainer
     },
-    user,
+    user
   }
 }
 
