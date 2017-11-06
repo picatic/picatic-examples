@@ -9,6 +9,12 @@ import AppBar from 'material-ui/AppBar'
 import Toolbar from 'material-ui/Toolbar'
 import Button from 'material-ui/Button'
 
+const styles = {
+  title: {
+    flex: 1,
+  },
+}
+
 class Header extends Component {
   handleClick = () => (
     <DialogTextInput
@@ -26,10 +32,12 @@ class Header extends Component {
     return (
       <AppBar position="static">
         <Toolbar>
-          Title
-          <Link to={EVENTS_PATH}>
-            <Button color="contrast">My Events</Button>
-          </Link>
+          <div style={styles.title}>
+            <Link to={INDEX_PATH}>Event Creator</Link>
+          </div>
+          <Button color="contrast" component={Link} to={EVENTS_PATH}>
+            My Events
+          </Button>
           <Button onClick={this.handleClick} color="contrast">
             Create Event
           </Button>
