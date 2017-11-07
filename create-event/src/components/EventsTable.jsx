@@ -13,12 +13,23 @@ import Table, {
 } from 'material-ui/Table'
 import Tooltip from 'material-ui/Tooltip'
 
-class EventsTable extends Component {
+type Props = {
+  data: Array<mixed>,
+}
+
+type State = {
+  data: Array<mixed>,
+  order: string,
+  orderBy: string,
+  rowsPerPage: number,
+  page: number,
+}
+
+class EventsTable extends Component<Props, State> {
   state = {
     data: [],
     order: 'asc',
     orderBy: 'title',
-    selected: [],
     rowsPerPage: 5,
     page: 0,
   }

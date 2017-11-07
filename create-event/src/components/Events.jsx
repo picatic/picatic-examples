@@ -6,7 +6,11 @@ import columnData from '../constants/ColumnData'
 
 import { CircularProgress } from 'material-ui/Progress'
 
-class Events extends Component {
+type Props = {
+  events: Array<mixed>,
+}
+
+class Events extends Component<Props> {
   componentWillMount() {
     this.props.fetchEvents()
   }
