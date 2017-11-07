@@ -5,11 +5,15 @@ const callApi = (url, method, apiKey, body) => {
   const options = {
     method: method,
     headers: headers,
-    body: JSON.stringify(body)
+    body: JSON.stringify(body),
   }
   return fetch(url, options)
-    .then(response => response.json())
-    .then(json => ({ json }))
+    .then(
+      response =>
+        response.ok ? response.json() : Promise.reject(response.text()),
+      error => Promise.reject(error),
+    )
+    .then(json => ({ json }), error => ({ error }))
     .catch(error => ({ error }))
 }
 
