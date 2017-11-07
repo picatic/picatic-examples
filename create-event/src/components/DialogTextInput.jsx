@@ -12,14 +12,20 @@ import Dialog, {
 
 class DialogTextInput extends Component {
   componentWillMount() {
-    this.setState({ value: this.props.value })
+    const { value, errorMessage } = this.props
+    this.setState({ value, errorMessage })
+  }
+  componentWillReceiveProps({ errorMessage }) {
+    if (errorMessage) {
+      this.setState({ errorMessage, error: true })
+    }
   }
   handleChange = ev => {
     ev.preventDefault()
-    this.setState({ value: ev.target.value })
+    this.setState({ value: ev.target.value, errorMessage: null })
   }
   render() {
-    const { value } = this.state
+    const { value, errorMessage } = this.state
     const {
       open,
       title,
@@ -38,8 +44,12 @@ class DialogTextInput extends Component {
             type="text"
             placeholder={placeholder}
             label={label}
+            helperText={errorMessage}
+            // FIXME: Is there a better way to do this
+            error={errorMessage ? true : false}
             value={value}
             onChange={this.handleChange}
+            margin="normal"
             fullWidth
           />
         </DialogContent>

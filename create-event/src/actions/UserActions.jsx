@@ -10,7 +10,16 @@ const fetchUserSuccess = (user, apiKey) => ({
   apiKey,
 })
 
+const fetchUserError = error => ({
+  type: types.FETCH_USER_FAILURE,
+  errorMessage: 'Invalid API key',
+})
+
 export const fetchUser = apiKey => async dispatch => {
-  const { json } = await getApi(USER_URL, apiKey)
-  dispatch(fetchUserSuccess(json.data, apiKey))
+  const { json, error } = await getApi(USER_URL, apiKey)
+  if (json) {
+    dispatch(fetchUserSuccess(json.data, apiKey))
+  } else if (error) {
+    dispatch(fetchUserError(error))
+  }
 }
