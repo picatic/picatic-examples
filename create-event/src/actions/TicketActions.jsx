@@ -1,4 +1,4 @@
-// @flow
+/* @flow */
 
 import * as types from '../constants/ActionTypes'
 import { createTicketBody, ticketBody } from '../constants/BodyConstants'

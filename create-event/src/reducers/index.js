@@ -1,4 +1,4 @@
-// @flow
+/* @flow */
 
 import { combineReducers } from 'redux'
 import event from '../reducers/event'

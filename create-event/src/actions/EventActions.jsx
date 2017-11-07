@@ -1,4 +1,4 @@
-// @flow
+/* @flow */
 
 import * as types from '../constants/ActionTypes'
 import { CREATE_EVENT_URL, UPDATE_EVENT_URL } from '../constants/ApiConstants'

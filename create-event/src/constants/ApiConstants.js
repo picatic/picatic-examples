@@ -1,4 +1,4 @@
-// @flow
+/* @flow */
 
 const API_HOSTNAME = 'https://api.picatic.com/v2'
 export const PAGE_LIMIT = 'page[limit]=10&page[offset]=0'

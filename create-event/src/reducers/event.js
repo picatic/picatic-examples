@@ -1,4 +1,4 @@
-// @flow
+/* @flow */
 
 import * as types from '../constants/ActionTypes'
 import update from 'immutability-helper'

@@ -1,4 +1,4 @@
-// @flow
+/* @flow */
 
 const callApi = (url, method, apiKey, body) => {
   const headers = apiKey ? { Authorization: `Bearer ${apiKey}` } : ''
