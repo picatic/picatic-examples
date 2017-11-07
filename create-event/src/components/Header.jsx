@@ -2,18 +2,12 @@
 
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { INDEX_PATH, EVENTS_PATH } from '../constants/RouterConstants'
+import { EVENTS_PATH } from '../constants/RouterConstants'
 import DialogTextInput from '../components/DialogTextInput'
 
 import AppBar from 'material-ui/AppBar'
 import Toolbar from 'material-ui/Toolbar'
 import Button from 'material-ui/Button'
-
-const styles = {
-  title: {
-    flex: 1,
-  },
-}
 
 class Header extends Component {
   state = {
@@ -31,9 +25,7 @@ class Header extends Component {
       <header>
         <AppBar position="static">
           <Toolbar>
-            <div style={styles.title} className="lead">
-              <Link to={INDEX_PATH}>Event Creator</Link>
-            </div>
+            <span className="header-title">Event Creator</span>
             <Button color="contrast" component={Link} to={EVENTS_PATH}>
               My Events
             </Button>

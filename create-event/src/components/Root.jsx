@@ -31,7 +31,9 @@ class Root extends Component {
     return (
       <div>
         <Header fetchCreateEvent={fetchCreateEvent} />
-        <Routes paths={paths} components={components} />
+        <div className="container mt-5">
+          <Routes paths={paths} components={components} />
+        </div>
       </div>
     )
   }

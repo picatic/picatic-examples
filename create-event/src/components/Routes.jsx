@@ -1,17 +1,19 @@
 /* @flow */
 
 import React from 'react'
-import { Route } from 'react-router-dom'
+import { Switch, Route, Redirect } from 'react-router-dom'
+import { INDEX_PATH, EVENTS_PATH } from '../constants/RouterConstants'
 
 const Routes = ({ paths, components }) => {
   return (
-    <div className="container mt-4">
+    <Switch className="container mt-4">
       {paths.map((path, index) => {
         return (
           <Route key={index} exact path={path} component={components[path]} />
         )
       })}
-    </div>
+      <Redirect from={INDEX_PATH} to={EVENTS_PATH} />
+    </Switch>
   )
 }
 
