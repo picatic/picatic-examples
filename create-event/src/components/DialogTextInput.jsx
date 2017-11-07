@@ -10,10 +10,25 @@ import Dialog, {
   DialogActions,
 } from 'material-ui/Dialog'
 
-class DialogTextInput extends Component {
-  componentWillMount() {
-    const { value, errorMessage } = this.props
-    this.setState({ value, errorMessage })
+type Props = {
+  open: boolean,
+  title: string,
+  label: string,
+  value: string,
+  placeholder: string,
+  errorMessage: string,
+  buttonText: string,
+}
+
+type State = {
+  value: string,
+  errorMessage: string,
+}
+
+class DialogTextInput extends Component<Props, State> {
+  state = {
+    value: this.props.value,
+    errorMessage: this.props.errorMessage,
   }
   componentWillReceiveProps({ errorMessage }) {
     if (errorMessage) {
@@ -45,11 +60,9 @@ class DialogTextInput extends Component {
             placeholder={placeholder}
             label={label}
             helperText={errorMessage}
-            // FIXME: Is there a better way to do this
-            error={errorMessage ? true : false}
+            error={!!errorMessage}
             value={value}
             onChange={this.handleChange}
-            margin="normal"
             fullWidth
           />
         </DialogContent>

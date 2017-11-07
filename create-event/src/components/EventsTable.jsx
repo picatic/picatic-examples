@@ -27,16 +27,11 @@ type State = {
 
 class EventsTable extends Component<Props, State> {
   state = {
-    data: [],
+    data: this.props.data,
     order: 'asc',
     orderBy: 'title',
     rowsPerPage: 5,
     page: 0,
-  }
-
-  componentWillMount() {
-    const { data } = this.props
-    this.setState({ data })
   }
 
   componentWillReceiveProps({ data }) {
