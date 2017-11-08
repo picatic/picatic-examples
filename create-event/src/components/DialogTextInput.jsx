@@ -11,7 +11,6 @@ import Dialog, {
 } from 'material-ui/Dialog'
 
 type Props = {
-  open: boolean,
   title: string,
   label: string,
   value: string,
@@ -21,6 +20,7 @@ type Props = {
 }
 
 type State = {
+  open: boolean,
   value: string,
   errorMessage: string,
 }
@@ -32,12 +32,25 @@ class DialogTextInput extends Component<Props, State> {
   }
   componentWillReceiveProps({ errorMessage }) {
     if (errorMessage) {
-      this.setState({ errorMessage, error: true })
+      this.setState({ errorMessage })
     }
+  }
+  resetState = () => {
+    this.setState({ value: '', errorMessage: null })
+  }
+  componentWillUnmount() {
+    this.resetState()
   }
   handleChange = ev => {
     ev.preventDefault()
     this.setState({ value: ev.target.value, errorMessage: null })
+  }
+  handleRequestClose = () => {
+    const { handleRequestClose } = this.props
+    if (handleRequestClose) {
+      handleRequestClose()
+      this.resetState()
+    }
   }
   render() {
     const { value, errorMessage } = this.state
@@ -47,23 +60,22 @@ class DialogTextInput extends Component<Props, State> {
       label,
       placeholder,
       handleClick,
-      handleRequestClose,
       buttonText,
     } = this.props
     return (
-      <Dialog open={open} onRequestClose={handleRequestClose} fullWidth>
+      <Dialog open={open} onRequestClose={this.handleRequestClose} fullWidth>
         <DialogTitle>{title}</DialogTitle>
         <DialogContent>
           <TextField
-            autoFocus
             type="text"
-            placeholder={placeholder}
             label={label}
+            value={value}
+            placeholder={placeholder}
+            onChange={this.handleChange}
             helperText={errorMessage}
             error={!!errorMessage}
-            value={value}
-            onChange={this.handleChange}
             fullWidth
+            autoFocus
           />
         </DialogContent>
         <DialogActions>

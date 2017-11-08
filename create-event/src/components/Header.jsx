@@ -16,10 +16,6 @@ class Header extends Component {
   handleRequestClose = () => {
     this.setState({ open: false })
   }
-  handleCreate = value => {
-    this.props.fetchCreateEvent(value)
-    this.setState({ open: false })
-  }
   render() {
     return (
       <header>
@@ -38,11 +34,11 @@ class Header extends Component {
           </Toolbar>
         </AppBar>
         <DialogTextInput
+          open={this.state.open}
           title="Create an Event"
           value=""
-          open={this.state.open}
           placeholder="Your Event Title"
-          handleClick={this.handleCreate}
+          handleClick={this.props.fetchCreateEvent}
           handleRequestClose={this.handleRequestClose}
           buttonText="Continue"
         />
