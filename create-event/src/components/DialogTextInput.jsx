@@ -11,6 +11,7 @@ import Dialog, {
 } from 'material-ui/Dialog'
 
 type Props = {
+  open: boolean,
   title: string,
   label: string,
   value: string,
@@ -20,7 +21,6 @@ type Props = {
 }
 
 type State = {
-  open: boolean,
   value: string,
   errorMessage: string,
 }
@@ -52,16 +52,13 @@ class DialogTextInput extends Component<Props, State> {
       this.resetState()
     }
   }
+  handleClick = () => {
+    this.props.handleClick(this.state.value)
+    this.handleRequestClose()
+  }
   render() {
     const { value, errorMessage } = this.state
-    const {
-      open,
-      title,
-      label,
-      placeholder,
-      handleClick,
-      buttonText,
-    } = this.props
+    const { open, title, label, placeholder, buttonText } = this.props
     return (
       <Dialog open={open} onRequestClose={this.handleRequestClose} fullWidth>
         <DialogTitle>{title}</DialogTitle>
@@ -79,7 +76,7 @@ class DialogTextInput extends Component<Props, State> {
           />
         </DialogContent>
         <DialogActions>
-          <Button color="primary" onClick={() => handleClick(value)}>
+          <Button color="primary" onClick={this.handleClick}>
             {buttonText}
           </Button>
         </DialogActions>
