@@ -72,11 +72,7 @@ class EventsTable extends Component<Props, State> {
             {columnData.map((n, i) => (
               <TableCell key={i}>
                 <Tooltip
-                  title={
-                    orderBy !== n.attribute
-                      ? 'asc'
-                      : order === 'asc' ? 'desc' : 'asc'
-                  }
+                  title={orderBy !== n.attribute ? 'desc' : order}
                   enterDelay={300}
                   placement="bottom-start"
                 >
