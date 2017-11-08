@@ -27,15 +27,33 @@ type State = {
 
 class EventsTable extends Component<Props, State> {
   state = {
-    data: this.props.data,
-    order: 'asc',
-    orderBy: 'title',
+    data: [],
+    order: 'desc',
+    orderBy: 'start_date',
     rowsPerPage: 5,
     page: 0,
+  }
+  componentWillMount() {
+    const { order, orderBy } = this.state
+    const data = this.sortData(this.props.data, order, orderBy)
+    this.setState({ data })
   }
 
   componentWillReceiveProps({ data }) {
     this.setState({ data })
+  }
+
+  sortData(data, order, orderBy) {
+    const sortedData =
+      order === 'desc'
+        ? data.sort(
+            (a, b) => (b.attributes[orderBy] < a.attributes[orderBy] ? -1 : 1),
+          )
+        : data.sort(
+            (a, b) => (a.attributes[orderBy] < b.attributes[orderBy] ? -1 : 1),
+          )
+
+    return sortedData
   }
 
   handleChangePage = (ev, page) => {
@@ -53,10 +71,7 @@ class EventsTable extends Component<Props, State> {
       order = 'asc'
     }
 
-    const data =
-      order === 'desc'
-        ? this.state.data.sort((a, b) => (b[orderBy] < a[orderBy] ? -1 : 1))
-        : this.state.data.sort((a, b) => (a[orderBy] < b[orderBy] ? -1 : 1))
+    const data = this.sortData(this.state.data, order, orderBy)
 
     this.setState({ data, order, orderBy })
   }
