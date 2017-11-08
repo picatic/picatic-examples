@@ -18,6 +18,7 @@ const event = (state = initialState, action) => {
         ...state,
         attributes: action.attributes,
         id: action.id,
+        tickets: action.tickets,
       }
 
     case types.FETCH_TICKET_PRICE_SUCCESS:
@@ -52,6 +53,14 @@ const event = (state = initialState, action) => {
       return {
         ...state,
         updatedTickets,
+      }
+
+    case types.VIEW_EVENT:
+      return {
+        ...state,
+        attributes: action.attributes,
+        id: action.id,
+        tickets: action.tickets,
       }
 
     case types.RESET_EVENT:
