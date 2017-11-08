@@ -37,6 +37,7 @@ class Header extends Component {
           open={this.state.open}
           title="Create an Event"
           value=""
+          min={3}
           placeholder="Your Event Title"
           handleClick={this.props.fetchCreateEvent}
           handleRequestClose={this.handleRequestClose}

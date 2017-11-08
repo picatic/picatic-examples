@@ -58,7 +58,8 @@ class DialogTextInput extends Component<Props, State> {
   }
   render() {
     const { value, errorMessage } = this.state
-    const { open, title, label, placeholder, buttonText } = this.props
+    const { open, title, label, placeholder, buttonText, min } = this.props
+    const inValidLength = value.length < min
     return (
       <Dialog open={open} onRequestClose={this.handleRequestClose} fullWidth>
         <DialogTitle>{title}</DialogTitle>
@@ -76,7 +77,11 @@ class DialogTextInput extends Component<Props, State> {
           />
         </DialogContent>
         <DialogActions>
-          <Button color="primary" onClick={this.handleClick}>
+          <Button
+            color="primary"
+            onClick={this.handleClick}
+            disabled={inValidLength}
+          >
             {buttonText}
           </Button>
         </DialogActions>
