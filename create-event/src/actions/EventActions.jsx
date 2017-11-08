@@ -26,6 +26,7 @@ const fetchEventSuccess = event => ({
   type: types.FETCH_EVENT_SUCCESS,
   attributes: event.attributes,
   id: event.id,
+  tickets: event.tickets,
 })
 
 const fetchEvent = id => async (dispatch, getState) => {
