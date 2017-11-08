@@ -3,10 +3,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import {
-  fetchEvent,
+  getEvent,
   fetchCreateEvent,
   handleEventChange,
   saveEvent,
+  resetEvent,
 } from '../actions/EventActions'
 import EventDetails from '../components/EventDetails'
 
@@ -17,8 +18,9 @@ const mapStateToProps = state => ({
 })
 
 export default connect(mapStateToProps, {
-  fetchEvent,
+  getEvent,
   fetchCreateEvent,
   saveEvent,
   handleEventChange,
+  resetEvent,
 })(EventComponent)

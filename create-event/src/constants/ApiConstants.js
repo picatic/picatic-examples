@@ -8,6 +8,7 @@ const constructUrl = url =>
 
 export const CREATE_EVENT_URL = `${API_HOSTNAME}/event`
 export const UPDATE_EVENT_URL = `${API_HOSTNAME}/event/:id`
+export const READ_EVENT_URL = `${API_HOSTNAME}/event/:id`
 export const USER_URL = `${API_HOSTNAME}/user/me`
 export const USER_EVENTS_URL = constructUrl('/event?filter[user_id]=:id')
 export const CREATE_TICKET_PRICE_URL = `${API_HOSTNAME}/ticket_price`

@@ -9,11 +9,26 @@ import { CircularProgress } from 'material-ui/Progress'
 
 class EventDetails extends Component {
   componentWillMount() {
-    const { match, fetchEvent } = this.props
+    const { event, match, getEvent } = this.props
     const { id } = match.params
-    if (!isNaN(id)) {
-      fetchEvent(id)
+
+    const newEvent = event.id !== id
+    if (!isNaN(id) && newEvent) {
+      getEvent(id)
     }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { id } = nextProps.match.params
+    const { match, getEvent } = this.props
+    const newEvent = id !== match.params.id
+    if (newEvent) {
+      getEvent(id)
+    }
+  }
+
+  componentWillUnmount() {
+    this.props.resetEvent()
   }
 
   handleChange = ev => {

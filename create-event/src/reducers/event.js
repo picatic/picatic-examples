@@ -5,10 +5,10 @@ import update from 'immutability-helper'
 
 const initialState = {
   attributes: {
-    title: 'title'
+    title: 'title',
   },
   type: 'event',
-  tickets: []
+  tickets: [],
 }
 
 const event = (state = initialState, action) => {
@@ -17,14 +17,14 @@ const event = (state = initialState, action) => {
       return {
         ...state,
         attributes: action.attributes,
-        id: action.id
+        id: action.id,
       }
 
     case types.FETCH_TICKET_PRICE_SUCCESS:
       const tickets = update(state.tickets, { $push: [action.ticket] })
       return {
         ...state,
-        tickets
+        tickets,
       }
 
     case types.HANDLE_EVENT_CHANGE:
@@ -32,8 +32,8 @@ const event = (state = initialState, action) => {
         ...state,
         attributes: {
           ...state.attributes,
-          [action.name]: action.value
-        }
+          [action.name]: action.value,
+        },
       }
 
     case types.HANDLE_TICKET_CHANGE:
@@ -43,16 +43,19 @@ const event = (state = initialState, action) => {
             ...ticket,
             attributes: {
               ...ticket.attributes,
-              [action.name]: action.value
-            }
+              [action.name]: action.value,
+            },
           }
         }
         return ticket
       })
       return {
         ...state,
-        updatedTickets
+        updatedTickets,
       }
+
+    case types.RESET_EVENT:
+      return initialState
 
     default:
       return state
