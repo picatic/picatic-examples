@@ -11,7 +11,11 @@ class Ticket extends Component {
     handleTicketChange(name, value, index)
   }
   render() {
-    const { name, quantity, price } = this.props.ticket
+    const { attributes } = this.props.ticket
+    if (!attributes) {
+      return false
+    }
+    const { name, quantity, price } = attributes
     return (
       <div className="row">
         <div className="col-md-6 mb-3">

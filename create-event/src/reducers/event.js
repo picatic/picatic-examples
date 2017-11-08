@@ -9,6 +9,8 @@ const initialState = {
   },
   type: 'event',
   tickets: [],
+  status: null,
+  errorMessage: null,
 }
 
 const event = (state = initialState, action) => {
@@ -19,6 +21,13 @@ const event = (state = initialState, action) => {
         attributes: action.attributes,
         id: action.id,
         tickets: action.tickets,
+      }
+
+    case types.FETCH_EVENT_FAILURE:
+      return {
+        ...state,
+        status: action.status,
+        errorMessage: action.errorMessage,
       }
 
     case types.FETCH_TICKET_PRICE_SUCCESS:
