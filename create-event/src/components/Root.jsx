@@ -5,8 +5,13 @@ import React, { Component } from 'react'
 import Header from '../components/Header'
 import Routes from '../components/Routes'
 import DialogTextInput from '../components/DialogTextInput'
+import SnackbarContainer from '../containers/SnackbarContainer'
 
 class Root extends Component {
+  componentWillMount() {
+    const { user, fetchUser } = this.props
+    fetchUser(user.apiKey)
+  }
   render() {
     const { user, paths, components, fetchUser, fetchCreateEvent } = this.props
     const noUser = !user.id
@@ -30,6 +35,7 @@ class Root extends Component {
         <div className="container mt-5">
           <Routes paths={paths} components={components} />
         </div>
+        <SnackbarContainer />
       </div>
     )
   }

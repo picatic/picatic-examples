@@ -1,3 +1,5 @@
+/* @flow */
+
 import React, { Component } from 'react'
 
 import TextField from 'material-ui/TextField'
@@ -11,11 +13,30 @@ class Ticket extends Component {
     handleTicketChange(name, value, index)
   }
   render() {
-    const { attributes } = this.props.ticket
-    if (!attributes) {
+    const { ticket, formError } = this.props
+    if (!ticket.attributes) {
       return false
     }
-    const { name, quantity, price } = attributes
+    const { name, quantity, price, type } = ticket.attributes
+
+    // Input Validation
+    const noName = name.length < 3
+
+    const freeTicket = type === 'free'
+
+    const cost = freeTicket ? (
+      'FREE'
+    ) : (
+      <TextField
+        type="number"
+        placeholder="Cost"
+        name="price"
+        value={price}
+        onChange={this.handleChange}
+        fullWidth
+      />
+    )
+
     return (
       <div className="row">
         <div className="col-md-6 mb-3">
@@ -25,6 +46,8 @@ class Ticket extends Component {
             name="name"
             value={name}
             onChange={this.handleChange}
+            helperText={formError && noName && 'Enter a name'}
+            error={formError && noName}
             fullWidth
           />
         </div>
@@ -32,22 +55,13 @@ class Ticket extends Component {
           <TextField
             type="number"
             placeholder="Unlimited"
-            name="quanity"
+            name="quantity"
             value={quantity}
             onChange={this.handleChange}
             fullWidth
           />
         </div>
-        <div className="col-md-3 mb-3">
-          <TextField
-            type="number"
-            placeholder="Cost"
-            name="price"
-            value={price}
-            onChange={this.handleChange}
-            fullWidth
-          />
-        </div>
+        <div className="col-md-3 mb-3">{cost}</div>
       </div>
     )
   }

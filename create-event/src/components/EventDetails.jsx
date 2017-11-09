@@ -50,6 +50,14 @@ class EventDetails extends Component {
       venue_street,
     } = event.attributes
 
+    if (event.status) {
+      return (
+        <div className="text-center">
+          <h1>{event.status}</h1>
+          <h3>{event.errorMessage}</h3>
+        </div>
+      )
+    }
     const noEvent = !event.id
     if (noEvent) {
       return <CircularProgress />
@@ -58,7 +66,7 @@ class EventDetails extends Component {
     return (
       <div className="w-50">
         <section className="row">
-          <div className="col-12 mb-3">
+          <div className="col-12 mb-4">
             <TextField
               type="text"
               label="Event Title"
@@ -68,7 +76,7 @@ class EventDetails extends Component {
               fullWidth
             />
           </div>
-          <div className="col-md-6 mb-3">
+          <div className="col-md-6 mb-4">
             <TextField
               type="date"
               label="Event Date"
@@ -78,7 +86,7 @@ class EventDetails extends Component {
               fullWidth
             />
           </div>
-          <div className="col-md-3 mb-3">
+          <div className="col-md-3 mb-4">
             <TextField
               type="time"
               label="Start Time"
@@ -91,7 +99,7 @@ class EventDetails extends Component {
               fullWidth
             />
           </div>
-          <div className="col-md-3 mb-3">
+          <div className="col-md-3 mb-4">
             <TextField
               type="time"
               label="End Time"
@@ -104,7 +112,7 @@ class EventDetails extends Component {
               fullWidth
             />
           </div>
-          <div className="col-md-6 mb-3">
+          <div className="col-md-6 mb-4">
             <TextField
               type="text"
               label="Venue Name"
@@ -114,7 +122,7 @@ class EventDetails extends Component {
               fullWidth
             />
           </div>
-          <div className="col-md-6 mb-3">
+          <div className="col-md-6 mb-4">
             <TextField
               type="text"
               label="Address"
@@ -126,9 +134,11 @@ class EventDetails extends Component {
           </div>
         </section>
         <TicketsContainer />
-        <Button raised color="accent" onClick={saveEvent}>
-          Save
-        </Button>
+        <div className="fixed-bottom text-right p-3">
+          <Button raised color="accent" onClick={saveEvent}>
+            Save
+          </Button>
+        </div>
       </div>
     )
   }

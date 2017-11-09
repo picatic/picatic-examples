@@ -1,7 +1,11 @@
 /* @flow */
 
 import * as types from '../constants/ActionTypes'
-import { createTicketBody, ticketBody } from '../constants/BodyConstants'
+import {
+  newTicket,
+  createTicketBody,
+  ticketBody,
+} from '../constants/BodyConstants'
 import {
   CREATE_TICKET_PRICE_URL,
   UPDATE_TICKET_PRICE_URL,
@@ -20,9 +24,9 @@ const fetchTicketSuccess = ticket => ({
   ticket,
 })
 
-export const fetchCreateTicket = type => async (dispatch, getState) => {
+export const fetchCreateTicket = ticket => async (dispatch, getState) => {
   const { user, event } = getState()
-  const body = createTicketBody(event, type)
+  const body = createTicketBody(event, ticket)
   const { json } = await postApi(CREATE_TICKET_PRICE_URL, user.apiKey, body)
   if (json) {
     dispatch(fetchTicketSuccess(json.data))
@@ -38,4 +42,22 @@ export const fetchUpdateTicket = ticket => async (dispatch, getState) => {
     body,
   )
   dispatch(fetchTicketSuccess(json.data))
+}
+
+export const updateTickets = tickets => async (dispatch, getState) => {
+  tickets.map(ticket => {
+    if (ticket.id) {
+      return dispatch(fetchUpdateTicket(ticket))
+    } else {
+      return dispatch(fetchCreateTicket(ticket))
+    }
+  })
+}
+
+export const addTicket = type => async (dispatch, getState) => {
+  const ticket = newTicket(type)
+  dispatch({
+    type: types.ADD_TICKET,
+    ticket,
+  })
 }

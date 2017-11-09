@@ -11,10 +11,16 @@ const initialState = {
   tickets: [],
   status: null,
   errorMessage: null,
+  formError: false,
 }
 
 const event = (state = initialState, action) => {
   switch (action.type) {
+    case types.SAVE_ERROR:
+      return {
+        ...state,
+        formError: true,
+      }
     case types.FETCH_EVENT_SUCCESS:
       return {
         ...state,
@@ -30,7 +36,7 @@ const event = (state = initialState, action) => {
         errorMessage: action.errorMessage,
       }
 
-    case types.FETCH_TICKET_PRICE_SUCCESS:
+    case types.ADD_TICKET:
       const tickets = update(state.tickets, { $push: [action.ticket] })
       return {
         ...state,
@@ -48,7 +54,7 @@ const event = (state = initialState, action) => {
 
     case types.HANDLE_TICKET_CHANGE:
       const updatedTickets = state.tickets.map((ticket, index) => {
-        if (index !== action.index) {
+        if (index === action.index) {
           return {
             ...ticket,
             attributes: {
@@ -61,7 +67,7 @@ const event = (state = initialState, action) => {
       })
       return {
         ...state,
-        updatedTickets,
+        tickets: updatedTickets,
       }
 
     case types.VIEW_EVENT:

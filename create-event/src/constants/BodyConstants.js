@@ -1,16 +1,29 @@
-export const createTicketBody = (event, type) => ({
-  data: {
-    type: 'ticket_price',
-    attributes: {
-      event_id: Number(event.id),
-      name: 'General Admission',
-      status: 'open',
-      who_pays_fees: 'promoter',
-      price: type === 'free' ? 0 : 3,
-      type,
-    },
+export const newTicket = type => ({
+  attributes: {
+    name: '',
+    price: type === 'free' ? 0 : '',
+    quantity: '',
+    type,
   },
 })
+
+export const createTicketBody = (event, ticket) => {
+  const { name, type, price, quantity } = ticket.attributes
+  return {
+    data: {
+      type: 'ticket_price',
+      attributes: {
+        name,
+        price,
+        type,
+        quantity: quantity === '' ? 0 : quantity,
+        status: 'open',
+        event_id: Number(event.id),
+        who_pays_fees: 'promoter',
+      },
+    },
+  }
+}
 
 export const ticketBody = ({ attributes, id }) => ({
   data: {

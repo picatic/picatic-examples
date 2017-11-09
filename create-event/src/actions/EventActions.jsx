@@ -7,6 +7,7 @@ import { EVENT_PATH } from '../constants/RouterConstants'
 import { eventBody } from '../constants/BodyConstants'
 import { getApi, postApi, patchApi } from '../utils/ApiUtils'
 import { push } from 'react-router-redux'
+import { openSnackbar } from '../actions/SnackbarActions'
 
 export const handleEventChange = (name, value) => ({
   type: types.HANDLE_EVENT_CHANGE,
@@ -25,13 +26,24 @@ const fetchEventSuccess = ({ data, included }) => ({
   tickets: included ? included : [],
 })
 
+const fetchEventFailure = errors => ({
+  type: types.FETCH_EVENT_FAILURE,
+  status: errors.status,
+  errorMessage: errors.title,
+})
+
 const fetchEvent = id => async (dispatch, getState) => {
   const { user } = getState()
-  const { json } = await getApi(
+  const response = await getApi(
     EVENT_TICKETS_URL.replace(':id', id),
     user.apiKey,
   )
-  dispatch(fetchEventSuccess(json))
+  const { json, error } = response
+  if (json) {
+    dispatch(fetchEventSuccess(json))
+  } else {
+    dispatch(fetchEventFailure(error))
+  }
 }
 
 export const fetchCreateEvent = title => async (dispatch, getState) => {
@@ -50,7 +62,10 @@ export const fetchUpdateEvent = event => async (dispatch, getState) => {
     user.apiKey,
     body,
   )
-  dispatch(fetchEventSuccess(json))
+  if (json) {
+    dispatch(fetchEventSuccess(json))
+    dispatch(openSnackbar('Event Saved'))
+  }
 }
 
 export const getEvent = id => async (dispatch, getState) => {
@@ -70,5 +85,20 @@ export const getEvent = id => async (dispatch, getState) => {
 
 export const saveEvent = () => async (dispatch, getState) => {
   const { event } = getState()
-  dispatch(fetchUpdateEvent(event))
+  const { attriubtes, tickets } = event
+  let formError = false
+
+  tickets.map(ticket => {
+    const { name } = ticket.attributes
+    const noName = name < 3
+    if (noName) {
+      return (formError = true)
+    }
+  })
+
+  if (formError) {
+    dispatch({ type: types.SAVE_ERROR })
+  } else {
+    dispatch(fetchUpdateEvent(event))
+  }
 }

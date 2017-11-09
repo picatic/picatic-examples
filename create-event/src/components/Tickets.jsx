@@ -4,7 +4,7 @@ import React from 'react'
 import Ticket from '../components/Ticket'
 import Button from 'material-ui/Button'
 
-const Tickets = ({ tickets, handleTicketChange, fetchCreateTicket }) => (
+const Tickets = ({ tickets, handleTicketChange, addTicket, formError }) => (
   <div>
     {tickets.length > 0 && (
       <div>
@@ -18,6 +18,7 @@ const Tickets = ({ tickets, handleTicketChange, fetchCreateTicket }) => (
             key={index}
             index={index}
             ticket={ticket}
+            formError={formError}
             handleTicketChange={handleTicketChange}
           />
         ))}
@@ -27,12 +28,12 @@ const Tickets = ({ tickets, handleTicketChange, fetchCreateTicket }) => (
     <Button
       raised
       color="primary"
-      onClick={() => fetchCreateTicket('regular')}
+      onClick={() => addTicket('regular')}
       className="mr-3"
     >
       + Paid Ticket
     </Button>
-    <Button raised color="primary" onClick={() => fetchCreateTicket('free')}>
+    <Button raised color="primary" onClick={() => addTicket('free')}>
       + Free Ticket
     </Button>
   </div>
