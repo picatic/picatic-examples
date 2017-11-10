@@ -7,6 +7,7 @@ const constructUrl = url =>
   `${API_HOSTNAME}${url}${url.indexOf('?') === -1 ? '?' : '&'}${PAGE_LIMIT}`
 
 export const CREATE_EVENT_URL = `${API_HOSTNAME}/event`
+export const EVENT_URL = `${API_HOSTNAME}/event/:id`
 export const EVENT_TICKETS_URL = `${API_HOSTNAME}/event/:id?include=ticket_prices`
 export const USER_URL = `${API_HOSTNAME}/user/me`
 export const USER_EVENTS_URL = constructUrl(

@@ -13,7 +13,8 @@ class EventDetails extends Component {
     const { id } = match.params
 
     const newEvent = event.id !== id
-    if (!isNaN(id) && newEvent) {
+
+    if (newEvent) {
       getEvent(id)
     }
   }
@@ -34,8 +35,14 @@ class EventDetails extends Component {
   handleChange = ev => {
     ev.preventDefault()
     const { name, value } = ev.target
+    const { handleChangeEvent } = this.props
 
-    this.props.handleEventChange(name, value)
+    const setEndtoStart = name === 'start_date'
+    if (setEndtoStart) {
+      handleChangeEvent('end_date', value)
+    }
+
+    handleChangeEvent(name, value)
   }
 
   render() {

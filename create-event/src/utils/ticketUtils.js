@@ -1,42 +1,37 @@
-export const newTicket = type => ({
+export const newTicketAttributes = type => ({
   attributes: {
     name: '',
-    price: type === 'free' ? 0 : '',
+    price: type === 'free' ? '0.00' : '',
     quantity: '',
     type,
   },
 })
 
 export const createTicketBody = (event, ticket) => {
-  const { name, type, price, quantity } = ticket.attributes
+  const { name, price, quantity } = ticket.attributes
   return {
     data: {
       type: 'ticket_price',
       attributes: {
         name,
         price,
-        type,
         quantity: quantity === '' ? 0 : quantity,
         status: 'open',
         event_id: Number(event.id),
         who_pays_fees: 'promoter',
+        type: price === '0.00' ? 'free' : 'regular',
       },
     },
   }
 }
 
-export const ticketBody = ({ attributes, id }) => ({
+export const updateTicketBody = event => ({
   data: {
-    attributes,
-    id,
+    attributes: {
+      ...event.attributes,
+      type: event.attributes.price === '0.00' ? 'free' : 'regular',
+    },
+    id: event.id,
     type: 'ticket_price',
-  },
-})
-
-export const eventBody = ({ attributes, id }) => ({
-  data: {
-    attributes,
-    type: 'event',
-    id: isNaN(id) ? '' : id,
   },
 })

@@ -1,4 +1,4 @@
-const columnData = [
+export const eventColumnData = [
   { label: 'Name', attribute: 'title' },
   { label: 'Location', attribute: 'venue_name' },
   { label: 'Capacity', attribute: 'venue_capacity' },
@@ -16,5 +16,3 @@ const columnData = [
   // { label: 'Type', attribute: 'type' },
   // { label: 'Street', attribute: 'venue_street' },
 ]
-
-export default columnData

@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react'
 import EventsTable from '../components/EventsTable'
-import columnData from '../constants/ColumnData'
+import { eventColumnData } from '../constants/TableColumns'
 
 import { CircularProgress } from 'material-ui/Progress'
 
@@ -33,7 +33,7 @@ class Events extends Component<Props> {
     return (
       <EventsTable
         data={events}
-        columnData={columnData}
+        columnData={eventColumnData}
         handleRowClick={this.handleClick}
       />
     )
