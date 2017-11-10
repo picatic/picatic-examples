@@ -57,6 +57,10 @@ class EventDetails extends Component {
       venue_street,
     } = event.attributes
 
+    // Error Handling
+    const { formError } = event
+    const noTitle = title.length < 3
+
     if (event.status) {
       return (
         <div className="text-center">
@@ -80,6 +84,7 @@ class EventDetails extends Component {
               name="title"
               value={title}
               onChange={this.handleChange}
+              error={formError && noTitle}
               fullWidth
             />
           </div>

@@ -101,19 +101,29 @@ export const saveEvent = () => async (dispatch, getState) => {
   const { tickets } = event
 
   let formError = false
+  let message = 'Error Saving'
 
   tickets.map(ticket => {
     const { name } = ticket.attributes
     const noName = name.length < 3
     if (noName) {
-      return (formError = true)
+      message = 'Incomplete Form'
+      formError = true
     }
-    return null
+    return
   })
+
+  const { title } = event.attributes
+
+  const noTitle = title.length < 3
+  if (noTitle) {
+    formError = true
+    message = 'Incomplete Form'
+  }
 
   if (formError) {
     dispatch({ type: types.SAVE_ERROR })
-    dispatch({ type: types.OPEN_SNACKBAR, message: 'Error Saving' })
+    dispatch({ type: types.OPEN_SNACKBAR, message })
   } else {
     dispatch(fetchUpdateEvent(event))
     dispatch(updateTickets(tickets))
