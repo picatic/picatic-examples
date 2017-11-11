@@ -2,7 +2,7 @@ export const newTicketAttributes = type => ({
   attributes: {
     name: '',
     price: type === 'free' ? '0.00' : '',
-    quantity: '',
+    quantity: 0,
     type,
   },
 })
@@ -15,7 +15,7 @@ export const createTicketBody = (event, ticket) => {
       attributes: {
         name,
         price,
-        quantity: quantity === '' ? 0 : quantity,
+        quantity,
         status: 'open',
         event_id: Number(event.id),
         who_pays_fees: 'promoter',

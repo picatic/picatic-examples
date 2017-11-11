@@ -8,6 +8,7 @@ import {
   getEvent,
   saveEvent,
   resetEvent,
+  removeError,
 } from '../actions/EventActions'
 import EventDetails from '../components/EventDetails'
 
@@ -23,4 +24,5 @@ export default connect(mapStateToProps, {
   getEvent,
   saveEvent,
   resetEvent,
+  removeError,
 })(EventComponent)

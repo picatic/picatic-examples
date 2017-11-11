@@ -60,7 +60,7 @@ const fetchEventSuccess = event => ({
 export const fetchUpdateEvent = event => async (dispatch, getState) => {
   const { user } = getState()
   const body = eventBody(event)
-  const { json } = await patchApi(
+  const { json, errors } = await patchApi(
     EVENT_URL.replace(':id', event.id),
     user.apiKey,
     body,
@@ -68,6 +68,9 @@ export const fetchUpdateEvent = event => async (dispatch, getState) => {
   if (json) {
     dispatch(fetchEventSuccess(json.data))
     dispatch(openSnackbar('Event Saved'))
+  } else if (errors) {
+    const [{ title }] = errors
+    dispatch(openSnackbar(title))
   }
 }
 
@@ -96,34 +99,29 @@ export const resetEvent = () => ({
   type: types.RESET_EVENT,
 })
 
-export const saveEvent = () => async (dispatch, getState) => {
+export const removeError = () => ({
+  type: types.REMOVE_ERROR,
+})
+
+export const saveEvent = error => async (dispatch, getState) => {
   const { event } = getState()
   const { tickets } = event
 
-  let formError = false
+  let formError = error
   let message = 'Error Saving'
 
   tickets.map(ticket => {
     const { name } = ticket.attributes
     const noName = name.length < 3
     if (noName) {
-      message = 'Incomplete Form'
       formError = true
     }
-    return
+    return true
   })
-
-  const { title } = event.attributes
-
-  const noTitle = title.length < 3
-  if (noTitle) {
-    formError = true
-    message = 'Incomplete Form'
-  }
 
   if (formError) {
     dispatch({ type: types.SAVE_ERROR })
-    dispatch({ type: types.OPEN_SNACKBAR, message })
+    dispatch(openSnackbar(message))
   } else {
     dispatch(fetchUpdateEvent(event))
     dispatch(updateTickets(tickets))

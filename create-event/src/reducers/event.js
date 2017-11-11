@@ -91,6 +91,11 @@ const event = (state = initialState, action) => {
         ...state,
         formError: true,
       }
+    case types.REMOVE_ERROR:
+      return {
+        ...state,
+        formError: false,
+      }
 
     case types.RESET_EVENT:
       return initialState

@@ -1,6 +1,7 @@
 export const RESET_EVENT = 'RESET_EVENT'
 export const VIEW_EVENT = 'VIEW_EVENT'
 export const SAVE_ERROR = 'SAVE_ERROR'
+export const REMOVE_ERROR = 'REMOVE_ERROR'
 
 export const ADD_TICKET = 'ADD_TICKET'
 

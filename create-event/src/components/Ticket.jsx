@@ -71,6 +71,7 @@ class Ticket extends Component {
             name="quantity"
             value={quantity}
             onChange={this.handleChange}
+            helperText={quantity === 0 ? 'Unlimited' : false}
             fullWidth
           />
         </div>
