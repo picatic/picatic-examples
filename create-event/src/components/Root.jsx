@@ -14,8 +14,7 @@ class Root extends Component {
   }
   render() {
     const { user, paths, components, fetchUser, fetchCreateEvent } = this.props
-    const noUser = !user.id
-    if (noUser) {
+    if (!user.id) {
       return (
         <DialogTextInput
           open

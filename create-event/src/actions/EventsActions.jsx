@@ -32,3 +32,8 @@ export const fetchEvents = () => async (dispatch, getState) => {
   })
   dispatch(fetchEventsSuccess(events))
 }
+
+export const updateEvents = events => ({
+  type: types.UPDATE_EVENTS,
+  events,
+})

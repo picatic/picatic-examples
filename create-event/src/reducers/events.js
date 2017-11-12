@@ -6,6 +6,8 @@ const events = (state = [], action) => {
   switch (action.type) {
     case types.FETCH_EVENTS_SUCCESS:
       return action.events
+    case types.UPDATE_EVENTS:
+      return action.events
     default:
       return state
   }

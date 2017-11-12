@@ -1,6 +1,7 @@
 /* @flow */
 
 import React, { Component } from 'react'
+import { eventColumnData } from '../constants/TableColumns'
 
 import Table, {
   TableHead,
@@ -26,24 +27,16 @@ type State = {
 }
 
 class EventsTable extends Component<Props, State> {
-  state = {
-    data: [],
-    order: 'desc',
-    orderBy: 'start_date',
-    rowsPerPage: 5,
-    page: 0,
-  }
   componentWillMount() {
-    const { order, orderBy } = this.state
-    const data = this.sortData(this.props.data, order, orderBy)
-    this.setState({ data })
+    const { events, eventsTable, handleChangeTable } = this.props
+    const { initialSort, order, orderBy } = eventsTable
+    if (!initialSort) {
+      this.sortData(events, order, orderBy)
+      handleChangeTable('initialSort', true)
+    }
   }
 
-  componentWillReceiveProps({ data }) {
-    this.setState({ data })
-  }
-
-  sortData(data, order, orderBy) {
+  sortData = (data, order, orderBy) => {
     const sortedData =
       order === 'desc'
         ? data.sort(
@@ -53,38 +46,36 @@ class EventsTable extends Component<Props, State> {
             (a, b) => (a.attributes[orderBy] < b.attributes[orderBy] ? -1 : 1),
           )
 
-    return sortedData
-  }
-
-  handleChangePage = (ev, page) => {
-    this.setState({ page })
-  }
-
-  handleChangeRowsPerPage = ev => {
-    this.setState({ rowsPerPage: ev.target.value })
+    this.props.updateEvents(sortedData)
   }
 
   handleRequestSort = orderBy => ev => {
     let order = 'desc'
+    const { events, eventsTable, handleChangeTable } = this.props
 
-    if (this.state.orderBy === orderBy && this.state.order === 'desc') {
+    if (eventsTable.orderBy === orderBy && eventsTable.order === 'desc') {
       order = 'asc'
     }
 
-    const data = this.sortData(this.state.data, order, orderBy)
-
-    this.setState({ data, order, orderBy })
+    this.sortData(events, order, orderBy)
+    handleChangeTable('order', order)
+    handleChangeTable('orderBy', orderBy)
   }
 
   render() {
-    const { data, order, orderBy, page, rowsPerPage } = this.state
-    const { columnData, handleRowClick } = this.props
+    const {
+      events,
+      eventsTable,
+      handleChangeTable,
+      handleClickRow,
+    } = this.props
+    const { order, orderBy, rowsPerPage, page } = eventsTable
 
     return (
       <Table>
         <TableHead>
           <TableRow>
-            {columnData.map((n, i) => (
+            {eventColumnData.map((n, i) => (
               <TableCell key={i}>
                 <Tooltip
                   title={orderBy !== n.attribute ? 'desc' : order}
@@ -104,11 +95,15 @@ class EventsTable extends Component<Props, State> {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data
+          {events
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map(obj => (
-              <TableRow key={obj.id} hover onClick={handleRowClick(obj.id)}>
-                {columnData.map((n, i) => (
+              <TableRow
+                key={obj.id}
+                hover
+                onClick={() => handleClickRow(obj.id)}
+              >
+                {eventColumnData.map((n, i) => (
                   <TableCell key={i}>{obj.attributes[n.attribute]}</TableCell>
                 ))}
               </TableRow>
@@ -117,11 +112,12 @@ class EventsTable extends Component<Props, State> {
         <TableFooter>
           <TableRow>
             <TablePagination
-              count={data.length}
+              count={events.length}
               page={page}
               rowsPerPage={rowsPerPage}
-              onChangePage={this.handleChangePage}
-              onChangeRowsPerPage={this.handleChangeRowsPerPage}
+              onChangePage={(ev, page) => handleChangeTable('page', page)}
+              onChangeRowsPerPage={ev =>
+                handleChangeTable('rowsPerPage', ev.target.value)}
             />
           </TableRow>
         </TableFooter>
