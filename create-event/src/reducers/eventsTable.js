@@ -7,7 +7,6 @@ const initialState = {
   orderBy: 'start_date',
   rowsPerPage: 5,
   page: 0,
-  initialSort: false,
 }
 
 const eventsTable = (state = initialState, action) => {

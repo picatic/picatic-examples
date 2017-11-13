@@ -7,7 +7,6 @@ import EventContainer from '../containers/EventContainer'
 import EventsContainer from '../containers/EventsContainer'
 import NotFoundContainer from '../containers/NotFoundContainer'
 import { fetchUser } from '../actions/UserActions'
-import { fetchCreateEvent } from '../actions/EventActions'
 
 import {
   EVENTS_PATH,
@@ -17,19 +16,16 @@ import {
 
 const RootComponent = props => <Root {...props} />
 
-const mapStateToProps = state => {
-  const { user } = state
+const mapStateToProps = ({ user }) => {
   return {
+    user,
     paths: [EVENTS_PATH, EVENT_PATH, NOT_FOUND_PATH],
     components: {
       [EVENTS_PATH]: EventsContainer,
       [EVENT_PATH]: EventContainer,
       [NOT_FOUND_PATH]: NotFoundContainer,
     },
-    user,
   }
 }
 
-export default connect(mapStateToProps, { fetchUser, fetchCreateEvent })(
-  RootComponent,
-)
+export default connect(mapStateToProps, { fetchUser })(RootComponent)

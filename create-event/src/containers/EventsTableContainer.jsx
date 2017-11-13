@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import EventsTable from '../components/EventsTable'
 import {
   handleChangeTable,
+  handleRequestSort,
   handleClickRow,
 } from '../actions/EventsTableActions'
 import { updateEvents } from '../actions/EventsActions'
@@ -18,6 +19,7 @@ const mapStateToProps = ({ events, eventsTable }) => ({
 
 export default connect(mapStateToProps, {
   handleChangeTable,
+  handleRequestSort,
   handleClickRow,
   updateEvents,
 })(EventsTableComponent)

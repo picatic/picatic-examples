@@ -27,46 +27,12 @@ type State = {
 }
 
 class EventsTable extends Component<Props, State> {
-  componentWillMount() {
-    const { events, eventsTable, handleChangeTable } = this.props
-    const { initialSort, order, orderBy } = eventsTable
-    if (!initialSort) {
-      this.sortData(events, order, orderBy)
-      handleChangeTable('initialSort', true)
-    }
-  }
-
-  sortData = (data, order, orderBy) => {
-    const sortedData =
-      order === 'desc'
-        ? data.sort(
-            (a, b) => (b.attributes[orderBy] < a.attributes[orderBy] ? -1 : 1),
-          )
-        : data.sort(
-            (a, b) => (a.attributes[orderBy] < b.attributes[orderBy] ? -1 : 1),
-          )
-
-    this.props.updateEvents(sortedData)
-  }
-
-  handleRequestSort = orderBy => ev => {
-    let order = 'desc'
-    const { events, eventsTable, handleChangeTable } = this.props
-
-    if (eventsTable.orderBy === orderBy && eventsTable.order === 'desc') {
-      order = 'asc'
-    }
-
-    this.sortData(events, order, orderBy)
-    handleChangeTable('order', order)
-    handleChangeTable('orderBy', orderBy)
-  }
-
   render() {
     const {
       events,
       eventsTable,
       handleChangeTable,
+      handleRequestSort,
       handleClickRow,
     } = this.props
     const { order, orderBy, rowsPerPage, page } = eventsTable
@@ -85,7 +51,7 @@ class EventsTable extends Component<Props, State> {
                   <TableSortLabel
                     active={orderBy === n.attribute}
                     direction={order}
-                    onClick={this.handleRequestSort(n.attribute)}
+                    onClick={ev => handleRequestSort(ev, n.attribute)}
                   >
                     {n.label}
                   </TableSortLabel>

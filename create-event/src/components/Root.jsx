@@ -2,18 +2,20 @@
 
 import React, { Component } from 'react'
 
-import Header from '../components/Header'
 import Routes from '../components/Routes'
 import DialogTextInput from '../components/DialogTextInput'
 import SnackbarContainer from '../containers/SnackbarContainer'
+import NavContainer from '../containers/NavContainer'
 
 class Root extends Component {
   componentWillMount() {
     const { user, fetchUser } = this.props
     fetchUser(user.apiKey)
   }
+
   render() {
-    const { user, paths, components, fetchUser, fetchCreateEvent } = this.props
+    const { user, paths, components, fetchUser } = this.props
+
     if (!user.id) {
       return (
         <DialogTextInput
@@ -28,9 +30,10 @@ class Root extends Component {
         />
       )
     }
+
     return (
       <div>
-        <Header fetchCreateEvent={fetchCreateEvent} />
+        <NavContainer />
         <div className="container mt-5">
           <Routes paths={paths} components={components} />
         </div>
