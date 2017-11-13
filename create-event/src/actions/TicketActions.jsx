@@ -5,6 +5,7 @@ import {
   newTicketAttributes,
   createTicketBody,
   updateTicketBody,
+  updateTicket,
 } from '../utils/ticketUtils'
 import {
   CREATE_TICKET_PRICE_URL,
@@ -41,27 +42,47 @@ const fetchUpdateTicket = (ticket, index) => async (dispatch, getState) => {
   }
 }
 
+const logChangeTicket = i => (dispatch, getState) => {
+  const { event } = getState()
+  let { ticketsChanged } = event
+  if (ticketsChanged.indexOf(i) < 0) {
+    ticketsChanged.push(i)
+  }
+  dispatch({ type: types.LOG_CHANGE_TICKET, ticketsChanged })
+}
+
 export const addTicket = type => async (dispatch, getState) => {
+  const { event } = getState()
+  const { tickets } = event
   const ticket = newTicketAttributes(type)
+
+  dispatch(logChangeTicket(tickets.length))
   dispatch({
     type: types.ADD_TICKET,
     ticket,
   })
 }
 
-export const handleChangeTicket = (name, value, index) => ({
-  type: types.HANDLE_CHANGE_TICKET,
-  name,
-  value,
-  index,
-})
+export const handleChangeTicket = (ev, i) => (dispatch, getState) => {
+  const { event } = getState()
+  let { name, value, type } = ev.target
+  value = type === 'number' ? Number(value) : value
+
+  const tickets = updateTicket(event.tickets, name, value, i)
+
+  dispatch(logChangeTicket(i))
+  dispatch({ type: types.HANDLE_CHANGE_TICKET, tickets })
+}
 
 export const updateTickets = tickets => async (dispatch, getState) => {
-  tickets.map((ticket, index) => {
-    if (ticket.id) {
-      return dispatch(fetchUpdateTicket(ticket, index))
-    } else {
-      return dispatch(fetchCreateTicket(ticket, index))
+  const { event } = getState()
+
+  tickets.map((ticket, i) => {
+    if (ticket.id && event.ticketsChanged.indexOf(i) >= 0) {
+      return dispatch(fetchUpdateTicket(ticket, i))
+    } else if (!ticket.id) {
+      return dispatch(fetchCreateTicket(ticket, i))
     }
+    return null
   })
 }

@@ -58,7 +58,10 @@ const fetchEventSuccess = event => ({
 })
 
 export const fetchUpdateEvent = event => async (dispatch, getState) => {
-  const { user } = getState()
+  const { user, event } = getState()
+  if (!event.eventChanged) {
+    return false
+  }
   const body = eventBody(event)
   const { json, errors } = await patchApi(
     EVENT_URL.replace(':id', event.id),
@@ -125,5 +128,6 @@ export const saveEvent = error => async (dispatch, getState) => {
   } else {
     dispatch(fetchUpdateEvent(event))
     dispatch(updateTickets(tickets))
+    dispatch({ type: types.RESET_SAVE })
   }
 }

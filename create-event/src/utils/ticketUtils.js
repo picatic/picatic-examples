@@ -35,3 +35,17 @@ export const updateTicketBody = event => ({
     type: 'ticket_price',
   },
 })
+
+export const updateTicket = (tickets, name, value, i) =>
+  tickets.map((ticket, index) => {
+    if (index === i) {
+      return {
+        ...ticket,
+        attributes: {
+          ...ticket.attributes,
+          [name]: value,
+        },
+      }
+    }
+    return ticket
+  })

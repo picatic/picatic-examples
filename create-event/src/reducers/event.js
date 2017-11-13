@@ -9,6 +9,8 @@ const initialState = {
   },
   type: 'event',
   tickets: [],
+  eventChanged: false,
+  ticketsChanged: [],
   status: null,
   errorMessage: null,
   formError: false,
@@ -58,24 +60,19 @@ const event = (state = initialState, action) => {
           ...state.attributes,
           [action.name]: action.value,
         },
+        eventChanged: true,
+      }
+
+    case types.LOG_CHANGE_TICKET:
+      return {
+        ...state,
+        ticketsChanged: action.ticketsChanged,
       }
 
     case types.HANDLE_CHANGE_TICKET:
-      const updatedTickets = state.tickets.map((ticket, index) => {
-        if (index === action.index) {
-          return {
-            ...ticket,
-            attributes: {
-              ...ticket.attributes,
-              [action.name]: action.value,
-            },
-          }
-        }
-        return ticket
-      })
       return {
         ...state,
-        tickets: updatedTickets,
+        tickets: action.tickets,
       }
 
     case types.VIEW_EVENT:
@@ -95,6 +92,13 @@ const event = (state = initialState, action) => {
       return {
         ...state,
         formError: false,
+      }
+
+    case types.RESET_SAVE:
+      return {
+        ...state,
+        eventChanged: false,
+        ticketsChanged: [],
       }
 
     case types.RESET_EVENT:

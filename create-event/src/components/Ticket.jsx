@@ -7,14 +7,8 @@ import TextField from 'material-ui/TextField'
 class Ticket extends Component {
   handleChange = ev => {
     ev.preventDefault()
-    const { name, type } = ev.target
-    let value = ev.target.value
-    const { index, handleChangeTicket } = this.props
-    if (type === 'number') {
-      value = Number(value)
-    }
-
-    handleChangeTicket(name, value, index)
+    const { handleChangeTicket, i } = this.props
+    handleChangeTicket(ev, i)
   }
   render() {
     const { ticket, formError } = this.props

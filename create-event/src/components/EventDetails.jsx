@@ -63,6 +63,15 @@ class EventDetails extends Component {
 
   render() {
     const { event, saveEvent } = this.props
+    const {
+      attributes,
+      id,
+      status,
+      errorMessage,
+      formError,
+      eventChanged,
+      ticketsChanged,
+    } = event
 
     const {
       title,
@@ -71,23 +80,22 @@ class EventDetails extends Component {
       end_time,
       venue_name,
       venue_street,
-    } = event.attributes
+    } = attributes
 
-    if (event.status) {
+    if (status) {
       return (
         <div className="text-center">
-          <h1>{event.status}</h1>
-          <h3>{event.errorMessage}</h3>
+          <h1>{status}</h1>
+          <h3>{errorMessage}</h3>
         </div>
       )
     }
-    const noEvent = !event.id
+    const noEvent = !id
     if (noEvent) {
       return <CircularProgress />
     }
 
     // Error Handling
-    const { formError } = event
     const allDay = start_time === null && end_time === null
     const noTitle = title.length < 3
     const noTime = allDay ? false : !start_time || !end_time
@@ -113,7 +121,12 @@ class EventDetails extends Component {
             />
           </div>
           <div className="col">
-            <Button raised onClick={() => saveEvent(error)} className="mr-3">
+            <Button
+              raised
+              onClick={() => saveEvent(error)}
+              className="mr-3"
+              disabled={!eventChanged && ticketsChanged.length <= 0}
+            >
               Save
             </Button>
             <Button raised disabled={true}>

@@ -16,10 +16,10 @@ const Tickets = props => {
             <div className="col-md-3 mb-3">Quantity</div>
             <div className="col-md-3 mb-3">Price</div>
           </div>
-          {tickets.map((ticket, index) => (
+          {tickets.map((ticket, i) => (
             <Ticket
-              key={index}
-              index={index}
+              key={i}
+              i={i}
               ticket={ticket}
               formError={formError}
               handleChangeTicket={handleChangeTicket}
