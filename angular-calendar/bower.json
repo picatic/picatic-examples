@@ -1,0 +1,21 @@
+{
+  "name": "angular-calendar",
+  "description": "An event calendar example powered by angularJS and the picatic API",
+  "version": "0.0.0",
+  "homepage": "https://github.com/picatic/picatic-examples",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "angular": "~1.5.0",
+    "angular-route": "~1.5.0",
+    "angular-loader": "~1.5.0",
+    "angular-mocks": "~1.5.0",
+    "angular-resource": "~1.5.0",
+    "angular-sanitize": "~1.5.0",
+    "html5-boilerplate": "^5.3.0",
+    "angular-ui-calendar": "~1.0.2"
+  },
+  "resolutions": {
+    "angular": "1.5.11"
+  }
+}
