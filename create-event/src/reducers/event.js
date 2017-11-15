@@ -9,6 +9,7 @@ const initialState = {
   },
   type: 'event',
   tickets: [],
+  id: null,
   eventChanged: false,
   ticketsChanged: [],
   status: null,

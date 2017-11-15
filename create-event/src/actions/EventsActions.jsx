@@ -1,7 +1,8 @@
 /* @flow */
 
 import * as types from '../constants/ActionTypes'
-import { USER_EVENTS_URL, PAGE_LIMIT } from '../constants/ApiConstants'
+import _ from 'lodash'
+import { USER_EVENTS_TICKETS_URL, PAGE_LIMIT } from '../constants/ApiConstants'
 import { getApi, pageLimit } from '../utils/ApiUtils'
 import { sortEvents, mapTicketsToEvent } from '../utils/eventsUtils'
 
@@ -14,12 +15,29 @@ export const fetchEvents = () => async (dispatch, getState) => {
   const { user, eventsTable } = getState()
   const newPageLimit = pageLimit(100, 0)
   const { json } = await getApi(
-    USER_EVENTS_URL.replace(':id', user.id).replace(PAGE_LIMIT, newPageLimit),
+    USER_EVENTS_TICKETS_URL.replace(':id', user.id).replace(
+      PAGE_LIMIT,
+      newPageLimit,
+    ),
     user.apiKey,
   )
   if (json) {
     let events = mapTicketsToEvent(json)
     events = sortEvents(events, eventsTable.order, eventsTable.orderBy)
     dispatch({ type: types.FETCH_EVENTS_SUCCESS, events })
+    return events
   }
+}
+
+export const replaceEvent = () => async (dispatch, getState) => {
+  const { events, event } = getState()
+  const { attributes, id, tickets } = event
+  const i = _.findIndex(events, ['id', id])
+  events[i] = {
+    ...events[i],
+    attributes,
+    tickets,
+  }
+
+  dispatch(updateEvents(events))
 }

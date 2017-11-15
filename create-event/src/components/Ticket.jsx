@@ -7,11 +7,14 @@ import TextField from 'material-ui/TextField'
 class Ticket extends Component {
   handleChange = ev => {
     ev.preventDefault()
-    const { handleChangeTicket, i } = this.props
-    handleChangeTicket(ev, i)
+    const { name, value, type } = ev.target
+    const updateValue = type === 'number' ? Number(value) : value
+
+    const { handleChangeTicket, index } = this.props
+    handleChangeTicket(name, updateValue, index)
   }
   render() {
-    const { ticket, formError } = this.props
+    const { ticket, submitted } = this.props
     if (!ticket.attributes) {
       return false
     }
@@ -22,6 +25,9 @@ class Ticket extends Component {
     const freePrice = price === 0
     const badPrice = price < 3 && !freePrice
     // const minQuantity = quantity >= 0
+
+    if (noName) {
+    }
 
     const freeTicket = type === 'free'
 
@@ -35,10 +41,10 @@ class Ticket extends Component {
         value={price}
         onChange={this.handleChange}
         helperText={
-          (formError && badPrice && 'Minimum price is $3') ||
+          (submitted && badPrice && 'Minimum price is $3') ||
           (freePrice && 'Free')
         }
-        error={formError && badPrice}
+        error={submitted && badPrice}
         min={0}
         fullWidth
       />
@@ -53,8 +59,8 @@ class Ticket extends Component {
             name="name"
             value={name}
             onChange={this.handleChange}
-            helperText={formError && noName && 'Enter a ticket name'}
-            error={formError && noName}
+            helperText={submitted && noName && 'Enter a ticket name'}
+            error={submitted && noName}
             fullWidth
           />
         </div>
