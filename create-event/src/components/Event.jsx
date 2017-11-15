@@ -32,6 +32,14 @@ class Event extends Component {
     this.setState({ initialState })
   }
 
+  // FIXME: router not receiving new props
+  componentWillUpdate(nextProps) {
+    const newEvent = nextProps.match.params.id !== this.state.id
+    if (newEvent) {
+      this.initEvent()
+    }
+  }
+
   initEvent = () => {
     const { match, getEvent } = this.props
     const { id } = match.params
@@ -134,6 +142,7 @@ class Event extends Component {
         } else {
           fetchCreateTicket(ticket, id).then(() => this.initEvent())
         }
+        return true
       })
       this.setState({
         submitted: false,
@@ -146,6 +155,7 @@ class Event extends Component {
   render() {
     const {
       attributes,
+      id,
       tickets,
       eventChanged,
       ticketsChanged,
@@ -155,9 +165,6 @@ class Event extends Component {
     if (!attributes) {
       return 'No Event Found'
     }
-
-    console.log(tickets)
-    console.log(attributes)
 
     const {
       title,

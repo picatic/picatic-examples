@@ -8,7 +8,6 @@ import {
   handleRequestSort,
   handleClickRow,
 } from '../actions/EventsTableActions'
-import { updateEvents } from '../actions/EventsActions'
 
 const EventsTableComponent = props => <EventsTable {...props} />
 
@@ -21,5 +20,4 @@ export default connect(mapStateToProps, {
   handleChangeTable,
   handleRequestSort,
   handleClickRow,
-  updateEvents,
 })(EventsTableComponent)

@@ -1,14 +1,13 @@
 /* @flow */
 
 import * as types from '../constants/ActionTypes'
-import _ from 'lodash'
 import { USER_EVENTS_TICKETS_URL, PAGE_LIMIT } from '../constants/ApiConstants'
 import { getApi, pageLimit } from '../utils/ApiUtils'
 import { sortEvents, mapTicketsToEvent } from '../utils/eventsUtils'
 
 export const updateEvents = events => ({
   type: types.UPDATE_EVENTS,
-  events,
+  updatedEvents: events,
 })
 
 export const fetchEvents = () => async (dispatch, getState) => {
@@ -27,17 +26,4 @@ export const fetchEvents = () => async (dispatch, getState) => {
     dispatch({ type: types.FETCH_EVENTS_SUCCESS, events })
     return events
   }
-}
-
-export const replaceEvent = () => async (dispatch, getState) => {
-  const { events, event } = getState()
-  const { attributes, id, tickets } = event
-  const i = _.findIndex(events, ['id', id])
-  events[i] = {
-    ...events[i],
-    attributes,
-    tickets,
-  }
-
-  dispatch(updateEvents(events))
 }

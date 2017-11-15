@@ -3,12 +3,7 @@
 import * as types from '../constants/ActionTypes'
 import _ from 'lodash'
 import update from 'immutability-helper'
-import {
-  newTicketAttributes,
-  createTicketBody,
-  updateTicketBody,
-  updateTicket,
-} from '../utils/ticketUtils'
+import { createTicketBody, updateTicketBody } from '../utils/ticketUtils'
 import {
   CREATE_TICKET_PRICE_URL,
   UPDATE_TICKET_PRICE_URL,
@@ -35,7 +30,7 @@ const fetchTicketSuccess = ticket => async (dispatch, getState) => {
     },
   })
 
-  dispatch({ type: types.FETCH_TICKET_PRICE_SUCCESS, updatedEvents })
+  dispatch({ type: types.UPDATE_EVENTS, updatedEvents })
 }
 
 export const fetchCreateTicket = (ticket, eventId) => async (
