@@ -2,7 +2,6 @@
 
 import React from 'react'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom'
 import Events from '../components/Events'
 import { openSnackbar } from '../actions/SnackbarActions'
 import { fetchEvents } from '../actions/EventsActions'
@@ -16,13 +15,11 @@ const mapStateToProps = ({ events, user }) => ({
   user,
 })
 
-export default withRouter(
-  connect(mapStateToProps, {
-    fetchEvents,
-    getEvent,
-    fetchUpdateEvent,
-    fetchCreateTicket,
-    fetchUpdateTicket,
-    openSnackbar,
-  })(EventsComponent),
-)
+export default connect(mapStateToProps, {
+  fetchEvents,
+  getEvent,
+  fetchUpdateEvent,
+  fetchCreateTicket,
+  fetchUpdateTicket,
+  openSnackbar,
+})(EventsComponent)

@@ -28,25 +28,13 @@ class Event extends Component {
     this.initEvent()
   }
 
+  initEvent = () => {
+    const { attributes, tickets, id } = this.props.event
+    this.setState({ attributes, tickets, id })
+  }
+
   componentWillUnmount() {
     this.setState({ initialState })
-  }
-
-  componentWillUpdate(nextProps) {
-    const newEvent = nextProps.match.params.id !== this.state.id
-    if (newEvent) {
-      this.initEvent()
-    }
-  }
-
-  initEvent = () => {
-    const { match, getEvent } = this.props
-    const { id } = match.params
-    const event = getEvent(id)
-    if (event) {
-      const { attributes, tickets } = event
-      this.setState({ attributes, tickets, id })
-    }
   }
 
   handleChangeEvent = ev => {
@@ -64,8 +52,9 @@ class Event extends Component {
       attributes['end_date'] = value
     }
 
-    attributes[name] = value
-    this.setState({ attributes, eventChanged: true })
+    const newAttributes = update(attributes, { [name]: { $set: value } })
+
+    this.setState({ attributes: newAttributes, eventChanged: true })
   }
 
   handleChangeTicket = (name, value, index) => {
@@ -116,7 +105,7 @@ class Event extends Component {
     return error
   }
 
-  handleSave = async errorEvent => {
+  handleSave = errorEvent => {
     const {
       fetchUpdateEvent,
       fetchUpdateTicket,
