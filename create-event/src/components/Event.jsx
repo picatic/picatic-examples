@@ -28,6 +28,13 @@ class Event extends Component {
     this.initEvent()
   }
 
+  componentWillUpdate(nextProps) {
+    const newEvent = nextProps.event.id !== this.state.id
+    if (newEvent) {
+      this.initEvent()
+    }
+  }
+
   initEvent = () => {
     const { attributes, tickets, id } = this.props.event
     this.setState({ attributes, tickets, id })
@@ -40,21 +47,23 @@ class Event extends Component {
   handleChangeEvent = ev => {
     ev.preventDefault()
     let { name, value, type } = ev.target
-    const { attributes } = this.state
+    let { attributes } = this.state
 
     const isTime = type === 'time'
     if (isTime && value) {
       value = `${value}:00`
     }
 
-    const setEndtoStart = name === 'start_date'
-    if (setEndtoStart) {
-      attributes['end_date'] = value
-    }
+    const end_date = name === 'start_date' ? value : attributes.start_date
 
-    const newAttributes = update(attributes, { [name]: { $set: value } })
-
-    this.setState({ attributes: newAttributes, eventChanged: true })
+    this.setState(prevState => ({
+      attributes: {
+        ...prevState.attributes,
+        [name]: value,
+        end_date,
+      },
+      eventChanged: true,
+    }))
   }
 
   handleChangeTicket = (name, value, index) => {
