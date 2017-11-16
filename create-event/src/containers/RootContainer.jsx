@@ -6,6 +6,7 @@ import Root from '../components/Root'
 import EventsContainer from '../containers/EventsContainer'
 import NotFoundContainer from '../containers/NotFoundContainer'
 import { fetchUser } from '../actions/UserActions'
+import { fetchCreateEvent } from '../actions/EventActions'
 import { openSnackbar } from '../actions/SnackbarActions'
 
 import {
@@ -28,6 +29,8 @@ const mapStateToProps = ({ user }) => {
   }
 }
 
-export default connect(mapStateToProps, { fetchUser, openSnackbar })(
-  RootComponent,
-)
+export default connect(mapStateToProps, {
+  fetchUser,
+  fetchCreateEvent,
+  openSnackbar,
+})(RootComponent)

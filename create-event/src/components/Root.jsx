@@ -2,10 +2,10 @@
 
 import React, { Component } from 'react'
 
+import Header from '../components/Header'
 import Routes from '../components/Routes'
 import DialogTextInput from '../components/DialogTextInput'
 import SnackbarContainer from '../containers/SnackbarContainer'
-import NavContainer from '../containers/NavContainer'
 
 class Root extends Component {
   componentWillMount() {
@@ -32,7 +32,7 @@ class Root extends Component {
 
     return (
       <div>
-        <NavContainer />
+        <Header {...this.props} />
         <div className="container mt-5">
           <Routes paths={paths} components={components} />
         </div>
