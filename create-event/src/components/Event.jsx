@@ -32,7 +32,6 @@ class Event extends Component {
     this.setState({ initialState })
   }
 
-  // FIXME: router not receiving new props
   componentWillUpdate(nextProps) {
     const newEvent = nextProps.match.params.id !== this.state.id
     if (newEvent) {
@@ -155,7 +154,6 @@ class Event extends Component {
   render() {
     const {
       attributes,
-      id,
       tickets,
       eventChanged,
       ticketsChanged,

@@ -9,8 +9,7 @@ import NavContainer from '../containers/NavContainer'
 
 class Root extends Component {
   componentWillMount() {
-    const { user, fetchUser } = this.props
-    fetchUser(user.apiKey)
+    this.props.fetchUser('sk_live_210eb57e6b95e5143c492a219091c4e5')
   }
 
   render() {

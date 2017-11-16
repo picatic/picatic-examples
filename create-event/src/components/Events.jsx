@@ -11,13 +11,6 @@ type Props = {
 }
 
 class Events extends Component<Props> {
-  shouldComponentUpdate(nextProps) {
-    const sameEvents = nextProps.events.length === this.props.events.length
-    if (sameEvents) {
-      return false
-    }
-    return true
-  }
   render() {
     const { events, fetchEvents, match } = this.props
 
