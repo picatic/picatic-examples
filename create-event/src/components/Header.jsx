@@ -11,7 +11,7 @@ import Button from 'material-ui/Button'
 
 class Header extends Component {
   state = {
-    open: false,
+    open: false
   }
   handleRequestClose = () => {
     this.setState({ open: false })
@@ -22,7 +22,12 @@ class Header extends Component {
         <AppBar position="static">
           <Toolbar>
             <span className="header-title">Event Creator</span>
-            <Button color="contrast" component={Link} to={EVENTS_PATH}>
+            <Button
+              color="contrast"
+              className="nav-button"
+              component={Link}
+              to={EVENTS_PATH}
+            >
               My Events
             </Button>
             <Button

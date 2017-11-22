@@ -19,3 +19,7 @@ body {
   border-radius: 50%;
   box-shadow: 0px 0px 5px 0px #34cb7b;
 }
+
+.nav-button:hover {
+  color: white;
+}
