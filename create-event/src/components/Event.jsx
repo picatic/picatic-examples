@@ -2,12 +2,14 @@
 
 import React, { Component } from 'react'
 import update from 'immutability-helper'
+import _ from 'lodash'
 import Tickets from '../components/Tickets'
 
 import TextField from 'material-ui/TextField'
 import { FormControlLabel } from 'material-ui/Form'
 import Checkbox from 'material-ui/Checkbox'
 import Button from 'material-ui/Button'
+import Tooltip from 'material-ui/Tooltip'
 
 import { newTicketAttributes } from '../utils/ticketUtils'
 
@@ -19,6 +21,7 @@ const initialState = {
   submitted: false,
   eventChanged: false,
   ticketsChanged: [],
+  hasStripeAcc: null
 }
 
 class Event extends Component {
@@ -26,6 +29,8 @@ class Event extends Component {
 
   componentWillMount() {
     this.initEvent()
+    const hasStripeAcc = this.props.user.attributes.stripe_api_key !== null
+    this.setState({ hasStripeAcc })
   }
 
   componentWillUpdate(nextProps) {
@@ -60,15 +65,15 @@ class Event extends Component {
       attributes: {
         ...prevState.attributes,
         [name]: value,
-        end_date,
+        end_date
       },
-      eventChanged: true,
+      eventChanged: true
     }))
   }
 
   handleChangeTicket = (name, value, index) => {
     const newTickets = update(this.state.tickets, {
-      [index]: { attributes: { [name]: { $set: value } } },
+      [index]: { attributes: { [name]: { $set: value } } }
     })
 
     let { ticketsChanged } = this.state
@@ -85,7 +90,7 @@ class Event extends Component {
     const newTicketIndex = this.state.tickets.length
     this.setState(prevState => ({
       tickets: prevState.tickets.concat(newTicket),
-      ticketsChanged: prevState.ticketsChanged.concat(newTicketIndex),
+      ticketsChanged: prevState.ticketsChanged.concat(newTicketIndex)
     }))
   }
 
@@ -119,9 +124,34 @@ class Event extends Component {
       fetchUpdateEvent,
       fetchUpdateTicket,
       fetchCreateTicket,
-      openSnackbar,
+      openSnackbar
     } = this.props
-    const { attributes, id, tickets, eventChanged, ticketsChanged } = this.state
+
+    let {
+      attributes,
+      id,
+      tickets,
+      eventChanged,
+      ticketsChanged,
+      hasStripeAcc
+    } = this.state
+
+    const paidTickets =
+      _.findIndex(tickets, ticket => ticket.attributes.type === 'regular') >= 0
+    const freeEvent = attributes.type === 'free'
+
+    if (paidTickets && !hasStripeAcc) {
+      openSnackbar('No Stripe Account, remove paid tickets')
+      return false
+    }
+
+    const eventType = type => {
+      attributes['type'] = type
+      eventChanged = true
+    }
+
+    !paidTickets && !freeEvent && eventType('free')
+    paidTickets && freeEvent && eventType('regular')
 
     const errorTicket = this.validateTickets()
     if (errorEvent || errorTicket) {
@@ -139,13 +169,33 @@ class Event extends Component {
         } else {
           fetchCreateTicket(ticket, id).then(() => this.initEvent())
         }
+        const paid = ticket.attributes.type === 'regular'
+        if (paid) {
+        }
         return true
       })
       this.setState({
         submitted: false,
         eventChanged: false,
-        ticketsChanged: [],
+        ticketsChanged: []
       })
+      return true
+    }
+  }
+
+  handleActivate = async errorEvent => {
+    const { event, fetchActivateEvent, openSnackbar } = this.props
+    const { tickets } = this.state
+
+    const noTickets = tickets.length <= 0
+    if (noTickets) {
+      openSnackbar('Please a ticket')
+      return false
+    }
+
+    const response = await this.handleSave(errorEvent)
+    if (response) {
+      fetchActivateEvent(event)
     }
   }
 
@@ -156,6 +206,7 @@ class Event extends Component {
       eventChanged,
       ticketsChanged,
       submitted,
+      hasStripeAcc
     } = this.state
 
     if (!attributes) {
@@ -169,6 +220,7 @@ class Event extends Component {
       end_time,
       venue_name,
       venue_street,
+      status
     } = attributes
 
     // Error Handling
@@ -181,8 +233,6 @@ class Event extends Component {
     if (noTitle || !start_date || noTime || endBeforeStart) {
       errorEvent = true
     }
-
-    const hasStripeAcc = this.props.user.attributes.stripe_api_key !== null
 
     return (
       <div className="w-75 mx-auto">
@@ -207,9 +257,19 @@ class Event extends Component {
             >
               Save
             </Button>
-            <Button raised disabled={true}>
-              Go Live
-            </Button>
+            {status === 'active' ? (
+              <Tooltip
+                id="tooltip-bottom"
+                title="Event Live"
+                placement="bottom"
+              >
+                <button className="event-active-dot" />
+              </Tooltip>
+            ) : (
+              <Button raised onClick={() => this.handleActivate(errorEvent)}>
+                Go Live
+              </Button>
+            )}
           </div>
         </section>
 
@@ -224,7 +284,7 @@ class Event extends Component {
                   value={start_date}
                   onChange={this.handleChangeEvent}
                   InputLabelProps={{
-                    shrink: true,
+                    shrink: true
                   }}
                   error={submitted && !start_date}
                   fullWidth
@@ -253,10 +313,10 @@ class Event extends Component {
                 value={!start_time ? '' : start_time}
                 onChange={this.handleChangeEvent}
                 inputProps={{
-                  step: 300, // 5 min
+                  step: 300 // 5 min
                 }}
                 InputLabelProps={{
-                  shrink: true,
+                  shrink: true
                 }}
                 helperText={
                   submitted && !start_time && 'Must have a start time'
@@ -275,10 +335,10 @@ class Event extends Component {
                 value={!end_time ? '' : end_time}
                 onChange={this.handleChangeEvent}
                 inputProps={{
-                  step: 300, // 5 min
+                  step: 300 // 5 min
                 }}
                 InputLabelProps={{
-                  shrink: true,
+                  shrink: true
                 }}
                 helperText={
                   (submitted && !end_time && 'Must have an end time') ||

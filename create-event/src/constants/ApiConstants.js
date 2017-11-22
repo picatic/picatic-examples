@@ -9,9 +9,10 @@ const constructUrl = url =>
 export const CREATE_EVENT_URL = `${API_HOSTNAME}/event`
 export const EVENT_URL = `${API_HOSTNAME}/event/:id`
 export const EVENT_TICKETS_URL = `${API_HOSTNAME}/event/:id?include=ticket_prices`
+export const ACTIVATE_EVENT_URL = `${API_HOSTNAME}/event/:id/activate`
 export const USER_URL = `${API_HOSTNAME}/user/me`
 export const USER_EVENTS_TICKETS_URL = constructUrl(
-  '/event?filter[user_id]=:id&include=ticket_prices',
+  '/event?filter[user_id]=:id&include=ticket_prices'
 )
 export const CREATE_TICKET_PRICE_URL = `${API_HOSTNAME}/ticket_price`
 export const UPDATE_TICKET_PRICE_URL = `${API_HOSTNAME}/ticket_price/:id`

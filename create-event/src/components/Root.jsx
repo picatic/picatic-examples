@@ -9,7 +9,7 @@ import SnackbarContainer from '../containers/SnackbarContainer'
 
 class Root extends Component {
   componentWillMount() {
-    // this.props.fetchUser('sk_live_210eb57e6b95e5143c492a219091c4e5')
+    this.props.fetchUser('sk_live_67c2aa1275dbb5e0822ba9bfa97ea132')
   }
 
   render() {

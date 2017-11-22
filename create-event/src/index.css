@@ -11,3 +11,11 @@ body {
 .header-title {
   flex: 1;
 }
+
+.event-active-dot {
+  width: 22px;
+  height: 22px;
+  background: #34cb7b;
+  border-radius: 50%;
+  box-shadow: 0px 0px 5px 0px #34cb7b;
+}
