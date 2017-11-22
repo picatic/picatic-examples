@@ -7,17 +7,16 @@ import Button from './components/Button'
 import Tickets from './components/Tickets'
 import TicketForm from './components/TicketForm'
 import StripeCheckout from './components/StripeCheckout'
+import Request from './components/Request'
 
-// Production Picatic API host
-// const host = 'https://api.picatic.com/v2'
-
-// Picatic API Staging Host
 const host = 'https://api-staging.picatic.com/v2'
 
 class App extends Component {
   state = {
     event: null,
     tickets: [],
+    pkStripe: null,
+
     checkoutObj: null,
     formSubmitted: false,
     selectedTickets: [],
@@ -25,83 +24,31 @@ class App extends Component {
   }
 
   componentWillMount = () => {
-    const paramsId = this.props.match.params.id
-    const hasParamsId = paramsId !== undefined
-
     // TODO: Replace with your event id
-    let eventSlug = 74701
-
-    eventSlug = hasParamsId ? paramsId : eventSlug
-
-    this.getEvent(eventSlug)
+    this.getEvent(74701)
   }
 
-  /**
-   * getEvent() gets information about an event.
-   *
-   * Example endpoint:
-   * https://api.picatic.com/v2/event/74701
-   *
-   * API Doc Reference:
-   * http://developer.picatic.com/v2/api/#methods-event-read
-   */
-  getEvent = eventSlug => {
-    const url = `${host}/event/${eventSlug}`
+  getEvent = async eventId => {
+    const url = `${host}/event/${eventId}?include=ticket_prices,event_owner`
 
-    fetch(url, { method: 'GET' })
+    const { json, error } = await fetch(url, { method: 'GET' })
       .then(res => res.json())
-      .then(json => {
-        const event = json.data
+      .then(json => ({ json }))
+      .catch(error => ({ error }))
 
-        this.getStripeKey(event.id)
-        this.getTickets(event.id)
-        this.setState({ event })
-      })
-      .catch(err => console.log(err))
+    console.log(error)
+
+    const event = json.data
+    const tickets = json.included.filter(incl => incl.type === 'ticket_price')
+    const pkStripe = json.included.filter(
+      incl => incl.type === 'EventOwnerDTO'
+    )[0].attributes.stripe_publishable_key
+
+    if (event && tickets && pkStripe)
+      return this.setState({ event, tickets, pkStripe })
+    else return this.setState({ error })
   }
 
-  getStripeKey = eventId => {
-    const url = `${host}/event?filter[id]=${eventId}&page[limit]=10&page[offset]=0&include=event_owner`
-
-    fetch(url, { method: 'GET' })
-      .then(res => res.json())
-      .then(event =>
-        this.setState({
-          stripeKey: event.included[0].attributes.stripe_publishable_key
-        })
-      )
-      .catch(err => console.log(err))
-  }
-
-  /**
-   * getTickets() sets an array of tickets to state.
-   * The array of tickets are filtered by a particular event
-   *
-   * Example endpoint:
-   * https://api.picatic.com/v2/ticket_price?filter[event_id]=49366&page[limit]=10&page[offset]=0
-   *
-   * API Doc Reference:
-   * http://developer.picatic.com/v2/api/#methods-ticketprice-find
-   */
-  getTickets = eventId => {
-    const url = `${host}/ticket_price?filter[event_id]=${eventId}&page[limit]=10&page[offset]=0`
-
-    fetch(url, { method: 'GET' })
-      .then(res => res.json())
-      .then(response => this.setState({ tickets: response.data }))
-      .catch(err => console.log(err))
-  }
-
-  /**
-   * createCheckout() creates a checkout order and reserve tickets for an event.
-   * Mandatory body fields: event id and ticket id
-   *
-   * Example endpoint:
-   * https://api.picatic.com/v2/checkout
-   *
-   * API Doc Reference:
-   * http://developer.picatic.com/v2/api/#methods-checkout-create
-   */
   createCheckout = ticket => {
     const { event, selectedTickets } = this.state
     const url = `${host}/checkout`
@@ -377,6 +324,7 @@ class App extends Component {
           </div>
           {step}
         </div>
+        <Request {...this.state} />
       </div>
     )
   }
