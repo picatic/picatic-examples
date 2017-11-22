@@ -108,9 +108,10 @@ class Event extends Component {
     const { tickets } = this.state
     let error = false
     tickets.map(ticket => {
-      const { name } = ticket.attributes
+      const { name, price } = ticket.attributes
       const noName = name.length < 3
-      if (noName) {
+      const badPrice = price < 3 && price != 0
+      if (noName || badPrice) {
         return (error = true)
       } else {
         return true

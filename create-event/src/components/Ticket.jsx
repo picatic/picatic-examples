@@ -8,10 +8,10 @@ class Ticket extends Component {
   handleChange = ev => {
     ev.preventDefault()
     const { name, value, type } = ev.target
-    const updateValue = type === 'number' ? Number(value) : value
+    const updatedValue = type === 'number' ? Number(value) : value
 
     const { handleChangeTicket, index } = this.props
-    handleChangeTicket(name, updateValue, index)
+    handleChangeTicket(name, updatedValue, index)
   }
   render() {
     const { ticket, submitted } = this.props
@@ -22,12 +22,9 @@ class Ticket extends Component {
 
     // Input Validation
     const noName = name.length < 3
-    const freePrice = price === 0
+    const freePrice = price == 0
     const badPrice = price < 3 && !freePrice
     // const minQuantity = quantity >= 0
-
-    if (noName) {
-    }
 
     const freeTicket = type === 'free'
 
