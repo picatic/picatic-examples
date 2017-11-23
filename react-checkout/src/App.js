@@ -17,7 +17,19 @@ const checkoutSteps = [
     type: 'update',
     url: '/checkout/:id',
     method: 'PATCH'
-  }
+  },
+  {
+    name: 'Stripe Tokenization',
+    type: 'stripe',
+    url: '',
+    method: ''
+  },
+  {
+    name: 'Checkout Payment',
+    type: 'payment',
+    url: '/checkout/:id/payment',
+    method: 'POST'
+  },
 ]
 
 const checkoutObj = {
@@ -26,6 +38,21 @@ const checkoutObj = {
       event_id: null,
       tickets: []
     },
+    type: 'checkout'
+  }
+}
+
+const checkoutPaymentObj = {
+  data: {
+    attributes: {
+      event_id: null,
+      payment: {
+        source: {
+          card_token: null
+        }
+      }
+    },
+    id: null,
     type: 'checkout'
   }
 }
@@ -91,7 +118,51 @@ class App extends Component {
 
   updateCheckout = async () => {
     const { checkoutObj } = this.state
-    const checkout = checkoutSteps.find(step => (step.type === 'update'))
+    const checkout = checkoutSteps.find(step => step.type === 'update')
+
+    const url = `${host}${checkout.url}`.replace(':id', checkoutObj.data.id)
+
+    const { json, error } = await fetch(url, {
+      method: checkout.method,
+      body: JSON.stringify({ data: checkoutObj.data })
+    })
+      .then(res => res.json())
+      .then(json => ({ json }))
+      .catch(error => ({ error }))
+
+    if (json) {
+      const { attributes  } = json.data
+      json.data.attributes = {
+        event_id: attributes.event_id,
+        payment: {
+          source: {
+            card_token: null
+          }
+        }
+      }
+      this.setState({ checkoutObj: json, formSubmitted: true })
+    } else if (error) {
+      this.setState({ error })
+    }
+  }
+
+  stripeTokenization = ({ token, error }) => {
+    const { checkoutObj } = this.state
+    if (token) {
+      checkoutObj.data.attributes.payment.source.card_token = token.id
+      console.log('token', token);
+      console.log('checkoutObj', checkoutObj);
+      this.setState({ checkoutObj })
+    } else if (error) {
+      console.log(error);
+      this.setState({ error })
+    }
+  }
+
+  checkoutPayment = async () => {
+
+    const { event, checkoutObj } = this.state
+    const checkout = checkoutSteps.find(step => step.type === 'payment')
 
     const url = `${host}${checkout.url}`.replace(':id', checkoutObj.data.id)
 
@@ -102,47 +173,11 @@ class App extends Component {
       .then(res => res.json())
       .then(json => ({ json }))
       .catch(error => ({ error }))
-
     if (json) {
-      this.setState({ checkoutObj: json, formSubmitted: true })
+      this.setState({ checkoutObj: '' })
     } else if (error) {
       this.setState({ error })
     }
-  }
-
-  checkoutPayment = payload => {
-    const cardError = payload.error
-    if (cardError) {
-      console.log(cardError)
-      return false
-    }
-
-    const { event, checkoutObj } = this.state
-
-    const url = `${host}/checkout/${checkoutObj.id}/payment`
-
-    const body = JSON.stringify({
-      data: {
-        attributes: {
-          event_id: Number(event.id),
-          payment: {
-            source: {
-              card_token: payload.token.id
-            }
-          }
-        },
-        id: checkoutObj.id,
-        type: 'checkout'
-      }
-    })
-
-    fetch(url, {
-      method: 'POST',
-      body: body
-    })
-      .then(res => res.json())
-      .then(response => this.confirmCheckout())
-      .catch(err => console.log(err))
   }
 
   confirmCheckout = () => {
@@ -232,14 +267,13 @@ class App extends Component {
       />
     ))
 
-    const hasSelectedTickets = checkoutObj.data.attributes.tickets.length > 0
-
     let checkout = checkoutSteps.find(step => step.type === 'create')
 
     let step = null
 
     const noCheckout = !checkoutObj.data.id
     if (noCheckout) {
+      const hasSelectedTickets = checkoutObj.data.attributes.tickets.length > 0
       // Step 1: Select Tickets
       step = (
         <section>
@@ -260,17 +294,28 @@ class App extends Component {
           handleSubmit={this.updateCheckout}
         />
       )
-    } else if (status !== 'completed') {
+    } else if (!checkoutObj.data.attributes.payment.source.card_token) {
+      checkout = checkoutSteps.find(step => step.type === 'stripe')
       // Step 3: Input credit card information
       step = (
         <StripeCheckout
-          checkoutPayment={this.checkoutPayment}
+          checkoutPayment={this.stripeTokenization}
           checkoutObj={checkoutObj}
           stripeKey={pkStripe}
         />
       )
-    } else {
-      // Step 4: Checkout complete
+    } else if (status !== 'completed') {
+      checkout = checkoutSteps.find(step => step.type === 'payment')
+      // Step 4: Payment Confirmation
+      step = (
+        <section>
+          Order summary
+          <Button label="Pay" />
+        </section>
+      )
+
+    }else {
+      // Step 5: Confirm Transaction
       step = (
         <div className="mdl-card__supporting-text">
           Congratulations on your purchase!

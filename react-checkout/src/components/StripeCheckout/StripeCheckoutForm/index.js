@@ -11,10 +11,6 @@ class StripeCheckoutForm extends Component {
   }
 
   render() {
-    const amount = parseFloat(
-      this.props.checkoutObj.data.attributes.order_summary.total
-    )
-    const pay = `Pay $${amount}`
     const styles = {
       form: {
         width: '480px',
@@ -29,7 +25,7 @@ class StripeCheckoutForm extends Component {
             hidePostalCode={true}
           />
         </form>
-        <Button label={pay} handleClick={this.handleSubmit} color="green" />
+        <Button label='Continue' handleClick={this.handleSubmit} color="green" />
       </section>
     )
   }

@@ -12,8 +12,6 @@ class Request extends Component {
     delete attributes.currency
     delete attributes.donation
     delete attributes.expires_on
-    delete attributes.order_summary
-    delete attributes.payment
     delete attributes.payment_option_id
     delete attributes.user
     delete attributes.status
@@ -33,16 +31,18 @@ class Request extends Component {
       delete invoice.created
     }
 
-    tickets.map(ticket => {
-      delete ticket.ticket_number
-      delete ticket.company
-      delete ticket.address_street
-      delete ticket.address_city
-      delete ticket.address_postalcode
-      delete ticket.address_region_id
-      delete ticket.address_country_id
-      delete ticket.phone
-    })
+    if (tickets) {
+      tickets.map(ticket => {
+        delete ticket.ticket_number
+        delete ticket.company
+        delete ticket.address_street
+        delete ticket.address_city
+        delete ticket.address_postalcode
+        delete ticket.address_region_id
+        delete ticket.address_country_id
+        delete ticket.phone
+      })
+    }
 
     return (
       <div>
