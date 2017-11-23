@@ -22,62 +22,61 @@ const checkoutSteps = [
     name: 'Stripe Tokenization',
     type: 'stripe',
     url: '',
-    method: ''
+    method: '',
+    description: 'Refer to Stripe\'s API documentation to learn how to create a card_token'
   },
   {
-    name: 'Checkout Payment',
+    name: 'Payment Checkout',
     type: 'payment',
     url: '/checkout/:id/payment',
     method: 'POST'
   },
+  {
+    name: 'Confirm Checkout',
+    type: 'confirm',
+    url: '/checkout/:id/confirm',
+    method: 'POST'
+  },
+  {
+    name: 'Checkout Completed',
+    type: 'completed',
+    url: '',
+    method: '',
+    description: 'You successfully purchased a ticket!'
+  }
 ]
 
-const checkoutObj = {
-  data: {
-    attributes: {
-      event_id: null,
-      tickets: []
-    },
-    type: 'checkout'
-  }
-}
+const initialState = {
+  eventId: 74701,
+  event: null,
+  tickets: [],
+  pkStripe: null,
 
-const checkoutPaymentObj = {
-  data: {
-    attributes: {
-      event_id: null,
-      payment: {
-        source: {
-          card_token: null
-        }
-      }
-    },
-    id: null,
-    type: 'checkout'
-  }
+  checkout: null,
+  checkoutObj: {
+    data: {
+      attributes: {
+        event_id: null,
+        tickets: []
+      },
+      type: 'checkout'
+    }
+  },
+  orderSummary: null,
+
+  phase: 'create'
 }
 
 class App extends Component {
-  state = {
-    event: null,
-    tickets: [],
-    pkStripe: null,
-
-    checkout: null,
-    checkoutObj,
-
-    formSubmitted: false,
-    selectedTickets: [],
-    checkoutStatus: null
-  }
+  state = initialState
 
   componentWillMount = () => {
     // TODO: Replace with your event id
-    this.getEvent(74701)
+    this.getEvent()
   }
 
-  getEvent = async eventId => {
-    const { checkoutObj } = this.state
+  getEvent = async () => {
+    const { checkoutObj, eventId } = this.state
     const url = `${host}/event/${eventId}?include=ticket_prices,event_owner`
 
     const { json, error } = await fetch(url, { method: 'GET' })
@@ -94,115 +93,6 @@ class App extends Component {
     if (event && tickets && pkStripe)
       return this.setState({ event, tickets, pkStripe, checkoutObj })
     else return this.setState({ error })
-  }
-
-  createCheckout = async () => {
-    const checkout = checkoutSteps.find(step => step.type === 'create')
-
-    const url = `${host}${checkout.url}`
-
-    const { json, error } = await fetch(url, {
-      method: checkout.method,
-      body: JSON.stringify(this.state.checkoutObj)
-    })
-      .then(res => res.json())
-      .then(json => ({ json }))
-      .catch(error => ({ error }))
-
-    if (json) {
-      this.setState({ checkoutObj: json })
-    } else if (error) {
-      this.setState({ error })
-    }
-  }
-
-  updateCheckout = async () => {
-    const { checkoutObj } = this.state
-    const checkout = checkoutSteps.find(step => step.type === 'update')
-
-    const url = `${host}${checkout.url}`.replace(':id', checkoutObj.data.id)
-
-    const { json, error } = await fetch(url, {
-      method: checkout.method,
-      body: JSON.stringify({ data: checkoutObj.data })
-    })
-      .then(res => res.json())
-      .then(json => ({ json }))
-      .catch(error => ({ error }))
-
-    if (json) {
-      const { attributes  } = json.data
-      json.data.attributes = {
-        event_id: attributes.event_id,
-        payment: {
-          source: {
-            card_token: null
-          }
-        }
-      }
-      this.setState({ checkoutObj: json, formSubmitted: true })
-    } else if (error) {
-      this.setState({ error })
-    }
-  }
-
-  stripeTokenization = ({ token, error }) => {
-    const { checkoutObj } = this.state
-    if (token) {
-      checkoutObj.data.attributes.payment.source.card_token = token.id
-      console.log('token', token);
-      console.log('checkoutObj', checkoutObj);
-      this.setState({ checkoutObj })
-    } else if (error) {
-      console.log(error);
-      this.setState({ error })
-    }
-  }
-
-  checkoutPayment = async () => {
-
-    const { event, checkoutObj } = this.state
-    const checkout = checkoutSteps.find(step => step.type === 'payment')
-
-    const url = `${host}${checkout.url}`.replace(':id', checkoutObj.data.id)
-
-    const { json, error } = await fetch(url, {
-      method: checkout.method,
-      body: JSON.stringify({data: checkoutObj.data})
-    })
-      .then(res => res.json())
-      .then(json => ({ json }))
-      .catch(error => ({ error }))
-    if (json) {
-      this.setState({ checkoutObj: '' })
-    } else if (error) {
-      this.setState({ error })
-    }
-  }
-
-  confirmCheckout = () => {
-    const { checkoutObj } = this.state
-
-    const url = `${host}/checkout/${checkoutObj.id}/confirm`
-
-    fetch(url, {
-      method: 'POST'
-    })
-      .then(res => res.json())
-      .then(response =>
-        this.setState({ status: response.data.attributes.status })
-      )
-      .catch(err => console.log(err))
-  }
-
-  updateCheckoutObj = (name, value) => {
-    const { checkoutObj } = this.state
-    const { invoice, tickets } = checkoutObj.data.attributes
-
-    invoice[name] = value
-    tickets.map((ticket, index) => (ticket[name] = value))
-
-    this.setState({ checkoutObj })
   }
 
   selectTickets = (id, qty) => {
@@ -235,68 +125,160 @@ class App extends Component {
     this.setState({ checkoutObj })
   }
 
-  render() {
-    const {
-      event,
-      tickets,
-      checkoutObj,
-      formSubmitted,
-      status,
-      pkStripe
-    } = this.state
+  fetchCreateCheckout = async () => {
+    const { checkoutObj, phase } = this.state
+    const checkout = checkoutSteps.find(step => step.type === phase)
 
-    const noEvent = event === null
-    if (noEvent) {
-      return (
-        <section className="container mt-5 text-center">
-          {/* <div className="mdl-spinner mdl-js-spinner is-active" /> */}
-        </section>
-      )
+    const url = `${host}${checkout.url}`
+
+    const { json, error } = await fetch(url, {
+      method: checkout.method,
+      body: JSON.stringify(checkoutObj)
+    })
+      .then(res => res.json())
+      .then(json => ({ json }))
+      .catch(error => ({ error }))
+
+    if (json) {
+      this.setState({ checkoutObj: json, phase: 'update' })
+    } else if (error) {
+      this.setState({ error })
     }
+  }
+
+  updateCheckoutObj = (name, value) => {
+    const { checkoutObj } = this.state
+    const { invoice, tickets } = checkoutObj.data.attributes
+
+    invoice[name] = value
+    tickets.map((ticket, index) => (ticket[name] = value))
+
+    this.setState({ checkoutObj })
+  }
+
+  fetchUpdateCheckout = async () => {
+    const { checkoutObj, phase } = this.state
+    const checkout = checkoutSteps.find(({ type }) => type === phase)
+
+    const url = `${host}${checkout.url}`.replace(':id', checkoutObj.data.id)
+
+    const { json, error } = await fetch(url, {
+      method: checkout.method,
+      body: JSON.stringify({ data: checkoutObj.data })
+    })
+      .then(res => res.json())
+      .then(json => ({ json }))
+      .catch(error => ({ error }))
+
+    if (json) {
+      const { attributes } = json.data
+      const orderSummary = attributes.order_summary
+
+      json.data.attributes = {
+        event_id: attributes.event_id,
+        payment: {
+          source: {
+            card_token: null
+          }
+        }
+      }
+
+      this.setState({ checkoutObj: json, phase: 'stripe', orderSummary})
+    } else if (error) {
+      this.setState({ error })
+    }
+  }
+
+  stripeTokenization = ({ token, error }) => {
+    const { checkoutObj } = this.state
+    if (token) {
+      checkoutObj.data.attributes.payment.source.card_token = token.id
+      this.setState({ checkoutObj, phase: 'payment' })
+    } else if (error) {
+      console.log(error)
+      this.setState({ error })
+    }
+  }
+
+  fetchPaymentCheckout = async () => {
+    const { checkoutObj, phase } = this.state
+    const checkout = checkoutSteps.find(({ type }) => type === phase)
+
+    const url = `${host}${checkout.url}`.replace(':id', checkoutObj.data.id)
+
+    const { json, error } = await fetch(url, {
+      method: checkout.method,
+      body: JSON.stringify({ data: checkoutObj.data })
+    })
+      .then(res => res.json())
+      .then(json => ({ json }))
+      .catch(error => ({ error }))
+
+    if (json) {
+      this.setState({ phase: 'confirm' })
+    } else if (error) {
+      this.setState({ error })
+    }
+  }
+
+  fetchConfirmCheckout = async () => {
+    const { checkoutObj, phase } = this.state
+    const checkout = checkoutSteps.find(({ type }) => type === phase)
+
+    const url = `${host}${checkout.url}`.replace(':id', checkoutObj.data.id)
+
+    const { json } = await fetch(url, {
+      method: checkout.method
+    })
+      .then(res => res.json())
+      .then(json => ({ json }))
+      .catch(err => console.log(err))
+
+    if (json.data.attributes.status === 'completed') {
+      this.setState({ checkoutObj: json, phase: 'completed' })
+    }
+  }
+
+  render() {
+    const { event, tickets, checkoutObj, orderSummary, pkStripe, phase } = this.state
+
+    if (event === null) return <div className="lead mt-5 text-center">Loading...</div>
 
     const cardBackground = {
       background: `linear-gradient(rgba(7,8,38,.28), rgba(7,8,38,.28)), url(${event
         .attributes.cover_image_uri}) no-repeat center center / cover`
     }
 
-    const renderTickets = tickets.map(ticket => (
-      <Tickets
-        key={ticket.id}
-        ticket={ticket}
-        selectTickets={this.selectTickets}
-      />
-    ))
+    const checkout = checkoutSteps.find(({ type }) => type === phase)
 
-    let checkout = checkoutSteps.find(step => step.type === 'create')
+    let step
 
-    let step = null
-
-    const noCheckout = !checkoutObj.data.id
-    if (noCheckout) {
-      const hasSelectedTickets = checkoutObj.data.attributes.tickets.length > 0
-      // Step 1: Select Tickets
+    if (phase === 'create') {
+      const noSelectedTickets = checkoutObj.data.attributes.tickets.length === 0
       step = (
         <section>
-          {renderTickets}
+          {tickets.map(ticket => (
+            <Tickets
+              key={ticket.id}
+              ticket={ticket}
+              selectTickets={this.selectTickets}
+            />
+          ))}
           <Button
             label="Continue"
-            handleClick={this.createCheckout}
-            disabled={!hasSelectedTickets}
+            handleClick={this.fetchCreateCheckout}
+            disabled={noSelectedTickets}
           />
         </section>
       )
-    } else if (!formSubmitted) {
-      checkout = checkoutSteps.find(step => step.type === 'update')
-      // Step 2: Update personal information
+    } else if (phase === 'update') {
       step = (
         <TicketForm
           updateCheckoutObj={this.updateCheckoutObj}
-          handleSubmit={this.updateCheckout}
+          handleSubmit={this.fetchUpdateCheckout}
         />
       )
-    } else if (!checkoutObj.data.attributes.payment.source.card_token) {
-      checkout = checkoutSteps.find(step => step.type === 'stripe')
-      // Step 3: Input credit card information
+    } else if (phase === 'stripe') {
       step = (
         <StripeCheckout
           checkoutPayment={this.stripeTokenization}
@@ -304,22 +286,32 @@ class App extends Component {
           stripeKey={pkStripe}
         />
       )
-    } else if (status !== 'completed') {
-      checkout = checkoutSteps.find(step => step.type === 'payment')
-      // Step 4: Payment Confirmation
+    } else if (phase === 'payment') {
       step = (
         <section>
-          Order summary
-          <Button label="Pay" />
+          <div className="mdl-card__supporting-text">
+          <p className="lead">Order Summary</p>
+          <div>Sub Total: {orderSummary.sub_total}</div>
+          <div><strong>Total: {orderSummary.total}</strong></div>
+        </div>
+          <Button label={`Pay $${parseFloat(orderSummary.total)}`} handleClick={this.fetchPaymentCheckout} />
         </section>
       )
-
-    }else {
-      // Step 5: Confirm Transaction
+    } else if (phase === 'confirm') {
       step = (
-        <div className="mdl-card__supporting-text">
-          Congratulations on your purchase!
-        </div>
+        <section>
+          <div className="mdl-card__supporting-text">Confirm Purchase</div>
+          <Button label="Confirm" handleClick={this.fetchConfirmCheckout} />
+        </section>
+      )
+    } else if (phase === 'completed') {
+      step = (
+        <section>
+          <div className="mdl-card__supporting-text">
+            Congratulations on purchasing your tickets!
+          </div>
+          <Button label="Reset" handleClick={() => this.setState(initialState,this.getEvent)} />
+        </section>
       )
     }
 
