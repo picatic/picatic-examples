@@ -23,7 +23,8 @@ const checkoutSteps = [
     type: 'stripe',
     url: '',
     method: '',
-    description: 'Refer to Stripe\'s API documentation to learn how to create a card_token'
+    description:
+      "Refer to Stripe's API documentation to learn how to create a card_token"
   },
   {
     name: 'Payment Checkout',
@@ -68,11 +69,8 @@ const initialState = {
 }
 
 class App extends Component {
-  state = initialState
-
   componentWillMount = () => {
-    // TODO: Replace with your event id
-    this.getEvent()
+    this.setState(initialState, this.getEvent)
   }
 
   getEvent = async () => {
@@ -86,9 +84,11 @@ class App extends Component {
 
     const event = json.data
     const tickets = json.included.filter(incl => incl.type === 'ticket_price')
-    const pkStripe = json.included.find(incl => incl.type === 'EventOwnerDTO')
-      .attributes.stripe_publishable_key
-    checkoutObj.data.attributes.event_id = Number(eventId)
+    const eventOwner = json.included.find(incl => incl.type === 'EventOwnerDTO')
+    const pkStripe = eventOwner.attributes.stripe_publishable_key
+
+    checkoutObj.data.attributes.event_id = eventId
+    checkoutObj.data.attributes.tickets = []
 
     if (event && tickets && pkStripe)
       return this.setState({ event, tickets, pkStripe, checkoutObj })
@@ -98,7 +98,7 @@ class App extends Component {
   selectTickets = (id, qty) => {
     const ticket = { ticket_price: { ticket_price_id: id } }
     const { checkoutObj } = this.state
-    let { tickets } = checkoutObj.data.attributes
+    const { tickets } = checkoutObj.data.attributes
 
     const oldQty = tickets.filter(
       ({ ticket_price }) => ticket_price.ticket_price_id === id
@@ -183,7 +183,7 @@ class App extends Component {
         }
       }
 
-      this.setState({ checkoutObj: json, phase: 'stripe', orderSummary})
+      this.setState({ checkoutObj: json, phase: 'stripe', orderSummary })
     } else if (error) {
       this.setState({ error })
     }
@@ -240,9 +240,17 @@ class App extends Component {
   }
 
   render() {
-    const { event, tickets, checkoutObj, orderSummary, pkStripe, phase } = this.state
+    const {
+      event,
+      tickets,
+      checkoutObj,
+      orderSummary,
+      pkStripe,
+      phase
+    } = this.state
 
-    if (event === null) return <div className="lead mt-5 text-center">Loading...</div>
+    if (event === null)
+      return <div className="lead mt-5 text-center">Event not found.</div>
 
     const cardBackground = {
       background: `linear-gradient(rgba(7,8,38,.28), rgba(7,8,38,.28)), url(${event
@@ -290,11 +298,16 @@ class App extends Component {
       step = (
         <section>
           <div className="mdl-card__supporting-text">
-          <p className="lead">Order Summary</p>
-          <div>Sub Total: {orderSummary.sub_total}</div>
-          <div><strong>Total: {orderSummary.total}</strong></div>
-        </div>
-          <Button label={`Pay $${parseFloat(orderSummary.total)}`} handleClick={this.fetchPaymentCheckout} />
+            <p className="lead">Order Summary</p>
+            <div>Sub Total: {orderSummary.sub_total}</div>
+            <div>
+              <strong>Total: {orderSummary.total}</strong>
+            </div>
+          </div>
+          <Button
+            label={`Pay $${parseFloat(orderSummary.total)}`}
+            handleClick={this.fetchPaymentCheckout}
+          />
         </section>
       )
     } else if (phase === 'confirm') {
@@ -310,7 +323,11 @@ class App extends Component {
           <div className="mdl-card__supporting-text">
             Congratulations on purchasing your tickets!
           </div>
-          <Button label="Reset" handleClick={() => this.setState(initialState,this.getEvent)} />
+          <Button
+            label="Reset"
+            handleClick={() =>
+              this.setState(initialState, this.getEvent)}
+          />
         </section>
       )
     }
