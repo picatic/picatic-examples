@@ -7,8 +7,8 @@ class Tickets extends Component {
 
   selectTicket = event => {
     event.preventDefault()
+    const { value } = event.target
     const { ticket, selectTickets } = this.props
-    const value = event.target.value
     selectTickets(Number(ticket.id), Number(value))
     this.setState({ selectedQuantity: value })
   }
@@ -25,8 +25,6 @@ class Tickets extends Component {
       quantity_sold
     } = this.props.ticket.attributes
 
-    const roundPrice = parseFloat(price)
-
     const ticketsRemaining = Math.max(quantity - quantity_sold, 0)
 
     const maxQuantity =
@@ -42,7 +40,7 @@ class Tickets extends Component {
         <div className="mdl-cell mdl-cell--4-col">
           <div className="form-row align-items-center float-right">
             {/* TODO: Replace static currency with dynamic value */}
-            <div className="col-auto">${roundPrice}</div>
+            <div className="col-auto">${parseFloat(price)}</div>
             {!soldOut && <div className="col-auto">x</div>}
 
             {!soldOut && (
