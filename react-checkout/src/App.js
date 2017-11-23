@@ -23,7 +23,7 @@ const checkoutSteps = [
     type: 'stripe',
     url: '',
     method: '',
-    description: 'Refer to Stripe\'s API documentation to learn how to create a card_.token'
+    description: 'Refer to Stripe\'s API documentation to learn how to create a card_token'
   },
   {
     name: 'Payment Checkout',
@@ -56,7 +56,7 @@ const initialState = {
   checkoutObj: {
     data: {
       attributes: {
-        event_.id: null,
+        event_id: null,
         tickets: []
       },
       type: 'checkout'
