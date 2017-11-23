@@ -39,6 +39,7 @@ class Request extends Component {
           delete ticket.address_region_id
           delete ticket.address_country_id
           delete ticket.phone
+          return true
         })
       }
     }

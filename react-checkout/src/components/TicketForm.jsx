@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import Button from '../Button'
+import Button from './Button'
 
 class TicketForm extends Component {
   state = {
-    first_name: 't',
-    last_name: 't',
-    email: 'thoams591234@gmadil.com',
+    first_name: '',
+    last_name: '',
+    email: '',
     validForm: false
   }
 
