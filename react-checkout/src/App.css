@@ -41,3 +41,7 @@ input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 30px white inset;
   -webkit-text-fill-color: #212529 !important;
 }
+
+.card-fixed {
+  position: fixed;
+}

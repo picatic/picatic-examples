@@ -9,7 +9,7 @@ class Tickets extends Component {
     event.preventDefault()
     const { ticket, selectTickets } = this.props
     const value = event.target.value
-    selectTickets(ticket.id, value)
+    selectTickets(Number(ticket.id), Number(value))
     this.setState({ selectedQuantity: value })
   }
 
