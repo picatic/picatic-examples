@@ -4,9 +4,9 @@ import './App.css'
 
 import Button from './components/Button'
 import Tickets from './components/Tickets'
+import Request from './components/Request'
 import TicketForm from './components/TicketForm'
 import StripeCheckout from './components/StripeCheckout'
-import Request from './components/Request'
 
 const host = 'https://api-staging.picatic.com/v2'
 
@@ -23,7 +23,7 @@ const checkoutSteps = [
     type: 'stripe',
     url: '',
     method: '',
-    description: 'Refer to Stripe\'s API documentation to learn how to create a card_token'
+    description: 'Refer to Stripe\'s API documentation to learn how to create a card_.token'
   },
   {
     name: 'Payment Checkout',
@@ -56,7 +56,7 @@ const initialState = {
   checkoutObj: {
     data: {
       attributes: {
-        event_id: null,
+        event_.id: null,
         tickets: []
       },
       type: 'checkout'

@@ -1,9 +1,8 @@
 {
-  "name": "react-app",
+  "name": "paid-checkout",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "immutability-helper": "^2.3.1",
     "lodash": "^4.17.4",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
