@@ -11,13 +11,41 @@ import Request from './components/Request'
 
 const host = 'https://api-staging.picatic.com/v2'
 
+const checkoutSteps = [
+  { name: 'Create Checkout', type: 'create', url: '/checkout', method: 'POST' },
+  {
+    name: 'Update Checkout',
+    type: 'update',
+    url: '/checkout/:id',
+    method: 'PATCH'
+  },
+  {
+    name: 'Update Checkout',
+    type: 'update',
+    url: '/checkout/:id',
+    method: 'PATCH'
+  }
+]
+
+const checkoutObj = {
+  data: {
+    attributes: {
+      event_id: null,
+      tickets: []
+    },
+    type: 'checkout'
+  }
+}
+
 class App extends Component {
   state = {
     event: null,
     tickets: [],
     pkStripe: null,
 
-    checkoutObj: null,
+    checkout: null,
+    checkoutObj,
+
     formSubmitted: false,
     selectedTickets: [],
     checkoutStatus: null
@@ -40,59 +68,38 @@ class App extends Component {
 
     const event = json.data
     const tickets = json.included.filter(incl => incl.type === 'ticket_price')
-    const pkStripe = json.included.filter(
-      incl => incl.type === 'EventOwnerDTO'
-    )[0].attributes.stripe_publishable_key
+    const pkStripe = json.included.find(incl => incl.type === 'EventOwnerDTO')
+      .attributes.stripe_publishable_key
+    const checkoutObj = (this.state.checkoutObj.data.attributes.event_id = Number(
+      eventId
+    ))
 
     if (event && tickets && pkStripe)
       return this.setState({ event, tickets, pkStripe })
     else return this.setState({ error })
   }
 
-  createCheckout = ticket => {
-    const { event, selectedTickets } = this.state
-    const url = `${host}/checkout`
+  createCheckout = async () => {
+    const { event, checkoutObj } = this.state
+    const checkout = checkoutSteps.find(step => step.type === 'create')
 
-    let tickets = []
+    const url = `${host}${checkout.url}`
 
-    // Create array of selected tickets
-    selectedTickets.map(ticket => {
-      for (let i = 0; i < ticket.quantity; i++) {
-        tickets.push({
-          ticket_price: { ticket_price_id: Number(ticket.ticket_id) }
-        })
-      }
-      return tickets
-    })
-
-    const body = JSON.stringify({
-      data: {
-        attributes: {
-          event_id: Number(event.id),
-          tickets
-        },
-        type: 'checkout'
-      }
-    })
-
-    fetch(url, {
-      method: 'POST',
-      body: body
+    const { json, error } = await fetch(url, {
+      method: checkout.method,
+      body: JSON.stringify(checkoutObj)
     })
       .then(res => res.json())
-      .then(response => this.setState({ checkoutObj: response.data }))
-      .catch(err => console.log(err))
+      .then(json => ({ json }))
+      .catch(error => ({ error }))
+
+    if (json) {
+      this.setState({ checkoutObj: json })
+    } else if (error) {
+      this.setState({ error })
+    }
   }
 
-  /**
-   * updateCheckout() PATCH checkout object with invoice and tickets information
-   *
-   * Example endpoint:
-   * https://api.picatic.com/v2/checkout/:id
-   *
-   * API Doc Reference:
-   * http://developer.picatic.com/v2/api/#methods-checkout-update
-   */
   updateCheckout = form => {
     const { checkoutObj } = this.state
 
@@ -109,15 +116,6 @@ class App extends Component {
     this.setState({ formSubmitted: true })
   }
 
-  /**
-   * checkoutPayment() must pass a Stripe card token and the event id.
-   *
-   * Example endpoint:
-   * https://api.picatic.com/v2/checkout/:id/payment
-   *
-   * API Doc Reference:
-   * http://developer.picatic.com/v2/api/#methods-checkout-update
-   */
   checkoutPayment = payload => {
     const cardError = payload.error
     if (cardError) {
@@ -153,17 +151,6 @@ class App extends Component {
       .catch(err => console.log(err))
   }
 
-  /**
-   * confirmCheckout() confirm validates and completes a registration/purchase
-   * of a checkout.
-   * Unconfirmed checkouts expire after 20 minutes
-   *
-   * Example endpoint:
-   * https://api.picatic.com/v2/checkout/:id/confirm
-   *
-   * API Doc Reference:
-   * http://developer.picatic.com/v2/api/#methods-checkout-confirm
-   */
   confirmCheckout = () => {
     const { checkoutObj } = this.state
 
@@ -181,59 +168,42 @@ class App extends Component {
 
   updateCheckoutObj = (name, value) => {
     const { checkoutObj } = this.state
-    const { invoice, tickets } = checkoutObj.attributes
+    const { invoice, tickets } = checkoutObj.data.attributes
 
-    const updatedInvoice = update(invoice, {
-      $merge: {
-        [name]: value
-      }
-    })
+    invoice[name] = value
+    tickets.map((ticket, index) => (ticket[name] = value))
 
-    let updatedTickets = tickets
-    tickets.map((ticket, index) => {
-      updatedTickets = update(updatedTickets, {
-        [index]: {
-          $merge: {
-            [name]: value
-          }
-        }
-      })
-      return tickets
-    })
-
-    // Input new invoice and tickets into checkout object
-    const newCheckoutObj = update(checkoutObj, {
-      attributes: {
-        invoice: { $set: updatedInvoice },
-        tickets: { $set: updatedTickets }
-      }
-    })
-
-    this.setState({ checkoutObj: newCheckoutObj })
+    this.setState({ checkoutObj })
   }
 
-  selectTickets = (id, quantity) => {
-    const { selectedTickets } = this.state
+  selectTickets = (id, qty) => {
+    const ticket = { ticket_price: { ticket_price_id: id } }
+    const { checkoutObj } = this.state
+    let { tickets } = checkoutObj.data.attributes
 
-    // Check if ticket has been selected
-    const index = _.findIndex(
-      selectedTickets,
-      selected => selected.ticket_id === id
-    )
+    const oldQty = tickets.filter(
+      ({ ticket_price }) => ticket_price.ticket_price_id === id
+    ).length
 
-    const ticketIndex = index === -1 ? selectedTickets.length : index
+    const changeQty = qty - oldQty
 
-    // Update quantity of ticket selection
-    const updatedSelection = update(selectedTickets, {
-      [ticketIndex]: {
-        $set: {
-          ticket_id: id,
-          quantity: quantity
-        }
+    if (changeQty > 0) {
+      for (let i = 0; i < changeQty; i++) {
+        tickets.push(ticket)
       }
-    })
+    } else if (changeQty < 0) {
+      for (let i = 0; i < -changeQty; i++) {
+        const index = _.findLastIndex(
+          tickets,
+          ({ ticket_price }) => ticket_price.ticket_price_id === id
+        )
+        tickets.splice(index, 1)
+      }
+    }
 
-    this.setState({ selectedTickets: updatedSelection })
+    checkoutObj.data.attributes['tickets'] = tickets
+
+    this.setState({ checkoutObj })
   }
 
   render() {
@@ -251,7 +221,7 @@ class App extends Component {
     if (noEvent) {
       return (
         <section className="container mt-5 text-center">
-          <div className="mdl-spinner mdl-js-spinner is-active" />
+          {/* <div className="mdl-spinner mdl-js-spinner is-active" /> */}
         </section>
       )
     }
@@ -269,13 +239,13 @@ class App extends Component {
       />
     ))
 
-    const hasSelectedTickets = !(
-      _.sumBy(selectedTickets, ticket => ticket.quantity) > 0
-    )
+    const hasSelectedTickets = checkoutObj.data.attributes.tickets.length > 0
+
+    let checkout = checkoutSteps.find(step => step.type === 'create')
 
     let step = null
 
-    const noCheckout = checkoutObj === null
+    const noCheckout = !checkoutObj.data.id
     if (noCheckout) {
       // Step 1: Select Tickets
       step = (
@@ -284,11 +254,12 @@ class App extends Component {
           <Button
             label="Continue"
             handleClick={this.createCheckout}
-            disabled={hasSelectedTickets}
+            disabled={!hasSelectedTickets}
           />
         </section>
       )
     } else if (!formSubmitted) {
+      checkout = checkoutSteps.find(step => step.type === 'update')
       // Step 2: Update personal information
       step = (
         <TicketForm
@@ -315,16 +286,22 @@ class App extends Component {
     }
 
     return (
-      <div className="container pt-4">
-        <div className="event-card-wide mdl-card mdl-shadow--1dp m-auto">
-          <div className="mdl-card__title" style={cardBackground}>
-            <h2 className="mdl-card__title-text text-white">
-              {event.attributes.title}
-            </h2>
+      <div className="container">
+        <div className="row pt-5">
+          <div className="col-6 pt-3">
+            <div className="event-card-wide mdl-card mdl-shadow--1dp m-auto card-fixed">
+              <div className="mdl-card__title" style={cardBackground}>
+                <h2 className="mdl-card__title-text text-white">
+                  {event.attributes.title}
+                </h2>
+              </div>
+              {step}
+            </div>
           </div>
-          {step}
+          <div className="col-6">
+            <Request {...this.state} checkout={checkout} host={host} />
+          </div>
         </div>
-        <Request {...this.state} />
       </div>
     )
   }

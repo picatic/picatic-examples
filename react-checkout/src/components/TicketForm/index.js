@@ -41,8 +41,6 @@ class TicketForm extends Component {
     const { first_name, last_name, email, validForm } = this.state
     const { handleSubmit } = this.props
 
-    // FIXME: Have to add in surveys in order for dynamic events to work
-
     return (
       <form id="form">
         <div className="mdl-grid">
