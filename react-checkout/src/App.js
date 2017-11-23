@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import update from 'immutability-helper'
 import _ from 'lodash'
 import './App.css'
 
@@ -13,12 +12,6 @@ const host = 'https://api-staging.picatic.com/v2'
 
 const checkoutSteps = [
   { name: 'Create Checkout', type: 'create', url: '/checkout', method: 'POST' },
-  {
-    name: 'Update Checkout',
-    type: 'update',
-    url: '/checkout/:id',
-    method: 'PATCH'
-  },
   {
     name: 'Update Checkout',
     type: 'update',
@@ -57,6 +50,7 @@ class App extends Component {
   }
 
   getEvent = async eventId => {
+    const { checkoutObj } = this.state
     const url = `${host}/event/${eventId}?include=ticket_prices,event_owner`
 
     const { json, error } = await fetch(url, { method: 'GET' })
@@ -64,30 +58,25 @@ class App extends Component {
       .then(json => ({ json }))
       .catch(error => ({ error }))
 
-    console.log(error)
-
     const event = json.data
     const tickets = json.included.filter(incl => incl.type === 'ticket_price')
     const pkStripe = json.included.find(incl => incl.type === 'EventOwnerDTO')
       .attributes.stripe_publishable_key
-    const checkoutObj = (this.state.checkoutObj.data.attributes.event_id = Number(
-      eventId
-    ))
+    checkoutObj.data.attributes.event_id = Number(eventId)
 
     if (event && tickets && pkStripe)
-      return this.setState({ event, tickets, pkStripe })
+      return this.setState({ event, tickets, pkStripe, checkoutObj })
     else return this.setState({ error })
   }
 
   createCheckout = async () => {
-    const { event, checkoutObj } = this.state
     const checkout = checkoutSteps.find(step => step.type === 'create')
 
     const url = `${host}${checkout.url}`
 
     const { json, error } = await fetch(url, {
       method: checkout.method,
-      body: JSON.stringify(checkoutObj)
+      body: JSON.stringify(this.state.checkoutObj)
     })
       .then(res => res.json())
       .then(json => ({ json }))
@@ -100,20 +89,25 @@ class App extends Component {
     }
   }
 
-  updateCheckout = form => {
+  updateCheckout = async () => {
     const { checkoutObj } = this.state
+    const checkout = checkoutSteps.find(step => (step.type === 'update'))
 
-    const url = `${host}/checkout/${checkoutObj.id}`
+    const url = `${host}${checkout.url}`.replace(':id', checkoutObj.data.id)
 
-    fetch(url, {
-      method: 'PATCH',
-      body: JSON.stringify({ data: checkoutObj })
+    const { json, error } = await fetch(url, {
+      method: checkout.method,
+      body: JSON.stringify({data: checkoutObj.data})
     })
       .then(res => res.json())
-      .then(response => this.setState({ checkoutObj: response.data }))
-      .catch(err => console.log(err))
+      .then(json => ({ json }))
+      .catch(error => ({ error }))
 
-    this.setState({ formSubmitted: true })
+    if (json) {
+      this.setState({ checkoutObj: json, formSubmitted: true })
+    } else if (error) {
+      this.setState({ error })
+    }
   }
 
   checkoutPayment = payload => {
@@ -213,8 +207,7 @@ class App extends Component {
       checkoutObj,
       formSubmitted,
       status,
-      selectedTickets,
-      stripeKey
+      pkStripe
     } = this.state
 
     const noEvent = event === null
@@ -273,7 +266,7 @@ class App extends Component {
         <StripeCheckout
           checkoutPayment={this.checkoutPayment}
           checkoutObj={checkoutObj}
-          stripeKey={stripeKey}
+          stripeKey={pkStripe}
         />
       )
     } else {
