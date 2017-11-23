@@ -3,9 +3,9 @@ import Button from '../Button'
 
 class TicketForm extends Component {
   state = {
-    first_name: '',
-    last_name: '',
-    email: '',
+    first_name: 't',
+    last_name: 't',
+    email: 'thoams591234@gmadil.com',
     validForm: false
   }
 
@@ -21,28 +21,24 @@ class TicketForm extends Component {
 
     this.setState({ [name]: value })
     this.props.updateCheckoutObj(name, value)
-    this.validateForm()
-  }
-
-  validateForm = () => {
-    const form = document.forms['form']
-
-    const firstValid = form['first_name'].value !== ''
-    const lastValid = form['last_name'].value !== ''
-    const emailValid =
-      form['email'].value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) !== ''
-
-    const validForm = firstValid && lastValid && emailValid
-
-    this.setState({ validForm })
   }
 
   render() {
-    const { first_name, last_name, email, validForm } = this.state
+    const { first_name, last_name, email } = this.state
     const { handleSubmit } = this.props
 
+    const firstValid = first_name.length > 0
+    const lastValid = last_name.length > 0
+
+    const atpos = email.indexOf('@')
+    const dotpos = email.lastIndexOf('.')
+    const emailInvalid =
+      atpos < 1 || dotpos < atpos + 2 || dotpos + 2 >= email.length
+
+    const validForm = firstValid && lastValid && !emailInvalid
+
     return (
-      <form id="form">
+      <section>
         <div className="mdl-grid">
           <div className="mdl-cell mdl-cell--6-col">
             <div className="mdl-textfield mdl-js-textfield">
@@ -95,7 +91,7 @@ class TicketForm extends Component {
           handleClick={handleSubmit}
           disabled={!validForm}
         />
-      </form>
+      </section>
     )
   }
 }
