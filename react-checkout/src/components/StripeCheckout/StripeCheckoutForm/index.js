@@ -25,7 +25,7 @@ class StripeCheckoutForm extends Component {
             hidePostalCode={true}
           />
         </form>
-        <Button label='Continue' handleClick={this.handleSubmit} color="green" />
+        <Button label='Continue' handleClick={this.handleSubmit} />
       </section>
     )
   }

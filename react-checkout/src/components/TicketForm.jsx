@@ -87,7 +87,7 @@ class TicketForm extends Component {
           </div>
         </div>
         <Button
-          label="Submit"
+          label="Continue"
           handleClick={handleSubmit}
           disabled={!validForm}
         />
