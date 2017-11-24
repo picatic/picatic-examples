@@ -335,7 +335,7 @@ class App extends Component {
     return (
       <div className="container">
         <div className="row pt-5">
-          <div className="col-6 pt-3">
+          <div className="col-6">
             <div className="event-card-wide mdl-card mdl-shadow--1dp m-auto card-fixed">
               <div className="mdl-card__title" style={cardBackground}>
                 <h2 className="mdl-card__title-text text-white">
