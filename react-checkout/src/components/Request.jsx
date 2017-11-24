@@ -1,6 +1,25 @@
 import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
+import hljs from 'highlight.js'
 
 class Request extends Component {
+  componentDidMount() {
+    this.highlightCode()
+  }
+
+  componentDidUpdate() {
+    this.highlightCode()
+  }
+
+  highlightCode() {
+    const { className, languages } = this.props
+    const domNode = ReactDOM.findDOMNode(this)
+    const nodes = domNode.querySelectorAll('pre code')
+
+    for (let i = 0; i < nodes.length; i++) {
+      hljs.highlightBlock(nodes[i])
+    }
+  }
   render() {
     const { checkout, host, checkoutObj } = this.props
     const { type } = checkout
@@ -46,25 +65,36 @@ class Request extends Component {
 
     const id = checkoutObj.data.id ? checkoutObj.data.id : ''
 
-    const body =
-      type !== 'confirm' ? (
-        <pre>{JSON.stringify(checkoutObj, null, 2)}</pre>
-      ) : (
-        ''
-      )
+    const body = (
+      <pre>
+        <code className="json">{JSON.stringify(checkoutObj, null, 2)}</code>
+      </pre>
+    )
+
+    const uri = `${checkout.url.replace(':id', id)}`
 
     return (
-      <div>
+      <div className="hljs rounded pl-4">
         <h5>{checkout.name}</h5>
         <p className="lead">{checkout.description}</p>
 
         {!checkout.description && (
-          <div>
-            <div>{checkout.method}</div>
-            <p>{`${host}${checkout.url.replace(':id', id)}`}</p>
-          </div>
+          <pre>
+            <code className="nohighlight hljs groovy">
+              <div>
+                <span className="hljs-keyword">{checkout.method} </span>
+                <span className="hljs-string">{uri} </span>
+                <span className="hljs-attr">HTTP/1.1</span>
+              </div>
+              <div>
+                <span className="hljs-attribute">Host</span>
+                <span>: {host}</span>
+              </div>
+            </code>
+          </pre>
         )}
-        {type !== 'completed' && <div>{body}</div>}
+
+        {type !== 'completed' && type !== 'confirm' && body}
       </div>
     )
   }
