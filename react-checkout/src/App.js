@@ -103,7 +103,7 @@ const initialState = {
 }
 
 class App extends Component {
-  componentWillMount = () => {
+  componentWillMount() {
     this.setState(initialState, this.getEvent)
   }
 
@@ -292,9 +292,7 @@ class App extends Component {
     }
 
     const checkout = checkoutSteps.find(({ type }) => type === phase)
-
     let step
-
     if (phase === 'create') {
       const noSelectedTickets = checkoutObj.data.attributes.tickets.length === 0
       step = (
@@ -341,6 +339,7 @@ class App extends Component {
           <Button
             label={`Pay $${parseFloat(orderSummary.total)}`}
             handleClick={this.fetchPaymentCheckout}
+            color="green"
           />
         </section>
       )
@@ -368,7 +367,7 @@ class App extends Component {
     return (
       <div className="container">
         <div className="row pt-5">
-          <div className="col-6">
+          <div className="col-xl-6 col-12 mb-4">
             <div className="event-card-wide mdl-card mdl-shadow--1dp m-auto card-fixed">
               <div className="mdl-card__title" style={cardBackground}>
                 <h2 className="mdl-card__title-text text-white">
@@ -378,7 +377,7 @@ class App extends Component {
               {step}
             </div>
           </div>
-          <div className="col-6">
+          <div className="col-xl-6">
             <Request {...this.state} checkout={checkout} host={host} />
           </div>
         </div>

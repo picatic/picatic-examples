@@ -73,7 +73,7 @@ class Request extends Component {
     const url = `${host}${checkout.url.replace(':id', id)}`
 
     return (
-      <div className="hljs rounded pl-4">
+      <div className="hljs rounded pl-4 request">
         <h5>{checkout.name}</h5>
         <div>{checkout.description}</div>
 
