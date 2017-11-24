@@ -3,7 +3,7 @@
 @import url('https://code.getmdl.io/1.3.0/material.indigo-pink.min.css');
 
 body {
-  background: #FAFAFA;
+  background: #fafafa;
 }
 
 /* Event Card */
@@ -89,6 +89,6 @@ pre {
 }
 
 .link-description,
-.link-description:hover  {
+.link-description:hover {
   color: #04abbe;
 }

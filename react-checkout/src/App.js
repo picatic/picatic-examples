@@ -25,11 +25,11 @@ const checkoutSteps = [
     method: '',
     description: (
       <div>
-        <div className="lead mb-1">
+        <div className="lead mb-2">
           To complete checkout you must get a{' '}
           <span className="hljs-keyword">card_token</span> from Stripe.
         </div>
-        <p>
+        <div className="mb-3">
           Create tokens client-side using Stripe's{' '}
           <a
             className="link-description"
@@ -56,6 +56,9 @@ const checkoutSteps = [
           >
             Mobile Libraries.
           </a>
+        </div>
+        <p className="text-muted">
+          Test Card: 4242 4242 4242 4242<span className="ml-3">11/20 123</span>
         </p>
       </div>
     )
