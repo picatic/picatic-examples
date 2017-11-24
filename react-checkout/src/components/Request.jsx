@@ -12,7 +12,6 @@ class Request extends Component {
   }
 
   highlightCode() {
-    const { className, languages } = this.props
     const domNode = ReactDOM.findDOMNode(this)
     const nodes = domNode.querySelectorAll('pre code')
 
@@ -76,7 +75,7 @@ class Request extends Component {
     return (
       <div className="hljs rounded pl-4">
         <h5>{checkout.name}</h5>
-        <p className="lead">{checkout.description}</p>
+        <div>{checkout.description}</div>
 
         {!checkout.description && (
           <pre>

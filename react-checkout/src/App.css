@@ -58,16 +58,20 @@ pre {
   word-wrap: break-word; /* Internet Explorer 5.5+ */
 }
 
+.request {
+  min-height: 279px;
+}
+
 .hljs-number {
-  color: #CD1855;
+  color: #cd1855;
 }
 
 .hljs-string {
-  color: #04ABBE;
+  color: #04abbe;
 }
 
 .hljs-attr {
-  color: #ABB2BF;
+  color: #abb2bf;
 }
 
 .hljs-literal {
@@ -75,5 +79,10 @@ pre {
 }
 
 .hljs-keyword {
-  color: #BA68C8;
+  color: #ba68c8;
+}
+
+.link-description,
+.link-description:hover  {
+  color: #04abbe;
 }
