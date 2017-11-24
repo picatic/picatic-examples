@@ -57,3 +57,23 @@ pre {
   white-space: -o-pre-wrap; /* Opera 7 */
   word-wrap: break-word; /* Internet Explorer 5.5+ */
 }
+
+.hljs-number {
+  color: #CD1855;
+}
+
+.hljs-string {
+  color: #04ABBE;
+}
+
+.hljs-attr {
+  color: #ABB2BF;
+}
+
+.hljs-literal {
+  color: rgb(152, 195, 121);
+}
+
+.hljs-keyword {
+  color: #BA68C8;
+}
