@@ -23,8 +23,42 @@ const checkoutSteps = [
     type: 'stripe',
     url: '',
     method: '',
-    description:
-      "Refer to Stripe's API documentation to learn how to create a card_token"
+    description: (
+      <div>
+        <div className="lead mb-1">
+          To complete checkout you must get a{' '}
+          <span className="hljs-keyword">card_token</span> from Stripe.
+        </div>
+        <p>
+          Create tokens client-side using Stripe's{' '}
+          <a
+            className="link-description"
+            href="https://stripe.com/docs/checkout"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Checkout,
+          </a>{' '}
+          <a
+            className="link-description"
+            href="https://stripe.com/docs/stripe-js/elements/quickstart"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Elements,
+          </a>{' '}
+          or{' '}
+          <a
+            className="link-description"
+            href="https://stripe.com/docs/mobile"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Mobile Libraries.
+          </a>
+        </p>
+      </div>
+    )
   },
   {
     name: 'Payment Checkout',
@@ -325,8 +359,7 @@ class App extends Component {
           </div>
           <Button
             label="Reset"
-            handleClick={() =>
-              this.setState(initialState, this.getEvent)}
+            handleClick={() => this.setState(initialState, this.getEvent)}
           />
         </section>
       )
