@@ -1,6 +1,6 @@
-# Picatic API Checkout - Built with React
+# Picatic API Event Creator - Built with React
 
-This project performs the checkout process of selling a ticket with the Picatic Ticketing API.
+This project renders your events and allows the user to create, edit and activate events.
 
 Built with [create-react-app](https://github.com/facebookincubator/create-react-app), a global command-line utility used to create React projects.
 
