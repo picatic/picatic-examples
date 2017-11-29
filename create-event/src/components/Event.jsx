@@ -170,9 +170,6 @@ class Event extends Component {
         } else {
           fetchCreateTicket(ticket, id).then(() => this.initEvent())
         }
-        const paid = ticket.attributes.type === 'regular'
-        if (paid) {
-        }
         return true
       })
       this.setState({
@@ -190,7 +187,7 @@ class Event extends Component {
 
     const noTickets = tickets.length <= 0
     if (noTickets) {
-      openSnackbar('Please a ticket')
+      openSnackbar('Please add a ticket')
       return false
     }
 

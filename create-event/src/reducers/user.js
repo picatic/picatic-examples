@@ -5,8 +5,8 @@ import * as types from '../constants/ActionTypes'
 const initialState = {
   attributes: {},
   id: null,
-  apiKey: '',
-  errorMessage: null,
+  apiKey: 'sk_live_210eb57e6b95e5143c492a219091c4e5',
+  errorMessage: null
 }
 
 const user = (state = initialState, action) => {
@@ -16,12 +16,12 @@ const user = (state = initialState, action) => {
         ...state,
         attributes: action.user.attributes,
         id: action.user.id,
-        apiKey: action.apiKey,
+        apiKey: action.apiKey
       }
     case types.FETCH_USER_FAILURE:
       return {
         ...state,
-        errorMessage: action.errorMessage,
+        errorMessage: action.errorMessage
       }
     default:
       return state
