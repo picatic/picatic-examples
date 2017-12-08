@@ -3,86 +3,14 @@ import _ from 'lodash'
 import './App.css'
 
 import Button from './components/Button'
-import Tickets from './components/Tickets'
+import Ticket from './components/Ticket'
 import Request from './components/Request'
 import TicketForm from './components/TicketForm'
 import StripeCheckout from './components/StripeCheckout'
 
-const host = 'https://api-staging.picatic.com/v2'
+import checkoutSteps from './constants/checkoutSteps'
 
-const checkoutSteps = [
-  { name: 'Create Checkout', type: 'create', url: '/checkout', method: 'POST' },
-  {
-    name: 'Update Checkout',
-    type: 'update',
-    url: '/checkout/:id',
-    method: 'PATCH'
-  },
-  {
-    name: 'Stripe Tokenization',
-    type: 'stripe',
-    url: '',
-    method: '',
-    description: (
-      <div>
-        <div className="lead mb-2">
-          To complete checkout you must get a{' '}
-          <span className="hljs-keyword">card_token</span> from Stripe.
-        </div>
-        <div className="mb-3">
-          Create tokens client-side using Stripe's{' '}
-          <a
-            className="link-description"
-            href="https://stripe.com/docs/checkout"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Checkout,
-          </a>{' '}
-          <a
-            className="link-description"
-            href="https://stripe.com/docs/stripe-js/elements/quickstart"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Elements,
-          </a>{' '}
-          or{' '}
-          <a
-            className="link-description"
-            href="https://stripe.com/docs/mobile"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Mobile Libraries.
-          </a>
-        </div>
-        <p className="text-muted">
-          Test Card: 4242 4242 4242 4242<span className="ml-3">11/20 123</span>
-        </p>
-      </div>
-    )
-  },
-  {
-    name: 'Payment Checkout',
-    type: 'payment',
-    url: '/checkout/:id/payment',
-    method: 'POST'
-  },
-  {
-    name: 'Confirm Checkout',
-    type: 'confirm',
-    url: '/checkout/:id/confirm',
-    method: 'POST'
-  },
-  {
-    name: 'Checkout Completed',
-    type: 'completed',
-    url: '',
-    method: '',
-    description: 'You successfully purchased a ticket!'
-  }
-]
+import { apiFetch, host } from './utils/apiUtils'
 
 const initialState = {
   eventId: 74701,
@@ -112,28 +40,72 @@ class App extends Component {
 
   getEvent = async () => {
     const { checkoutObj, eventId } = this.state
-    const url = `${host}/event/${eventId}?include=ticket_prices,event_owner`
+    const uri = `/event/${eventId}?include=ticket_prices,event_owner`
 
-    const { json, error } = await fetch(url, { method: 'GET' })
-      .then(res => res.json())
-      .then(json => ({ json }))
-      .catch(error => ({ error }))
+    const { json, error } = await apiFetch(uri)
 
-    const event = json.data
-    const tickets = json.included.filter(incl => incl.type === 'ticket_price')
-    const eventOwner = json.included.find(incl => incl.type === 'EventOwnerDTO')
-    const pkStripe = eventOwner.attributes.stripe_publishable_key
+    if (json) {
+      const event = json.data
+      const eventOwner = json.included.find(
+        incl => incl.type === 'EventOwnerDTO'
+      )
+      const pkStripe = eventOwner.attributes.stripe_publishable_key
 
-    checkoutObj.data.attributes.event_id = eventId
-    checkoutObj.data.attributes.tickets = []
+      this.getTickets()
 
-    if (event && tickets && pkStripe)
-      return this.setState({ event, tickets, pkStripe, checkoutObj })
-    else return this.setState({ error })
+      checkoutObj.data.attributes.event_id = eventId
+      checkoutObj.data.attributes.tickets = []
+      if (event && pkStripe)
+        return this.setState({ event, pkStripe, checkoutObj })
+    } else return this.setState({ error })
   }
 
-  selectTickets = (id, qty) => {
-    const ticket = { ticket_price: { ticket_price_id: id } }
+  getTickets = async () => {
+    const { eventId } = this.state
+    const uri = `/ticket_price?filter[event_id]=${eventId}&page[limit]=100&page[offset]=0&include=key_value,event_schedule`
+
+    const { json } = await apiFetch(uri)
+
+    if (json) {
+      const tickets = json.data
+
+      const enabledWaitlists = json.included.filter(
+        ({ attributes }) =>
+          attributes.key === 'waitlist_enabled' && attributes.value === 'true'
+      )
+
+      if (enabledWaitlists.length > 0) {
+        enabledWaitlists.map(waitlist => {
+          const ticket = tickets.find(
+            ({ id }) => id === waitlist.attributes.reference_id
+          )
+          ticket.attributes.waitlist = true
+        })
+      }
+
+      const eventSchedules = json.included.filter(
+        ({ type }) => type === 'event_schedule'
+      )
+
+      this.setState({ tickets, eventSchedules })
+    }
+  }
+
+  selectTickets = (ticket, qty) => {
+    const waitlist = ticket.attributes.waitlist
+
+    const errorCheckout =
+      waitlist && this.state.checkoutObj.data.attributes.tickets
+
+    if (errorCheckout) {
+      alert('Cannot add a waitlist ticket and a normal ticket')
+      return false
+    }
+
+    const id = Number(ticket.id)
+    const selectedTicket = {
+      ticket_price: { ticket_price_id: id }
+    }
     const { checkoutObj } = this.state
     const { tickets } = checkoutObj.data.attributes
 
@@ -145,7 +117,7 @@ class App extends Component {
 
     if (changeQty > 0) {
       for (let i = 0; i < changeQty; i++) {
-        tickets.push(ticket)
+        tickets.push(selectedTicket)
       }
     } else if (changeQty < 0) {
       for (let i = 0; i < -changeQty; i++) {
@@ -166,15 +138,10 @@ class App extends Component {
     const { checkoutObj, phase } = this.state
     const checkout = checkoutSteps.find(step => step.type === phase)
 
-    const url = `${host}${checkout.url}`
+    const { url, method } = checkout
+    const body = JSON.stringify(checkoutObj)
 
-    const { json, error } = await fetch(url, {
-      method: checkout.method,
-      body: JSON.stringify(checkoutObj)
-    })
-      .then(res => res.json())
-      .then(json => ({ json }))
-      .catch(error => ({ error }))
+    const { json, error } = await apiFetch(url, method, body)
 
     if (json) {
       this.setState({ checkoutObj: json, phase: 'update' })
@@ -197,15 +164,11 @@ class App extends Component {
     const { checkoutObj, phase } = this.state
     const checkout = checkoutSteps.find(({ type }) => type === phase)
 
-    const url = `${host}${checkout.url}`.replace(':id', checkoutObj.data.id)
+    const { url, method } = checkout
+    const uri = `${url}`.replace(':id', checkoutObj.data.id)
+    const body = JSON.stringify({ data: checkoutObj.data })
 
-    const { json, error } = await fetch(url, {
-      method: checkout.method,
-      body: JSON.stringify({ data: checkoutObj.data })
-    })
-      .then(res => res.json())
-      .then(json => ({ json }))
-      .catch(error => ({ error }))
+    const { json, error } = await apiFetch(uri, method, body)
 
     if (json) {
       const { attributes } = json.data
@@ -241,15 +204,11 @@ class App extends Component {
     const { checkoutObj, phase } = this.state
     const checkout = checkoutSteps.find(({ type }) => type === phase)
 
-    const url = `${host}${checkout.url}`.replace(':id', checkoutObj.data.id)
+    const { url, method } = checkout
+    const uri = `${url}`.replace(':id', checkoutObj.data.id)
+    const body = JSON.stringify({ data: checkoutObj.data })
 
-    const { json, error } = await fetch(url, {
-      method: checkout.method,
-      body: JSON.stringify({ data: checkoutObj.data })
-    })
-      .then(res => res.json())
-      .then(json => ({ json }))
-      .catch(error => ({ error }))
+    const { json, error } = await apiFetch(uri, method, body)
 
     if (json) {
       this.setState({ phase: 'confirm' })
@@ -262,14 +221,10 @@ class App extends Component {
     const { checkoutObj, phase } = this.state
     const checkout = checkoutSteps.find(({ type }) => type === phase)
 
-    const url = `${host}${checkout.url}`.replace(':id', checkoutObj.data.id)
+    const { url, method } = checkout
+    const uri = `${url}`.replace(':id', checkoutObj.data.id)
 
-    const { json } = await fetch(url, {
-      method: checkout.method
-    })
-      .then(res => res.json())
-      .then(json => ({ json }))
-      .catch(err => console.log(err))
+    const { json } = await apiFetch(uri, method)
 
     if (json.data.attributes.status === 'completed') {
       this.setState({ checkoutObj: json, phase: 'completed' })
@@ -280,6 +235,8 @@ class App extends Component {
     const {
       event,
       tickets,
+      eventSchedules,
+      waitlistTickets,
       checkoutObj,
       orderSummary,
       pkStripe,
@@ -301,10 +258,12 @@ class App extends Component {
       step = (
         <section>
           {tickets.map(ticket => (
-            <Tickets
+            <Ticket
               key={ticket.id}
               ticket={ticket}
+              eventSchedules={eventSchedules}
               selectTickets={this.selectTickets}
+              waitlistTickets={waitlistTickets}
             />
           ))}
           <Button
