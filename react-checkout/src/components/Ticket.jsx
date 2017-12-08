@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-class Tickets extends Component {
+class Ticket extends Component {
   state = {
     selectedQuantity: ''
   }
@@ -9,12 +9,12 @@ class Tickets extends Component {
     event.preventDefault()
     const { value } = event.target
     const { ticket, selectTickets } = this.props
-    selectTickets(Number(ticket.id), Number(value))
+    selectTickets(ticket, Number(value))
     this.setState({ selectedQuantity: value })
   }
 
   render() {
-    const { ticket } = this.props
+    const { ticket, waitlistTickets } = this.props
     const { selectedQuantity } = this.state
 
     const {
@@ -22,7 +22,8 @@ class Tickets extends Component {
       price,
       max_quantity,
       quantity,
-      quantity_sold
+      quantity_sold,
+      status
     } = this.props.ticket.attributes
 
     const ticketsRemaining = Math.max(quantity - quantity_sold, 0)
@@ -33,15 +34,20 @@ class Tickets extends Component {
         : ticketsRemaining
 
     const soldOut = maxQuantity === 0
+    const open = status === 'open'
+    const closed = status === 'closed'
+
+    const waitlist = ticket.attributes.waitlist
+    const activeWaitlist = waitlist && (closed || soldOut)
+
+    const priceName = activeWaitlist ? 'join waitlist' : `$${parseFloat(price)}`
 
     return (
       <div key={ticket.id} className="mdl-grid align-items-center">
         <div className="mdl-cell mdl-cell--8-col">{name}</div>
         <div className="mdl-cell mdl-cell--4-col">
           <div className="form-row align-items-center float-right">
-            {/* TODO: Replace static currency with dynamic value */}
-            <div className="col-auto">${parseFloat(price)}</div>
-            {!soldOut && <div className="col-auto">x</div>}
+            <div className="col-auto">{priceName}</div>
 
             {!soldOut && (
               <div className="col-auto">
@@ -67,4 +73,4 @@ class Tickets extends Component {
   }
 }
 
-export default Tickets
+export default Ticket
