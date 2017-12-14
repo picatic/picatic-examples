@@ -9,6 +9,7 @@ import TicketForm from './components/TicketForm'
 import StripeCheckout from './components/StripeCheckout'
 
 import checkoutSteps from './constants/checkoutSteps'
+import { waitlistBody, checkoutBody } from './constants/bodyConstants'
 
 import { apiFetch, host } from './utils/apiUtils'
 
@@ -19,15 +20,7 @@ const initialState = {
   pkStripe: null,
 
   checkout: null,
-  checkoutObj: {
-    data: {
-      attributes: {
-        event_id: null,
-        tickets: []
-      },
-      type: 'checkout'
-    }
-  },
+  checkoutObj: checkoutBody,
   orderSummary: null,
 
   phase: 'create'
@@ -87,49 +80,81 @@ class App extends Component {
         ({ type }) => type === 'event_schedule'
       )
 
-      this.setState({ tickets, eventSchedules })
+      this.setState({ tickets, enabledWaitlists, eventSchedules })
     }
   }
 
   selectTickets = (ticket, qty) => {
-    const waitlist = ticket.attributes.waitlist
+    let { enabledWaitlists, checkoutObj } = this.state
+    const { waitlist, status } = ticket.attributes
 
-    const errorCheckout =
-      waitlist && this.state.checkoutObj.data.attributes.tickets
+    const selectedIsWaitlist = waitlist && status === 'closed'
 
-    if (errorCheckout) {
+    const selectedTickets = checkoutObj.data.attributes.tickets
+
+    let errorWaitlist
+    if (selectedTickets.length > 0) {
+      selectedTickets.map(selectedTicket => {
+        const isWaitlist = enabledWaitlists.find(
+          ({ attributes }) =>
+            Number(attributes.reference_id) ===
+            selectedTicket.ticket_price.ticket_price_id
+        )
+
+        const mixedWaitlistandRegularTickets =
+          (selectedIsWaitlist && !isWaitlist) ||
+          (!selectedIsWaitlist && isWaitlist)
+
+        if (mixedWaitlistandRegularTickets) {
+          errorWaitlist = true
+        }
+      })
+    }
+
+    if (errorWaitlist) {
       alert('Cannot add a waitlist ticket and a normal ticket')
       return false
     }
 
-    const id = Number(ticket.id)
-    const selectedTicket = {
-      ticket_price: { ticket_price_id: id }
-    }
-    const { checkoutObj } = this.state
-    const { tickets } = checkoutObj.data.attributes
+    const { type } = checkoutObj.data
 
-    const oldQty = tickets.filter(
-      ({ ticket_price }) => ticket_price.ticket_price_id === id
-    ).length
-
-    const changeQty = qty - oldQty
-
-    if (changeQty > 0) {
-      for (let i = 0; i < changeQty; i++) {
-        tickets.push(selectedTicket)
+    if (selectedIsWaitlist) {
+      if (type !== 'waitlist') {
+        checkoutObj = waitlistBody
       }
-    } else if (changeQty < 0) {
-      for (let i = 0; i < -changeQty; i++) {
-        const index = _.findLastIndex(
-          tickets,
-          ({ ticket_price }) => ticket_price.ticket_price_id === id
-        )
-        tickets.splice(index, 1)
+    } else {
+      if (type !== 'checkout') {
+        checkoutObj = checkoutBody
       }
-    }
+      const id = Number(ticket.id)
+      const selectedTicket = {
+        ticket_price: { ticket_price_id: id }
+      }
 
-    checkoutObj.data.attributes['tickets'] = tickets
+      const { tickets } = checkoutObj.data.attributes
+
+      const oldQty = tickets.filter(
+        ({ ticket_price }) => ticket_price.ticket_price_id === id
+      ).length
+
+      const changeQty = qty - oldQty
+
+      if (changeQty > 0) {
+        for (let i = 0; i < changeQty; i++) {
+          tickets.push(selectedTicket)
+        }
+      } else if (changeQty < 0) {
+        for (let i = 0; i < -changeQty; i++) {
+          const index = _.findLastIndex(
+            tickets,
+            ({ ticket_price }) => ticket_price.ticket_price_id === id
+          )
+          tickets.splice(index, 1)
+        }
+      }
+
+      checkoutObj.data.attributes['tickets'] = tickets
+    }
 
     this.setState({ checkoutObj })
   }
@@ -254,16 +279,24 @@ class App extends Component {
     const checkout = checkoutSteps.find(({ type }) => type === phase)
     let step
     if (phase === 'create') {
-      const noSelectedTickets = checkoutObj.data.attributes.tickets.length === 0
+      let noSelectedTickets
+      let quantity
+      const { attributes, type } = checkoutObj.data
+      if (type === 'checkout') {
+        noSelectedTickets = attributes.tickets.length === 0
+        quantity = attributes.tickets
+      } else if (type === 'waitlist') {
+        quantity = attributes.quantity
+        noSelectedTickets = quantity === 0
+      }
       step = (
         <section>
           {tickets.map(ticket => (
             <Ticket
               key={ticket.id}
               ticket={ticket}
-              eventSchedules={eventSchedules}
+              selectedQuantity={quantity}
               selectTickets={this.selectTickets}
-              waitlistTickets={waitlistTickets}
             />
           ))}
           <Button

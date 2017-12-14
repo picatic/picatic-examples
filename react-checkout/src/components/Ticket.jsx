@@ -1,21 +1,26 @@
 import React, { Component } from 'react'
 
 class Ticket extends Component {
-  state = {
-    selectedQuantity: ''
-  }
-
   selectTicket = event => {
     event.preventDefault()
     const { value } = event.target
     const { ticket, selectTickets } = this.props
     selectTickets(ticket, Number(value))
-    this.setState({ selectedQuantity: value })
   }
 
   render() {
-    const { ticket, waitlistTickets } = this.props
-    const { selectedQuantity } = this.state
+    const { selectedQuantity, ticket, waitlistTickets } = this.props
+
+    let ticketQuantity = selectedQuantity
+
+    const { tickets } = selectedQuantity
+    if (tickets) {
+      ticketQuantity = tickets.filter(
+        ({ ticket_price }) => ticket_price.ticket_price_id === Number(ticket.id)
+      )
+    }
+
+    const value = ticketQuantity > 0 ? ticketQuantity : ''
 
     const {
       name,
@@ -55,7 +60,7 @@ class Ticket extends Component {
                   <input
                     type="number"
                     className="form-control text-center"
-                    value={selectedQuantity}
+                    value={value}
                     onChange={this.selectTicket}
                     placeholder="0"
                     min="0"
