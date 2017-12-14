@@ -3,6 +3,12 @@ import React from 'react'
 const checkoutSteps = [
   { name: 'Create Checkout', type: 'create', url: '/checkout', method: 'POST' },
   {
+    name: 'Create Waitlist',
+    type: 'waitlist-create',
+    url: '/waitlist',
+    method: 'POST'
+  },
+  {
     name: 'Update Checkout',
     type: 'update',
     url: '/checkout/:id',
