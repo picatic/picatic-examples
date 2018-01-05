@@ -1,21 +1,19 @@
-export const getEvent = async (dispatch, getState) => {
-  const state = getState()
+import * as types from '../constants/ActionTypes'
+import { apiFetch } from '../utils/apiUtils'
+import { getEventOwner } from '../utils/eventUtils'
+import { EVENT_URL } from '../constants/ApiContants'
 
-  // const { checkoutObj, eventId } = this.state
-  // const uri = `/event/${eventId}?include=ticket_prices,event_owner`
-  //
-  // const { json, error } = await apiFetch(uri)
-  //
-  // if (json) {
-  //   const event = json.data
-  //   const eventOwner = json.included.find(incl => incl.type === 'EventOwnerDTO')
-  //   const pkStripe = eventOwner.attributes.stripe_publishable_key
-  //
-  //   this.getTickets()
-  //
-  //   checkoutObj.data.attributes.event_id = eventId
-  //   checkoutObj.data.attributes.tickets = []
-  //   if (event && pkStripe)
-  //     return this.setState({ event, pkStripe, checkoutObj })
-  // } else return this.setState({ error })
+export const getEvent = eventId => async (dispatch, getState) => {
+  const url = EVENT_URL.replace(':eventId', eventId)
+
+  const { json } = await apiFetch(url)
+
+  if (json) {
+    const event = json.data
+    const eventOwner = getEventOwner(json.included)
+
+    if (event) return dispatch({ type: types.FETCH_EVENT_SUCESS, event })
+    if (eventOwner)
+      return dispatch({ type: types.FETCH_EVENT_OWNER_SUCCESS, eventOwner })
+  }
 }

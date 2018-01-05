@@ -4,6 +4,7 @@ const event = (state = {}, action) => {
   switch (action.type) {
     case types.FETCH_EVENT_SUCCESS:
       return action.event
+
     default:
       return state
   }
