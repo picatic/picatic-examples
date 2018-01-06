@@ -6,6 +6,10 @@ body {
   background: #fafafa;
 }
 
+.event-card-media {
+  height: 200px;
+}
+
 /* Event Card */
 .event-card-wide.mdl-card {
   width: 512px;

@@ -4,6 +4,6 @@ import Tickets from '../components/Tickets'
 
 const TicketsComponent = props => <Tickets {...props} />
 
-const mapStateToProps = () => {}
+const mapStateToProps = ({ tickets }) => ({ tickets })
 
-export default mapStateToProps(TicketsComponent)
+export default connect(mapStateToProps)(TicketsComponent)
