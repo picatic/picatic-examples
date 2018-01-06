@@ -1,4 +1,4 @@
-import * as types from '../contants/ActionTypes'
+import * as types from '../constants/ActionTypes'
 
 const eventOwner = (state = null, action) => {
   switch (action.type) {
@@ -10,4 +10,4 @@ const eventOwner = (state = null, action) => {
   }
 }
 
-export const eventOwner
+export default eventOwner

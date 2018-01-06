@@ -1,6 +1,6 @@
 import * as types from '../constants/ActionTypes'
 
-const event = (state = {}, action) => {
+const event = (state = null, action) => {
   switch (action.type) {
     case types.FETCH_EVENT_SUCCESS:
       return action.event

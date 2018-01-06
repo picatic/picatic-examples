@@ -1,13 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import App from '../components/App'
+import Root from '../components/Root'
 
-import { getEvent } from '../actions/EventActions'
+// Actions
+import { fetchEvent, fetchTickets } from '../actions/EventActions'
 
-const AppComponent = props => <App {...props} />
+const RootComponent = props => <Root {...props} />
 
-const mapStateToProps = props => {
-  event
-}
+const mapStateToProps = ({ event }) => ({ event })
 
-export default connect(mapStateToProps, { getEvent })(AppComponent)
+export default connect(mapStateToProps, { fetchEvent, fetchTickets })(
+  RootComponent,
+)

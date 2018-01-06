@@ -1,20 +1,26 @@
 import React, { Component } from 'react'
-import './App.css'
 
 import EventContainer from '../containers/EventContainer'
 
 class App extends Component {
   componentWillMount() {
-    this.props.getEvent()
+    const eventId = 74701
+    const { fetchEvent, fetchTickets } = this.props
+    fetchEvent(eventId)
+    fetchTickets(eventId)
   }
   render() {
-    if (!this.props.event) {
-      return false
-    }
+    const { event } = this.props
+    if (!event) return <div className="container">No event found.</div>
+
     return (
-      <div>
-        <EventContainer />
-        <h1>Hello</h1>
+      <div className="container mt-3">
+        <div className="row">
+          <div className="col">
+            <EventContainer />
+          </div>
+          <div className="col" />
+        </div>
       </div>
     )
   }
