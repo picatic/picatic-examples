@@ -15,11 +15,10 @@ class App extends Component {
 
     return (
       <div className="container mt-3">
-        <div className="row">
-          <div className="col">
+        <div className="row justify-content-md-center">
+          <div className="col-10">
             <EventContainer />
           </div>
-          <div className="col" />
         </div>
       </div>
     )

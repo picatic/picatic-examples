@@ -1,5 +1,9 @@
 import React from 'react'
 
+// Material UI Components
+import TextField from 'material-ui/TextField'
+import { MenuList, MenuItem } from 'material-ui/Menu'
+
 const Ticket = ({
   id,
   name,
@@ -14,27 +18,58 @@ const Ticket = ({
   selectTicket
 }) => {
   const availableTickets = quantity - quantity_sold
+  const maxTickets = max_quantity === 0 ? availableTickets : max_quantity
+
+  const menuItems = () => {
+    let arr = [0]
+    for (let index = 0; index < maxTickets; index++) {
+      if (min_quantity < index && 10 > index) {
+        arr.push(index)
+      }
+    }
+    return arr.map(index => (
+      <MenuItem key={index} value={index} className="test-height">
+        {index}
+      </MenuItem>
+    ))
+  }
+
+  console.log(value)
+
   return (
     <div className="row">
-      <div className="col">{name}</div>
-      <div className="col">{price}</div>
       <div className="col">
-        <input
-          type="number"
+        ${Math.floor(price)} {name}
+      </div>
+      <div className="col text-right">
+        <TextField
           id={id}
-          className="form-control text-center"
+          select
           value={value}
-          onChange={selectTicket}
-          placeholder="0"
-          min={0}
-          max={max_quantity === 0 ? availableTickets : max_quantity}
-        />
+          margin="dense"
+          onChange={ev => selectTicket(ev.target.value, id)}
+        >
+          {menuItems()}
+        </TextField>
       </div>
     </div>
   )
 }
 
 export default Ticket
+
+{
+  /* <input
+type="number"
+id={id}
+className="form-control text-center"
+value={value}
+onChange={selectTicket}
+placeholder="0"
+min={0}
+max={max_quantity === 0 ? availableTickets : max_quantity}
+/> */
+}
 
 // class Ticket extends Component {
 //   selectTicket = event => {

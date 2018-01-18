@@ -20,14 +20,12 @@ export const updateCheckoutTickets = () => (dispatch, getState) => {
 export const createCheckout = () => async (dispatch, getState) => {
   const { checkout } = getState()
 
-  console.log(checkout)
-
-  const body = JSON.stringify({ data: checkout })
-
   const url = CREATE_CHECKOUT_URL
+  const body = JSON.stringify({ data: checkout })
   const { json } = await apiFetch(url, 'POST', body)
 
   if (json) {
-    dispatch({ type: types.FETCH_CREATE_CHECKOUT_SUCCESS, checkout: json.data })
+    console.log("Checkout Object: ", json.data);
+    // dispatch({ type: types.FETCH_CREATE_CHECKOUT_SUCCESS, checkout: json.data })
   }
 }
