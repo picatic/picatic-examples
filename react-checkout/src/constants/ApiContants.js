@@ -5,3 +5,4 @@ const PAGINATE =
 
 export const EVENT_URL = `${HOST}/event/:eventId?include=event_owner`
 export const TICKET_PRICE_URL = `${HOST}/ticket_price?filter[event_id]=:eventId&${PAGINATE}`
+export const CREATE_CHECKOUT_URL = `${HOST}/checkout`
