@@ -21,7 +21,14 @@ export const fetchEvent = eventId => async dispatch => {
     const event = json.data
     const eventOwner = getEventOwner(json.included)
 
-    if (event) return dispatch({ type: types.FETCH_EVENT_SUCCESS, event })
+    if (event) {
+      dispatch({
+        type: types.UPDATE_CHECKOUT_ATTRIBUTE,
+        attribute: 'event_id',
+        value: Number(event.id)
+      })
+      dispatch({ type: types.FETCH_EVENT_SUCCESS, event })
+    }
     if (eventOwner)
       return dispatch({ type: types.FETCH_EVENT_OWNER_SUCCESS, eventOwner })
   }
