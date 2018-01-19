@@ -1,16 +1,20 @@
 @import url('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css');
-@import url('https://fast.fonts.net/dv2/14/2cd55546-ec00-4af9-aeca-4a3cd186da53.woff2?d44f19a684109620e484147ea390e81836c80ef2a06a33cb3702b21fa86c7e20989729f56d4cc62e1a906f2486ba38746a67ab7ef28dfd112e18fec9ad4ccb3cedd1a3ea8eaab1a732e2&projectId=82546004-91f4-4f3d-901d-37fbaa5d72fb');
 
 body {
-  background: #fafafa;
+  background: #FFFFFF;
 }
 
 .card-event {
   box-shadow: 0 4px 24px 0 rgba(0,0,0,.12);
   background: #FFFFFF;
-  font-family: 'Avenir Next W01', Avenir, Helvetica, Arial, sans-serif;
 }
 
 .test-height {
   height: 18px !important;
+}
+
+.strike-price {
+  color: red;
+  text-decoration: line-through;
+  font-style: italic;
 }

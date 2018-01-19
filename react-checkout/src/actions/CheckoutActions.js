@@ -1,6 +1,6 @@
 import * as types from '../constants/ActionTypes'
 import { apiFetch } from '../utils/apiUtils'
-import { CREATE_CHECKOUT_URL } from '../constants/ApiContants'
+import { CREATE_CHECKOUT_URL } from '../constants/ApiConstants'
 
 export const updateCheckoutTickets = () => (dispatch, getState) => {
   const { selectedTickets } = getState()

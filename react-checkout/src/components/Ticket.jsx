@@ -2,12 +2,14 @@ import React from 'react'
 
 // Material UI Components
 import TextField from 'material-ui/TextField'
-import { MenuList, MenuItem } from 'material-ui/Menu'
+import { MenuItem } from 'material-ui/Menu'
 
 const Ticket = ({
   id,
+  index,
   name,
   price,
+  discount_price,
   quantity,
   quantity_sold,
   status,
@@ -22,132 +24,42 @@ const Ticket = ({
 
   const menuItems = () => {
     let arr = [0]
-    for (let index = 0; index < maxTickets; index++) {
-      if (min_quantity < index && 10 > index) {
-        arr.push(index)
+    for (let i = 0; i < maxTickets; i++) {
+      if (min_quantity <= i && 10 > i) {
+        arr.push(i + 1)
       }
     }
-    return arr.map(index => (
-      <MenuItem key={index} value={index} className="test-height">
-        {index}
+    return arr.map(i => (
+      <MenuItem key={i} value={i} className="test-height">
+        {i}
       </MenuItem>
     ))
   }
 
-  console.log(value)
+  const displayPrice = Number(price) === 0 ? 'Free' : `$${price}`
+  const discountPrice = discount_price ? discount_price : ''
 
   return (
-    <div className="row">
-      <div className="col">
-        ${Math.floor(price)} {name}
+    <div className="d-flex align-items-center">
+      <div>
+        {name} |{' '}
+        <span className={discount_price ? 'strike-price' : ''}>
+          {displayPrice}
+        </span>{' '}
+        {discountPrice}
       </div>
-      <div className="col text-right">
-        <TextField
-          id={id}
-          select
-          value={value}
-          margin="dense"
-          onChange={ev => selectTicket(ev.target.value, id)}
-        >
-          {menuItems()}
-        </TextField>
-      </div>
+      <TextField
+        id={id}
+        select
+        className="ml-auto"
+        value={value}
+        margin="dense"
+        onChange={ev => selectTicket(ev.target.value, id)}
+      >
+        {menuItems()}
+      </TextField>
     </div>
   )
 }
 
 export default Ticket
-
-{
-  /* <input
-type="number"
-id={id}
-className="form-control text-center"
-value={value}
-onChange={selectTicket}
-placeholder="0"
-min={0}
-max={max_quantity === 0 ? availableTickets : max_quantity}
-/> */
-}
-
-// class Ticket extends Component {
-//   selectTicket = event => {
-//     event.preventDefault()
-//     const { value } = event.target
-//     const { ticket, selectTickets } = this.props
-//     selectTickets(ticket, Number(value))
-//   }
-
-//   render() {
-//     const { selectedQuantity, ticket, waitlistTickets } = this.props
-
-//     let ticketQuantity = selectedQuantity
-
-//     const { tickets } = selectedQuantity
-//     if (tickets) {
-//       ticketQuantity = tickets.filter(
-//         ({ ticket_price }) =>
-//           ticket_price.ticket_price_id === Number(ticket.id),
-//       )
-//     }
-
-//     const value = ticketQuantity > 0 ? ticketQuantity : ''
-
-//     const {
-//       name,
-//       price,
-//       max_quantity,
-//       quantity,
-//       quantity_sold,
-//       status,
-//     } = this.props.ticket.attributes
-
-//     const ticketsRemaining = Math.max(quantity - quantity_sold, 0)
-
-//     const maxQuantity =
-//       max_quantity > 0
-//         ? Math.min(max_quantity, ticketsRemaining)
-//         : ticketsRemaining
-
-//     const soldOut = maxQuantity === 0
-//     const open = status === 'open'
-//     const closed = status === 'closed'
-
-//     const waitlist = ticket.attributes.waitlist
-//     const activeWaitlist = waitlist && (closed || soldOut)
-
-//     const priceName = activeWaitlist ? 'join waitlist' : `$${parseFloat(price)}`
-
-//     return (
-//       <div key={ticket.id} className="mdl-grid align-items-center">
-//         <div className="mdl-cell mdl-cell--8-col">{name}</div>
-//         <div className="mdl-cell mdl-cell--4-col">
-//           <div className="form-row align-items-center float-right">
-//             <div className="col-auto">{priceName}</div>
-
-//             {!soldOut && (
-//               <div className="col-auto">
-//                 <div className="input-group">
-//                   <input
-//                     type="number"
-//                     className="form-control text-center"
-//                     value={value}
-//                     onChange={this.selectTicket}
-//                     placeholder="0"
-//                     min="0"
-//                     max={maxQuantity}
-//                   />
-//                 </div>
-//               </div>
-//             )}
-
-//             {soldOut && <div className="col-auto">SOLD OUT</div>}
-//           </div>
-//         </div>
-//       </div>
-//     )
-//   }
-// }
-
-// export default Ticket

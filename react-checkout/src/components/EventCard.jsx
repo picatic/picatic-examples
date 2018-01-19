@@ -1,49 +1,50 @@
 import React, { Component } from 'react'
 import TicketsContainer from '../containers/TicketsContainer'
+import PromoCode from '../components/PromoCode'
 
 // Material UI
 import Button from 'material-ui/Button'
-import TextField from 'material-ui/TextField'
-import IconButton from 'material-ui/IconButton'
-import ChevronRight from 'material-ui-icons/ChevronRight'
 
 class EventCard extends Component {
+  componentWillMount() {
+    const root = document.getElementById('picatic-ticket-form')
+    const showTitle = root.getAttribute('showTitle')
+    const showSummary = root.getAttribute('showSummary')
+    const cta = root.getAttribute('cta')
+    const button = cta ? cta : 'continue'
+    this.setState({ showTitle, showSummary, cta: button })
+  }
   render() {
-    const { event, checkout, selectedTickets, createCheckout } = this.props
+    const { event, selectedTickets, createCheckout } = this.props
+    const { showTitle, showSummary, cta } = this.state
 
     // If no event found
     if (!event.attributes) {
       return 'No event details'
     }
 
-    const { status } = checkout.attributes
-    const { title, cover_image_uri } = event.attributes
-
     const hasSelectedTickets = Object.entries(selectedTickets).reduce(
       (qty, ticket) => (qty += ticket[1]),
       0
     )
+
     return (
       <section className="card-event p-4 rounded">
         <div>
-          <h3>Tickets</h3>
+          <h3>{showTitle ? event.attributes.title : 'Tickets'}</h3>
+          {showSummary && <h5>{event.attributes.summary}</h5>}
           <TicketsContainer />
         </div>
         <hr />
         <div className="d-flex flex-row align-items-center">
-          <form className="d-flex flex-row align-items-center">
-            <TextField placeholder="Promo Code" />
-            <IconButton disabled>
-              <ChevronRight />
-            </IconButton>
-          </form>
+          <PromoCode {...this.props} />
           <div className="ml-auto">
             <Button
               disabled={!hasSelectedTickets}
               onClick={createCheckout}
               href={`https://www.picatic.com/${event.id}`}
             >
-              Continue
+              {cta}
             </Button>
           </div>
         </div>
