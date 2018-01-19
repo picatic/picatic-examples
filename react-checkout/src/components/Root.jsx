@@ -4,8 +4,7 @@ import EventContainer from '../containers/EventContainer'
 
 class App extends Component {
   componentWillMount() {
-    const eventId = 74701
-    const { fetchEvent, fetchTickets } = this.props
+    const { eventId, fetchEvent, fetchTickets } = this.props
     fetchEvent(eventId)
     fetchTickets(eventId)
   }

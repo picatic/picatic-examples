@@ -1,16 +1,9 @@
 import * as types from '../constants/ActionTypes'
 import { apiFetch } from '../utils/apiUtils'
-import { getEventOwner } from '../utils/eventUtils'
-import { EVENT_URL, TICKET_PRICE_URL } from '../constants/ApiContants'
-
-export const fetchTickets = eventId => async dispatch => {
-  const url = TICKET_PRICE_URL.replace(':eventId', eventId)
-  const { json } = await apiFetch(url)
-  if (json) {
-    const tickets = json.data
-    dispatch({ type: types.FETCH_TICKET_PRICE_SUCCESS, tickets })
-  }
-}
+import {
+  EVENT_URL,
+  APPLY_PROMO_CODE_URL
+} from '../constants/ApiConstants'
 
 export const fetchEvent = eventId => async dispatch => {
   const url = EVENT_URL.replace(':eventId', eventId)
@@ -19,7 +12,6 @@ export const fetchEvent = eventId => async dispatch => {
 
   if (json) {
     const event = json.data
-    const eventOwner = getEventOwner(json.included)
 
     if (event) {
       dispatch({
@@ -29,7 +21,30 @@ export const fetchEvent = eventId => async dispatch => {
       })
       dispatch({ type: types.FETCH_EVENT_SUCCESS, event })
     }
-    if (eventOwner)
-      return dispatch({ type: types.FETCH_EVENT_OWNER_SUCCESS, eventOwner })
+  }
+}
+
+export const applyPromoCode = code => async (dispatch, getState) => {
+  const { event } = getState()
+
+  const url = APPLY_PROMO_CODE_URL.replace(':eventId', event.id).replace(
+    ':tpd_code',
+    code
+  )
+
+  const { json } = await apiFetch(url)
+  if (json) {
+    if (json.included) {
+      json.included.map(tpd => {
+        const { amount, ticket_price_id } = tpd.attributes
+        dispatch({
+          type: types.APPLY_PROMO_CODE,
+          discount_price: amount,
+          ticket_price_id, 
+          ticket_price_discount_id: tpd.id
+        })
+        return true
+      })
+    }
   }
 }
