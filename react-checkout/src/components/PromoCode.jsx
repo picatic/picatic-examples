@@ -7,17 +7,29 @@ import ChevronRight from 'material-ui-icons/ChevronRight'
 
 class PromoCode extends Component {
   state = {
-    value: ''
+    value: '',
+    error: false,
+    submitted: false
   }
-  handleChange = event => {
-    this.setState({ value: event.target.value })
+  handleChange = ev => {
+    this.setState({ value: ev.target.value, error: false })
   }
-  handleSubmit = event => {
-    event.preventDefault()
+  handleSubmit = ev => {
+    ev.preventDefault()
+    this.setState({ submitted: true })
     this.props.applyPromoCode(this.state.value)
   }
+  componentWillUpdate(nextProps, nextState) {
+    if (this.state.submitted) {
+      if (nextProps.error) {
+        this.setState({ submitted: false, error: true })
+      } else {
+        this.setState({ submitted: false, error: false, value: '' })
+      }
+    }
+  }
   render() {
-    const { value } = this.state
+    const { value, error } = this.state
     return (
       <form
         className="d-flex flex-row align-items-center"
@@ -27,6 +39,8 @@ class PromoCode extends Component {
           placeholder="Promo Code"
           value={value}
           onChange={this.handleChange}
+          helperText={error ? 'Please try again' : ''}
+          error={error}
         />
         <IconButton type="submit" disabled={value.length === 0} color="primary">
           <ChevronRight />

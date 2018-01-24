@@ -7,13 +7,28 @@ const tickets = (state = null, action) => {
 
     case types.APPLY_PROMO_CODE:
       return state.map(ticket => {
-        if (ticket.id == action.ticket_price_id) {
+        if (ticket.id === action.ticket_price_id) {
           return {
             ...ticket,
             attributes: {
               ...ticket.attributes,
               discount_price: action.discount_price,
               ticket_discount_price: action.ticket_discount_price_id
+            }
+          }
+        } else {
+          return ticket
+        }
+      })
+
+    case types.UPDATE_TICKET_WAITLIST:
+      return state.map(ticket => {
+        if (ticket.id === action.ticket_price_id) {
+          return {
+            ...ticket,
+            attributes: {
+              ...ticket.attributes,
+              waitlist_enabled: true
             }
           }
         } else {

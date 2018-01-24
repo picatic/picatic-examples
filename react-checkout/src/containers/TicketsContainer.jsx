@@ -6,9 +6,10 @@ import { selectTicket } from '../actions/TicketActions'
 
 const TicketsComponent = props => <Tickets {...props} />
 
-const mapStateToProps = ({ tickets, selectedTickets }) => ({
+const mapStateToProps = ({ tickets, selectedTickets, event }) => ({
   tickets,
-  selectedTickets
+  selectedTickets,
+  event
 })
 
 export default connect(mapStateToProps, { selectTicket })(TicketsComponent)

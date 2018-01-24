@@ -4,12 +4,14 @@ import { combineReducers } from 'redux'
 import event from './event'
 import tickets from './tickets'
 import checkout from './checkout'
+import promoCode from './promoCode'
 import selectedTickets from './selectedTickets'
 
 const rootReducer = combineReducers({
   event,
   tickets,
   checkout,
+  promoCode,
   selectedTickets
 })
 

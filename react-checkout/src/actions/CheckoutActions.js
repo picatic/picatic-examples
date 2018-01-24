@@ -26,6 +26,6 @@ export const createCheckout = () => async (dispatch, getState) => {
 
   if (json) {
     console.log("Checkout Object: ", json.data);
-    // dispatch({ type: types.FETCH_CREATE_CHECKOUT_SUCCESS, checkout: json.data })
+    dispatch({ type: types.FETCH_CREATE_CHECKOUT_SUCCESS, checkout: json.data })
   }
 }
