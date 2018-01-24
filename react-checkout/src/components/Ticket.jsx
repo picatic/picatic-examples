@@ -1,4 +1,5 @@
 import React from 'react'
+import moment from 'moment'
 
 // Material UI Components
 import TextField from 'material-ui/TextField'
@@ -20,7 +21,7 @@ const Ticket = ({
   max_quantity,
   value,
   selectTicket,
-  waitlist_enabled,
+  disabled,
 }) => {
   const availableTickets = quantity - quantity_sold
   const maxTickets = max_quantity === 0 ? availableTickets : max_quantity
@@ -42,6 +43,13 @@ const Ticket = ({
   const displayPrice = Number(price) === 0 ? 'Free' : `$${price}`
   const discountPrice = discount_price ? discount_price : ''
 
+  let displayDate
+  if (start_date === end_date) {
+    displayDate = moment(start_date).format("MMM DD, YYYY")
+  } else {
+    displayDate = `${moment(start_date).format("MMM DD")} - ${moment(end_date).format("MMM DD, YYYY")}`
+  }
+
   return (
     <div className="d-flex align-items-center">
       <div>
@@ -51,7 +59,7 @@ const Ticket = ({
         </span>{' '}
         {discountPrice}
         <br />
-        <div className="text-muted">{start_date} - {end_date}</div>
+        <div className="text-muted">{displayDate}</div>
       </div>
       <TextField
         id={id}
@@ -60,6 +68,7 @@ const Ticket = ({
         value={value}
         margin="dense"
         onChange={ev => selectTicket(ev.target.value, id)}
+        disabled={disabled}
       >
         {menuItems()}
       </TextField>

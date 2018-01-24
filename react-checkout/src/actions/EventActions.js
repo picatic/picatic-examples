@@ -55,8 +55,6 @@ export const applyPromoCode = code => async (dispatch, getState) => {
         dispatch({ type: types.PROMO_CODE_SUCCESS })
         return true
       })
-      if (json.included.length === 0) {
-      }
     } else {
       dispatch({ type: types.PROMO_CODE_ERROR })
     }
