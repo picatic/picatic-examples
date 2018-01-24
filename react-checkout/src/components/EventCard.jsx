@@ -8,8 +8,8 @@ import Button from 'material-ui/Button'
 class EventCard extends Component {
   componentWillMount() {
     const root = document.getElementById('picatic-ticket-form')
-    const showTitle = root.getAttribute('showTitle')
-    const showSummary = root.getAttribute('showSummary')
+    const showTitle = root.hasAttribute('showTitle')
+    const showSummary = root.hasAttribute('showSummary')
     const cta = root.getAttribute('cta')
     const button = cta ? cta : 'continue'
     this.setState({ showTitle, showSummary, cta: button })
