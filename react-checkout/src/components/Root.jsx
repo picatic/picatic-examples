@@ -4,9 +4,8 @@ import EventContainer from '../containers/EventContainer'
 
 class App extends Component {
   componentWillMount() {
-    const { eventId, fetchEvent, fetchTickets } = this.props
-    fetchEvent(eventId)
-    fetchTickets(eventId)
+    const { eventId, initEvent } = this.props
+    initEvent(eventId)
   }
   render() {
     const { event } = this.props

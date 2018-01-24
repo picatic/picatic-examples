@@ -8,6 +8,8 @@ const Ticket = ({
   id,
   index,
   name,
+  start_date,
+  end_date,
   price,
   discount_price,
   quantity,
@@ -17,7 +19,8 @@ const Ticket = ({
   min_quantity,
   max_quantity,
   value,
-  selectTicket
+  selectTicket,
+  waitlist_enabled,
 }) => {
   const availableTickets = quantity - quantity_sold
   const maxTickets = max_quantity === 0 ? availableTickets : max_quantity
@@ -47,6 +50,8 @@ const Ticket = ({
           {displayPrice}
         </span>{' '}
         {discountPrice}
+        <br />
+        <div className="text-muted">{start_date} - {end_date}</div>
       </div>
       <TextField
         id={id}

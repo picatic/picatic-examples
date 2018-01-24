@@ -15,12 +15,13 @@ class EventCard extends Component {
     this.setState({ showTitle, showSummary, cta: button })
   }
   render() {
-    const { event, selectedTickets, createCheckout } = this.props
+    const { event, selectedTickets, createCheckout, promoCode } = this.props
     const { showTitle, showSummary, cta } = this.state
+    console.log(event)
 
     // If no event found
-    if (!event.attributes) {
-      return 'No event details'
+    if (!event.attributes || !event.schedules) {
+      return <div>No event details</div>
     }
 
     const hasSelectedTickets = Object.entries(selectedTickets).reduce(
@@ -37,7 +38,7 @@ class EventCard extends Component {
         </div>
         <hr />
         <div className="d-flex flex-row align-items-center">
-          <PromoCode {...this.props} />
+          <PromoCode {...this.props} error={promoCode.error} />
           <div className="ml-auto">
             <Button
               disabled={!hasSelectedTickets}

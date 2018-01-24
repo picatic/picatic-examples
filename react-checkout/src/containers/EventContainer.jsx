@@ -6,10 +6,13 @@ import { applyPromoCode } from '../actions/EventActions'
 
 const EventComponent = props => <EventCard {...props} />
 
-const mapStateToProps = ({ event, checkout, selectedTickets }) => ({
+const mapStateToProps = ({ event, checkout, selectedTickets, promoCode }) => ({
   event,
   checkout,
-  selectedTickets
+  selectedTickets,
+  promoCode
 })
 
-export default connect(mapStateToProps, { createCheckout, applyPromoCode })(EventComponent)
+export default connect(mapStateToProps, { createCheckout, applyPromoCode })(
+  EventComponent
+)

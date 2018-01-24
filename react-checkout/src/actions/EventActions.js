@@ -1,11 +1,9 @@
 import * as types from '../constants/ActionTypes'
 import { apiFetch } from '../utils/apiUtils'
-import {
-  EVENT_URL,
-  APPLY_PROMO_CODE_URL
-} from '../constants/ApiConstants'
+import { EVENT_URL, EVENT_SCHEDULE_URL, APPLY_PROMO_CODE_URL } from '../constants/ApiConstants'
+import { fetchTickets } from './TicketActions';
 
-export const fetchEvent = eventId => async dispatch => {
+const fetchEvent = eventId => async dispatch => {
   const url = EVENT_URL.replace(':eventId', eventId)
 
   const { json } = await apiFetch(url)
@@ -21,6 +19,17 @@ export const fetchEvent = eventId => async dispatch => {
       })
       dispatch({ type: types.FETCH_EVENT_SUCCESS, event })
     }
+  }
+}
+
+const fetchEventSchedules = eventId => async dispatch => {
+  const url = EVENT_SCHEDULE_URL.replace(':eventId', eventId)
+  const { json } = await apiFetch(url)
+  if (json) {
+    dispatch({
+      type: types.FETCH_EVENT_SCHEDULES_SUCCESS,
+      schedules: json.data
+    })
   }
 }
 
@@ -40,11 +49,22 @@ export const applyPromoCode = code => async (dispatch, getState) => {
         dispatch({
           type: types.APPLY_PROMO_CODE,
           discount_price: amount,
-          ticket_price_id, 
+          ticket_price_id,
           ticket_price_discount_id: tpd.id
         })
+        dispatch({ type: types.PROMO_CODE_SUCCESS })
         return true
       })
+      if (json.included.length === 0) {
+      }
+    } else {
+      dispatch({ type: types.PROMO_CODE_ERROR })
     }
   }
+}
+
+export const initEvent = eventId => dispatch => {
+  dispatch(fetchEvent(eventId))
+  dispatch(fetchEventSchedules(eventId))
+  dispatch(fetchTickets(eventId))
 }
