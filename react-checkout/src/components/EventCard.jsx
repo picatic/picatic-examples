@@ -17,7 +17,6 @@ class EventCard extends Component {
   render() {
     const { event, selectedTickets, createCheckout, promoCode } = this.props
     const { showTitle, showSummary, cta } = this.state
-    console.log(event)
 
     // If no event found
     if (!event.attributes || !event.schedules) {

@@ -7,7 +7,7 @@ const tickets = (state = null, action) => {
 
     case types.APPLY_PROMO_CODE:
       return state.map(ticket => {
-        if (ticket.id === action.ticket_price_id) {
+        if (Number(ticket.id) === action.ticket_price_id) {
           return {
             ...ticket,
             attributes: {

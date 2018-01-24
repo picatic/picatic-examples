@@ -23,7 +23,7 @@ export const fetchTickets = eventId => async dispatch => {
   }
 }
 
-export const selectTicket = (value, id) => dispatch => {
+export const selectTicket = (value, id) => (dispatch, getState) => {
   dispatch({ type: types.SELECT_TICKET_PRICE, id, quantity: Number(value) })
   dispatch(updateCheckoutTickets())
 }
