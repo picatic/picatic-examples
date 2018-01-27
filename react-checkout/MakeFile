@@ -1,0 +1,15 @@
+VERSION = $(shell cat package.json | egrep 'version' | cut -f4 -d'"')
+BUCKET_URL = https://console.cloud.google.com/storage/browser/picatic
+FOLDER = $(VERSION)
+LATEST = latest
+
+deploy:
+	@echo "======================================================================"
+	@echo "Deploying $(VERSION) on $(BUCKET_URL)"
+	@echo "======================================================================"
+	-gsutil rm -r ${BUCKET_URL}/${FOLDER}/
+	gsutil -h "Cache-Control:public, max-age=60" cp -Z -r -a public-read ./build/static/css/* ${BUCKET_URL}/${FOLDER}/css/
+	gsutil -h "Cache-Control:public, max-age=60" cp -Z -r -a public-read ./build/static/js/* ${BUCKET_URL}/${FOLDER}/js/
+	
+	-gsutil rm -r ${BUCKET_URL}/${LATEST}/
+	gsutil -h "Cache-Control:public, max-age=60" cp -Z -r -a public-read ${BUCKET_URL}/${FOLDER}/* ${BUCKET_URL}/${LATEST}/

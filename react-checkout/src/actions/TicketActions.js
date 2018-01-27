@@ -8,12 +8,13 @@ export const fetchTickets = eventId => async dispatch => {
   const url = TICKET_PRICE_URL.replace(':eventId', eventId)
   const { json } = await apiFetch(url)
   if (json) {
-    const tickets = json.data
-    dispatch({ type: types.FETCH_TICKET_PRICE_SUCCESS, tickets })
+    dispatch({ type: types.FETCH_TICKET_PRICE_SUCCESS, tickets: json.data })
+    
     const waitlists = json.included.filter(
       ({ attributes }) =>
         attributes.key === 'waitlist_enabled' && attributes.value === 'true'
     )
+
     waitlists.map(waitlist => {
       return dispatch({
         type: types.UPDATE_TICKET_WAITLIST,
