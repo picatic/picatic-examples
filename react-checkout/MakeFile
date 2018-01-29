@@ -1,5 +1,5 @@
-VERSION = $(shell cat package.json | egrep 'version' | cut -f4 -d'"')
-BUCKET_URL = https://console.cloud.google.com/storage/browser/picatic
+VERSION = 0.1.0
+BUCKET_URL = gs://picatic
 FOLDER = $(VERSION)
 LATEST = latest
 
