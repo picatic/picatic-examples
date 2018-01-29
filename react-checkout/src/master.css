@@ -1,7 +1,12 @@
 @import url('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css');
+/* @import url('/styles/fonts'); */
 
 body {
   background: #FFFFFF;
+  font-family: 'Avenir Next', 'Helvetica Neue', Helvetica, sans-serif;
+  font-weight: 300;
+  src: url('/styles/fonts');
+  color: rgba(0,0,0,.87);
 }
 
 .card-event {
@@ -17,4 +22,8 @@ body {
   color: red;
   text-decoration: line-through;
   font-style: italic;
+}
+
+table.borderless td,table.borderless th{
+  border: none !important;
 }

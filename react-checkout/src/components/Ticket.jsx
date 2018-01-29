@@ -1,9 +1,24 @@
 import React from 'react'
 import moment from 'moment'
-
-// Material UI Components
 import TextField from 'material-ui/TextField'
 import { MenuItem } from 'material-ui/Menu'
+
+const styles = {
+  price: {
+    fontWeight: 500,
+    fontSize: 20,
+    verticalAlign: 'middle',
+  },
+  ticketHeading: {
+    borderLeft: '1px solid lightgrey',
+  },
+  ticketTitle: {
+    fontSize: 18,
+  },
+  ticketDate: {
+    color: 'rgba(0,0,0,.54)',
+  },
+}
 
 const Ticket = ({
   id,
@@ -26,54 +41,62 @@ const Ticket = ({
   const availableTickets = quantity - quantity_sold
   const maxTickets = max_quantity === 0 ? availableTickets : max_quantity
 
-  const menuItems = () => {
-    let arr = [0]
-    for (let i = 0; i < maxTickets; i++) {
-      if (min_quantity <= i && 10 > i) {
-        arr.push(i + 1)
-      }
-    }
-    return arr.map(i => (
-      <MenuItem key={i} value={i} className="test-height">
-        {i}
-      </MenuItem>
-    ))
-  }
-
   const displayPrice = Number(price) === 0 ? 'Free' : `$${price}`
+  const displayDate = getDisplayDate(start_date, end_date)
   const discountPrice = discount_price ? discount_price : ''
 
-  let displayDate
-  if (start_date === end_date) {
-    displayDate = moment(start_date).format("MMM DD, YYYY")
-  } else {
-    displayDate = `${moment(start_date).format("MMM DD")} - ${moment(end_date).format("MMM DD, YYYY")}`
-  }
-
   return (
-    <div className="d-flex align-items-center">
-      <div>
-        {name} |{' '}
+    <tr className="mb-3">
+      <th style={styles.price} scope="row">
         <span className={discount_price ? 'strike-price' : ''}>
           {displayPrice}
         </span>{' '}
         {discountPrice}
-        <br />
+      </th>
+      <td style={styles.ticketHeading}>
+        <div style={styles.ticketTitle}>{name}</div>
         <div className="text-muted">{displayDate}</div>
-      </div>
-      <TextField
-        id={id}
-        select
-        className="ml-auto"
-        value={value}
-        margin="dense"
-        onChange={ev => selectTicket(ev.target.value, id)}
-        disabled={disabled}
-      >
-        {menuItems()}
-      </TextField>
-    </div>
+      </td>
+      <td>
+        <TextField
+          id={id}
+          select
+          className="ml-auto"
+          value={value}
+          margin="dense"
+          onChange={ev => selectTicket(ev.target.value, id)}
+          disabled={disabled}
+          
+        >
+          {renderMenuItems(maxTickets, min_quantity)}
+        </TextField>
+      </td>
+    </tr>
   )
 }
 
 export default Ticket
+
+const getDisplayDate = (start_date, end_date) => {
+  if (start_date === end_date) {
+    return moment(start_date).format('MMM DD, YYYY')
+  } else {
+    return `${moment(start_date).format('MMM DD')} - ${moment(end_date).format(
+      'MMM DD, YYYY',
+    )}`
+  }
+}
+
+const renderMenuItems = (maxTickets, min_quantity) => {
+  let arr = [0]
+  for (let i = 0; i < maxTickets; i++) {
+    if (min_quantity <= i && 10 > i) {
+      arr.push(i + 1)
+    }
+  }
+  return arr.map(i => (
+    <MenuItem key={i} value={i} style={{minWidth: 36}}>
+      {i}
+    </MenuItem>
+  ))
+}
