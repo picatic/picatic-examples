@@ -17,9 +17,10 @@ const styles = {
 class EventCard extends Component {
   componentWillMount() {
     const root = document.getElementById('picatic-ticket-form')
+    const cta = root.getAttribute('cta')
     const showTitle = root.hasAttribute('showTitle')
     const showSummary = root.hasAttribute('showSummary')
-    const cta = root.getAttribute('cta')
+    const primary = root.getAttribute('primary')
     const button = cta ? cta : 'continue'
     this.setState({ showTitle, showSummary, cta: button })
   }
@@ -47,7 +48,7 @@ class EventCard extends Component {
         )}
         <TicketsContainer />
         <hr />
-        <div className="d-flex flex-row align-items-center">
+        <div className="d-flex flex-row">
           <PromoCode {...this.props} error={promoCode.error} />
           <div className="ml-auto">
             <Button
@@ -55,7 +56,8 @@ class EventCard extends Component {
               color="primary"
               disabled={!hasSelectedTickets}
               onClick={createCheckout}
-              href={`https://www.picatic.com/${event.id}`}
+              className="mt-1"
+              // href={`https://www.picatic.com/${event.id}`}
             >
               {cta}
             </Button>
