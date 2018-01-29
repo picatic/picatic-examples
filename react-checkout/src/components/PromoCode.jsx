@@ -32,17 +32,18 @@ class PromoCode extends Component {
     const { value, error } = this.state
     return (
       <form
-        className="d-flex flex-row align-items-center"
+        className="d-flex flex-row align-items-top"
         onSubmit={this.handleSubmit}
       >
         <TextField
           placeholder="Promo Code"
           value={value}
           onChange={this.handleChange}
+          className="mt-1"
           helperText={error ? 'Please try again' : ''}
           error={error}
         />
-        <IconButton type="submit" disabled={value.length === 0} color="primary">
+        <IconButton type="submit" disabled={value.length === 0 || error} color="primary">
           <ChevronRight />
         </IconButton>
       </form>
