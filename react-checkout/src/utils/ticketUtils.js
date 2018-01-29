@@ -54,3 +54,4 @@ export const getDisabledState = (ticket, waitListSelected) => {
     return false
   }
 }
+

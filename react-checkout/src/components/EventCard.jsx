@@ -5,6 +5,15 @@ import PromoCode from '../components/PromoCode'
 // Material UI
 import Button from 'material-ui/Button'
 
+const styles = {
+  eventTitle: {
+    fontFamily: '"Futura Std", "Times", sans-serif',
+  },
+  eventSummary: {
+    fontWeight: 300,
+  },
+}
+
 class EventCard extends Component {
   componentWillMount() {
     const root = document.getElementById('picatic-ticket-form')
@@ -25,21 +34,25 @@ class EventCard extends Component {
 
     const hasSelectedTickets = Object.entries(selectedTickets).reduce(
       (qty, ticket) => (qty += ticket[1]),
-      0
+      0,
     )
 
     return (
-      <section className="card-event p-4 rounded">
-        <div>
-          <h3>{showTitle ? event.attributes.title : 'Tickets'}</h3>
-          {showSummary && <h5>{event.attributes.summary}</h5>}
-          <TicketsContainer />
-        </div>
+      <section className="card-event p-5 rounded">
+        <h3 style={styles.eventTitle}>
+          {showTitle ? event.attributes.title : 'Tickets'}
+        </h3>
+        {showSummary && (
+          <h5 style={styles.eventSummary}>{event.attributes.summary}</h5>
+        )}
+        <TicketsContainer />
         <hr />
         <div className="d-flex flex-row align-items-center">
           <PromoCode {...this.props} error={promoCode.error} />
           <div className="ml-auto">
             <Button
+              raised
+              color="primary"
               disabled={!hasSelectedTickets}
               onClick={createCheckout}
               href={`https://www.picatic.com/${event.id}`}
