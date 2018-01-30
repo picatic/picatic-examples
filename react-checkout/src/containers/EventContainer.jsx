@@ -6,13 +6,28 @@ import { applyPromoCode } from '../actions/EventActions'
 
 const EventComponent = props => <EventCard {...props} />
 
-const mapStateToProps = ({ event, checkout, selectedTickets, promoCode }) => ({
+const mapStateToProps = ({
   event,
+  widget,
   checkout,
   selectedTickets,
-  promoCode
-})
+  promoCode,
+}) => {
+  
+  const hasSelectedTickets = Object.entries(selectedTickets).reduce(
+    (qty, ticket) => (qty += ticket[1]),
+    0,
+  )
+
+  return {
+    event,
+    widget,
+    checkout,
+    hasSelectedTickets,
+    promoCode,
+  }
+}
 
 export default connect(mapStateToProps, { createCheckout, applyPromoCode })(
-  EventComponent
+  EventComponent,
 )

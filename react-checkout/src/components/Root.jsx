@@ -9,33 +9,32 @@ class App extends Component {
     secondary: red,
   }
   componentWillMount() {
-    const { eventId, initEvent } = this.props
+    const { root, initEvent, initWidget } = this.props
+    const eventId = root.getAttribute('event-id')
     initEvent(eventId)
+    initWidget(root)
 
-    const root = document.getElementById('picatic-ticket-form')
-    const primary = root.getAttribute('primary')
-    const secondary = root.getAttribute('secondary')
+    const primaryAttr = root.getAttribute('primary')
+    const secondaryAttr = root.getAttribute('secondary')
 
-    if (primary) {
-      import(`material-ui/colors/${primary}`)
-        .then(module => {
-          this.setState({ primary: module.default })
-        })
+    if (primaryAttr) {
+      import(`material-ui/colors/${primaryAttr}`)
+        .then(module => this.setState({ primary: module.default }))
         .catch(err => console.log(err))
     }
 
-    if (secondary) {
-      import(`material-ui/colors/${secondary}`)
-        .then(module => {
-          this.setState({ secondary: module.default })
-        })
+    if (secondaryAttr) {
+      import(`material-ui/colors/${secondaryAttr}`)
+        .then(module => this.setState({ secondary: module.default }))
         .catch(err => console.log(err))
     }
   }
-
   render() {
     const { event } = this.props
+
     if (!event) return <div className="container">No event found.</div>
+    if (!event.attributes)
+      return <div className="container">Event Loading.</div>
 
     const { primary, secondary } = this.state
     const theme = createMuiTheme({
@@ -47,13 +46,7 @@ class App extends Component {
 
     return (
       <MuiThemeProvider theme={theme}>
-        <div className="container mt-3">
-          <div className="row justify-content-md-center">
-            <div className="col-10">
-              <EventContainer />
-            </div>
-          </div>
-        </div>
+        <EventContainer />
       </MuiThemeProvider>
     )
   }

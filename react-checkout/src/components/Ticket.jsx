@@ -8,6 +8,11 @@ const styles = {
     fontWeight: 500,
     fontSize: 20,
     verticalAlign: 'middle',
+    strike: {
+      color: '#ff4632',
+      textDecoration: 'line-through',
+      fontStyle: 'italic'
+    }
   },
   ticketHeading: {
     borderLeft: '1px solid lightgrey',
@@ -48,7 +53,7 @@ const Ticket = ({
   return (
     <tr className="mb-3">
       <th style={styles.price} scope="row">
-        <span className={discount_price ? 'strike-price' : ''}>
+        <span style={discount_price && styles.price.strike}>
           {displayPrice}
         </span>{' '}
         {discountPrice}

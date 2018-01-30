@@ -3,24 +3,10 @@
 body {
   background: #FFFFFF;
   font-family: 'Avenir Next', 'Helvetica Neue', Helvetica, sans-serif;
+  font-size: 14px;
   font-weight: 300;
   src: url('/styles/fonts');
   color: rgba(0,0,0,.87);
-}
-
-.card-event {
-  box-shadow: 0 4px 24px 0 rgba(0,0,0,.12);
-  background: #FFFFFF;
-}
-
-.test-height {
-  height: 18px !important;
-}
-
-.strike-price {
-  color: red;
-  text-decoration: line-through;
-  font-style: italic;
 }
 
 table.borderless td,table.borderless th{
