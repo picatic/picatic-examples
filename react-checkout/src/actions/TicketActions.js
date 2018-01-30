@@ -8,17 +8,20 @@ export const fetchTickets = eventId => async dispatch => {
   const url = TICKET_PRICE_URL.replace(':eventId', eventId)
   const { json } = await apiFetch(url)
   if (json) {
-    dispatch({ type: types.FETCH_TICKET_PRICE_SUCCESS, tickets: json.data })
-    
+    const tickets = json.data.filter(
+      ({ relationships }) => relationships.event_schedules,
+    )
+    dispatch({ type: types.FETCH_TICKET_PRICE_SUCCESS, tickets })
+
     const waitlists = json.included.filter(
       ({ attributes }) =>
-        attributes.key === 'waitlist_enabled' && attributes.value === 'true'
+        attributes.key === 'waitlist_enabled' && attributes.value === 'true',
     )
 
     waitlists.map(waitlist => {
       return dispatch({
         type: types.UPDATE_TICKET_WAITLIST,
-        ticket_price_id: waitlist.attributes.reference_id
+        ticket_price_id: waitlist.attributes.reference_id,
       })
     })
   }

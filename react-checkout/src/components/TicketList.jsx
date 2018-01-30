@@ -16,7 +16,7 @@ const styles = {
   },
 }
 
-class EventCard extends Component {
+class TicketList extends Component {
   render() {
     const {
       event,
@@ -46,7 +46,6 @@ class EventCard extends Component {
               disabled={!hasSelectedTickets}
               onClick={createCheckout}
               className="mt-1"
-              // href={`https://www.picatic.com/${event.id}`}
             >
               {cta}
             </Button>
@@ -55,14 +54,6 @@ class EventCard extends Component {
       </section>
     )
   }
-  // Render Picatic Anywhere
-  // componentDidMount() {
-  //   const script = document.createElement('script')
-  //   script.src = 'https://widget.picatic.com/latest/js/embed.min.js'
-  //   script.async = true
-  //   script.id = 'picatic-widget-script'
-  //   document.getElementsByTagName('body')[0].appendChild(script)
-  // }
 }
 
-export default EventCard
+export default TicketList
