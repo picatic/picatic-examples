@@ -1,10 +1,20 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import EventCard from '../components/EventCard'
+import TicketList from '../components/TicketList'
+import Anywhere from '../components/Anywhere'
 import { createCheckout } from '../actions/CheckoutActions'
 import { applyPromoCode } from '../actions/EventActions'
 
-const EventComponent = props => <EventCard {...props} />
+const EventComponent = props => {
+  const { app } = props.widget
+  if (app === 'ticket-list') {
+    return <TicketList {...props} />
+  } else if (app === 'anywhere') {
+    return <Anywhere {...props} />
+  }
+}
+
+
 
 const mapStateToProps = ({
   event,
