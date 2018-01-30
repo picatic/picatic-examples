@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-
-// Material UI
 import TextField from 'material-ui/TextField'
 import IconButton from 'material-ui/IconButton'
 import ChevronRight from 'material-ui-icons/ChevronRight'

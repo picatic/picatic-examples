@@ -5,16 +5,14 @@ import { Provider } from 'react-redux'
 import thunkMiddleware from 'redux-thunk'
 import rootReducer from './reducers'
 import RootContainer from './containers/RootContainer'
-import './master.css'
-
-const root = document.getElementById('picatic-ticket-form')
-const eventId = root.getAttribute("event-id")
+import './styles/master.css'
 
 const store = createStore(rootReducer, applyMiddleware(thunkMiddleware))
+const root = document.getElementById('picatic-widget')
 
 ReactDOM.render(
   <Provider store={store}>
-    <RootContainer eventId={eventId} />
+    <RootContainer root={root} />
   </Provider>,
   root,
 )
