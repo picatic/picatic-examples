@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import EventContainer from '../containers/EventContainer'
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles'
-import { purple, red } from 'material-ui/colors'
+import { red, purple } from 'material-ui/colors'
 
 class App extends Component {
   state = {
