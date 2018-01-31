@@ -13,7 +13,7 @@ const tickets = (state = [], action) => {
             attributes: {
               ...ticket.attributes,
               discount_price: action.discount_price,
-              ticket_discount_price: action.ticket_discount_price_id
+              ticket_discount_price_id: action.ticket_price_discount_id
             }
           }
         } else {

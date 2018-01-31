@@ -11,6 +11,17 @@ export const fetchTickets = eventId => async dispatch => {
     const tickets = json.data.filter(
       ({ relationships }) => relationships.event_schedules,
     )
+    tickets.sort((a,b) => {
+      const orderA = a.attributes.order
+      const orderB = b.attributes.order
+      if (orderA < orderB) {
+        return -1
+      } else if (orderA > orderB) {
+        return 1
+      } else {
+        return 0
+      }
+    })
     dispatch({ type: types.FETCH_TICKET_PRICE_SUCCESS, tickets })
 
     const waitlists = json.included.filter(

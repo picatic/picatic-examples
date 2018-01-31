@@ -39,7 +39,7 @@ class TicketList extends Component {
         <hr />
         <div className="d-flex flex-row">
           <PromoCode {...this.props} error={promoCode.error} />
-          <div className="ml-auto">
+          <form className="ml-auto" >
             <Button
               raised
               color="primary"
@@ -49,7 +49,7 @@ class TicketList extends Component {
             >
               {cta}
             </Button>
-          </div>
+          </form>
         </div>
       </section>
     )
