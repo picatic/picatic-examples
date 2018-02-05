@@ -5,9 +5,9 @@ const selectedTickets = (state = {}, action) => {
     case types.SELECT_TICKET_PRICE:
       return {
         ...state,
-        [action.id]: action.quantity
+        [action.id]: action.quantity,
       }
-    
+
     case types.REMOVE_TICKET_PRICE:
       return action.selectedTickets
 

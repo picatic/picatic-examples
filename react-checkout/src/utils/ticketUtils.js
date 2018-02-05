@@ -55,3 +55,16 @@ export const getDisabledState = (ticket, waitListSelected) => {
   }
 }
 
+export const sortTickets = tickets => {
+  return tickets.sort((a,b) => {
+    const orderA = a.attributes.order
+    const orderB = b.attributes.order
+    if (orderA < orderB) {
+      return -1
+    } else if (orderA > orderB) {
+      return 1
+    } else {
+      return 0
+    }
+  })
+}

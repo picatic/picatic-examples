@@ -5,9 +5,9 @@ const Tickets = ({ tickets, selectTicket }) => (
   <table className="table borderless">
     <thead>
       <tr>
-        <th scope="col" className="col-auto"></th>
-        <th scope="col" className="col"></th>
-        <th scope="col" className="col text-right"></th>
+        <th scope="col" className="col-auto" />
+        <th scope="col" className="col" />
+        <th scope="col" className="col text-right" />
       </tr>
     </thead>
     <tbody>

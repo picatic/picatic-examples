@@ -2,32 +2,21 @@ import React from 'react'
 import moment from 'moment'
 import TextField from 'material-ui/TextField'
 import { MenuItem } from 'material-ui/Menu'
+import Typography from 'material-ui/Typography'
 
 const styles = {
   price: {
-    fontWeight: 500,
-    fontSize: 20,
     verticalAlign: 'middle',
     strike: {
       color: '#ff4632',
       textDecoration: 'line-through',
-      fontStyle: 'italic'
-    }
-  },
-  ticketHeading: {
-    borderLeft: '1px solid lightgrey',
-  },
-  ticketTitle: {
-    fontSize: 18,
-  },
-  ticketDate: {
-    color: 'rgba(0,0,0,.54)',
+      fontStyle: 'italic',
+    },
   },
 }
 
 const Ticket = ({
   id,
-  index,
   name,
   start_date,
   end_date,
@@ -36,13 +25,16 @@ const Ticket = ({
   quantity,
   quantity_sold,
   status,
-  type,
   min_quantity,
   max_quantity,
   value,
   selectTicket,
   disabled,
 }) => {
+  if (status === 'closed' || status === 'hidden') {
+    return false
+  }
+
   const availableTickets = quantity - quantity_sold
   const maxTickets = max_quantity === 0 ? availableTickets : max_quantity
 
@@ -54,13 +46,15 @@ const Ticket = ({
     <tr className="mb-3">
       <th style={styles.price} scope="row">
         <span style={discount_price && styles.price.strike}>
-          {displayPrice}
+          <Typography variant="headline">{displayPrice}</Typography>
         </span>{' '}
-        {discountPrice}
+        <Typography variant="headline">{discountPrice}</Typography>
       </th>
-      <td style={styles.ticketHeading}>
-        <div style={styles.ticketTitle}>{name}</div>
-        <div className="text-muted">{displayDate}</div>
+      <td>
+        <Typography variant="title">{name}</Typography>
+          <Typography variant="body2">
+            {displayDate}
+          </Typography>
       </td>
       <td>
         <TextField
@@ -71,7 +65,6 @@ const Ticket = ({
           margin="dense"
           onChange={ev => selectTicket(ev.target.value, id)}
           disabled={disabled}
-          
         >
           {renderMenuItems(maxTickets, min_quantity)}
         </TextField>
@@ -100,7 +93,7 @@ const renderMenuItems = (maxTickets, min_quantity) => {
     }
   }
   return arr.map(i => (
-    <MenuItem key={i} value={i} style={{minWidth: 36}}>
+    <MenuItem key={i} value={i} style={{ minWidth: 36 }}>
       {i}
     </MenuItem>
   ))
