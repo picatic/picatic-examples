@@ -85,7 +85,7 @@ const checkoutSteps = [
 ]
 
 const initialState = {
-  eventId: 74701,
+  eventId: 72558,
   event: null,
   tickets: [],
   pkStripe: null,
