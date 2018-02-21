@@ -2,14 +2,7 @@ import React, { Component } from 'react'
 import TicketsContainer from '../containers/TicketsContainer'
 import PromoCode from '../components/PromoCode'
 import Button from 'material-ui/Button'
-import Typography from 'material-ui/Typography'
-
-const styles = {
-  eventCard: {
-    background: '#FFF',
-    boxShadow: '0 4px 24px 0 rgba(0,0,0,.12)',
-  },
-}
+import Text from '../jellyfish/Text'
 
 class TicketList extends Component {
   render() {
@@ -17,34 +10,60 @@ class TicketList extends Component {
       event,
       widget,
       hasSelectedTickets,
-      createCheckout,
+      postEventWebsite,
       promoCode,
     } = this.props
-    const { showTitle, showSummary, cta } = widget
+    const { showTitle, cta } = widget
+
+    const styles = {
+      eventCard: {
+        maxWidth: 736,
+      },
+      eventHeader: {
+        background: `linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.54) ${
+          event.attributes.intro_box_opacity
+        *100}%)`,
+      },
+      eventImage: {
+        background: `url(${
+          event.attributes.cover_image_uri
+          }) center center / cover no-repeat`,
+      },
+      eventTitle: {
+        color: 'white',
+      },
+    }
 
     return (
-      <section className="p-5 rounded" style={styles.eventCard}>
-        <Typography variant="display3">
+      <div className="rounded" style={styles.eventCard}>
+        <Text type="headline">
           {showTitle ? event.attributes.title : 'Tickets'}
-        </Typography>
-        {showSummary && <Typography variant="display2">{event.attributes.summary}</Typography>}
-        <TicketsContainer />
-        <hr />
-        <div className="d-flex flex-row">
-          <PromoCode {...this.props} error={promoCode.error} />
-          <form className="ml-auto">
+        </Text>
+        <div className="rounded-top" style={styles.eventImage}>
+          <div className="p3 rounded-top" style={styles.eventHeader}>
+          <Text type="display3">
+            {showTitle ? event.attributes.title : 'Tickets'}
+          </Text>
+          </div>
+        </div>
+        <div className="p3">
+          <TicketsContainer />
+          <hr />
+          <div className="flex">
+            <PromoCode {...this.props} error={promoCode.error} />
             <Button
-              raised
+              variant="raised"
               color="primary"
+              size="large"
               disabled={!hasSelectedTickets}
-              onClick={createCheckout}
-              className="mt-1"
+              onClick={postEventWebsite}
+              className="mt1"
             >
               {cta}
             </Button>
-          </form>
+          </div>
         </div>
-      </section>
+      </div>
     )
   }
 }

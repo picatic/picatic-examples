@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import TicketList from '../components/TicketList'
 import Anywhere from '../components/Anywhere'
-import { createCheckout } from '../actions/CheckoutActions'
+import { createCheckout, postEventWebsite } from '../actions/CheckoutActions'
 import { applyPromoCode } from '../actions/EventActions'
 
 const EventComponent = props => {
@@ -14,8 +14,6 @@ const EventComponent = props => {
   }
 }
 
-
-
 const mapStateToProps = ({
   event,
   widget,
@@ -23,7 +21,7 @@ const mapStateToProps = ({
   selectedTickets,
   promoCode,
 }) => {
-  
+
   const hasSelectedTickets = Object.entries(selectedTickets).reduce(
     (qty, ticket) => (qty += ticket[1]),
     0,
@@ -38,6 +36,8 @@ const mapStateToProps = ({
   }
 }
 
-export default connect(mapStateToProps, { createCheckout, applyPromoCode })(
-  EventComponent,
-)
+export default connect(mapStateToProps, {
+  createCheckout,
+  postEventWebsite,
+  applyPromoCode,
+})(EventComponent)
