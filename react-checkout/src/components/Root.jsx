@@ -32,9 +32,8 @@ class App extends Component {
   render() {
     const { event } = this.props
 
-    if (!event) return <div className="container">No event found.</div>
-    if (!event.attributes)
-      return <div className="container">Event Loading.</div>
+    if (!event) return <div>No event found.</div>
+    if (!event.attributes) return <div>Event Loading.</div>
 
     const { primary, secondary } = this.state
     const theme = createMuiTheme({
@@ -55,9 +54,8 @@ class App extends Component {
         display1: {},
         headline: {},
         title: {
-          fontSize: "1.2rem",
+          fontSize: '1.2rem',
           fontWeight: 500,
-
         },
         subheading: {},
         body2: {
@@ -70,6 +68,13 @@ class App extends Component {
       palette: {
         primary,
         secondary,
+      },
+      overrides: {
+        MuiButton: {
+          sizeLarge: {
+              width: 248,
+          },
+        },
       },
     })
 

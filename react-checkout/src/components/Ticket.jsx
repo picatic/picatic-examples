@@ -43,7 +43,7 @@ const Ticket = ({
   const discountPrice = discount_price ? discount_price : ''
 
   return (
-    <tr className="mb-3">
+    <tr className="mb3">
       <th style={styles.price} scope="row">
         <span style={discount_price && styles.price.strike}>
           <Typography variant="headline">{displayPrice}</Typography>

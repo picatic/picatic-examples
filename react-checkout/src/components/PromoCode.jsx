@@ -7,7 +7,7 @@ class PromoCode extends Component {
   state = {
     value: '',
     error: false,
-    submitted: false
+    submitted: false,
   }
   handleChange = ev => {
     this.setState({ value: ev.target.value, error: false })
@@ -17,7 +17,7 @@ class PromoCode extends Component {
     this.setState({ submitted: true })
     this.props.applyPromoCode(this.state.value)
   }
-  componentWillUpdate(nextProps, nextState) {
+  componentWillUpdate(nextProps) {
     if (this.state.submitted) {
       if (nextProps.error) {
         this.setState({ submitted: false, error: true })
@@ -29,19 +29,21 @@ class PromoCode extends Component {
   render() {
     const { value, error } = this.state
     return (
-      <form
-        className="d-flex flex-row align-items-top"
-        onSubmit={this.handleSubmit}
-      >
-        <TextField
-          placeholder="Promo Code"
-          value={value}
-          onChange={this.handleChange}
-          className="mt-1"
-          helperText={error ? 'Please try again' : ''}
-          error={error}
-        />
-        <IconButton type="submit" disabled={value.length === 0 || error} color="primary">
+      <form className="flex justify-between" onSubmit={this.handleSubmit}>
+        <div className="mt1">
+          <TextField
+            placeholder="Promo Code"
+            value={value}
+            onChange={this.handleChange}
+            helperText={error ? 'Please try again' : ''}
+            error={error}
+          />
+        </div>
+        <IconButton
+          type="submit"
+          disabled={value.length === 0 || error}
+          color="primary"
+        >
           <ChevronRight />
         </IconButton>
       </form>

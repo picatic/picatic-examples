@@ -18,12 +18,23 @@ export const updateCheckoutTickets = () => (dispatch, getState) => {
 }
 
 export const createCheckout = () => async (dispatch, getState) => {
-  const { event, tickets, selectedTickets, checkout } = getState()
+  const { checkout } = getState()
+
+  const body = JSON.stringify(checkout)
+
+  const { json } = await apiFetch(CREATE_CHECKOUT_URL, 'POST', body)
+
+  if (json) {
+    console.log('Checkout object: ', json)
+  }
+}
+
+export const postEventWebsite = () => (dispatch, getState) => {
+  const { event, tickets, selectedTickets } = getState()
 
   const form = document.createElement('form')
   form.method = 'POST'
   form.action = `https://www.picatic.com/${event.id}/checkout`
-  // form.target = "_parent"
 
   const inputEvent = document.createElement('input')
   inputEvent.name = 'data[Event][id]'
@@ -44,7 +55,9 @@ export const createCheckout = () => async (dispatch, getState) => {
     inputQty.value = selectedTickets[ticket.id] ? selectedTickets[ticket.id] : 0
 
     inputDiscount.name = `data[TicketPrice][${i}][ticket_price_discount_id]`
-    inputDiscount.value = ticket.attributes.ticket_discount_price_id ? ticket.attributes.ticket_discount_price_id : ''
+    inputDiscount.value = ticket.attributes.ticket_discount_price_id
+      ? ticket.attributes.ticket_discount_price_id
+      : ''
 
     form.appendChild(inputId)
     form.appendChild(inputQty)
@@ -54,32 +67,4 @@ export const createCheckout = () => async (dispatch, getState) => {
   document.body.appendChild(form)
   window.open('', '_parent', 'location=yes,width=400,height=400')
   form.submit()
-
-  //   `https://www.picatic.com/${event.id}/checkout`,
-  //   'TicketPurchaseWidgetForm',
-  //   `
-  // data[Event][id]:117517,
-  // data[TicketPrice][0][id]:111072,
-  // data[TicketPrice][0][quantity]:0,
-  // data[TicketPrice][0][ticket_price_discount_id]:,
-  // data[TicketPrice][1][id]:110953,
-  // data[TicketPrice][1][quantity]:0,
-  // data[TicketPrice][1][ticket_price_discount_id]:,
-  // data[TicketPrice][2][id]:110954,
-  // data[TicketPrice][2][quantity]:1,
-  // data[TicketPrice][2][ticket_price_discount_id]:,
-  // data[TicketPrice][3][id]:131057,
-  // data[TicketPrice][3][quantity]:0,
-  // data[TicketPrice][3][ticket_price_discount_id]:
-  // `,
-  // )
-
-  // const url = CREATE_CHECKOUT_URL
-  // const body = JSON.stringify({ data: checkout })
-  // const { json } = await apiFetch(url, 'POST', body)
-
-  // if (json) {
-  //   console.log('Checkout Object: ', json.data)
-  //   dispatch({ type: types.FETCH_CREATE_CHECKOUT_SUCCESS, checkout: json.data })
-  // }
 }
