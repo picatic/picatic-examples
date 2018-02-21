@@ -36,14 +36,15 @@ class TicketList extends Component {
 
     return (
       <div className="rounded" style={styles.eventCard}>
-        <Text type="headline">
-          {showTitle ? event.attributes.title : 'Tickets'}
-        </Text>
+
         <div className="rounded-top" style={styles.eventImage}>
           <div className="p3 rounded-top" style={styles.eventHeader}>
-          <Text type="display3">
-            {showTitle ? event.attributes.title : 'Tickets'}
-          </Text>
+            <Text type="headline">
+              Bloom Festival & Conference 2017
+            </Text>
+            <Text type="subheading">
+              Oct 5 - 8 2017 Edmonton, Canada
+            </Text>
           </div>
         </div>
         <div className="p3">

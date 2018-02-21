@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
+
 const styles = {
   background: '#FFF',
   boxShadow: '0 4px 24px 0 rgba(0,0,0,.12)',
