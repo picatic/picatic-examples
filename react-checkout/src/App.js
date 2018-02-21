@@ -85,7 +85,7 @@ const checkoutSteps = [
 ]
 
 const initialState = {
-  eventId: 72558,
+  eventId: 75179,
   event: null,
   tickets: [],
   pkStripe: null,
@@ -286,7 +286,7 @@ class App extends Component {
       phase
     } = this.state
 
-    if (event === null)
+    if (!event)
       return <div className="lead mt-5 text-center">Event not found.</div>
 
     const cardBackground = {
