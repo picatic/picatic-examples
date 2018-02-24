@@ -13,7 +13,7 @@ class Text extends PureComponent {
     className: PropTypes.string,
     classes: PropTypes.object.isRequired,
     component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
-    color: PropTypes.oneOf(['inherit', 'primary', 'textSecondary', 'secondary', 'error', 'default']),
+    color: PropTypes.oneOf(['inherit', 'primary', 'secondary', 'error', 'default', 'dark', 'muted', 'extraMuted', 'white', 'whiteMuted', 'whiteExtraMuted']),
     gutterBottom: PropTypes.bool,
     noWrap: PropTypes.bool,
     paragraph: PropTypes.bool,

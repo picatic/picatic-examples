@@ -2,7 +2,7 @@ import React from 'react'
 import moment from 'moment'
 import TextField from 'material-ui/TextField'
 import { MenuItem } from 'material-ui/Menu'
-import Typography from 'material-ui/Typography'
+import Text from '../jellyfish/Text'
 
 const styles = {
   price: {
@@ -43,20 +43,8 @@ const Ticket = ({
   const discountPrice = discount_price ? discount_price : ''
 
   return (
-    <tr className="mb3">
-      <th style={styles.price} scope="row">
-        <span style={discount_price && styles.price.strike}>
-          <Typography variant="headline">{displayPrice}</Typography>
-        </span>{' '}
-        <Typography variant="headline">{discountPrice}</Typography>
-      </th>
-      <td>
-        <Typography variant="title">{name}</Typography>
-          <Typography variant="body2">
-            {displayDate}
-          </Typography>
-      </td>
-      <td>
+    <div className="flex items-center">
+      <div className="col pr2">
         <TextField
           id={id}
           select
@@ -68,8 +56,16 @@ const Ticket = ({
         >
           {renderMenuItems(maxTickets, min_quantity)}
         </TextField>
-      </td>
-    </tr>
+      </div>
+      <div className="col flex-auto">
+        <Text type="title">{name}</Text>
+        <Text type="subheading" color="muted">{displayDate}</Text>
+      </div>
+      <div className="col">
+        <Text type="title">{displayPrice}</Text>
+        <Text>{discountPrice}</Text>
+      </div>
+    </div>
   )
 }
 
