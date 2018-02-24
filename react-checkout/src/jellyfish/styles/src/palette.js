@@ -3,10 +3,10 @@ import colors from '../../colors'
 const types = {
   light: {
     text: {
-      primary: 'rgba(0, 0, 0, 0.87)',
-      secondary: 'rgba(0, 0, 0, 0.54)',
-      disabled: 'rgba(0, 0, 0, 0.38)',
-      hint: 'rgba(0, 0, 0, 0.38)',
+      default: 'rgba(0, 0, 0, 0.87)',
+      dark: 'rgba(0, 0, 0, 0.54)',
+      muted: 'rgba(0, 0, 0, 0.38)',
+      extraMuted: 'rgba(0, 0, 0, 0.38)',
     },
     divider: 'rgba(0, 0, 0, 0.12)',
     background: {
@@ -23,11 +23,10 @@ const types = {
   },
   dark: {
     text: {
-      primary: colors.white,
-      secondary: 'rgba(255, 255, 255, 0.7)',
-      disabled: 'rgba(255, 255, 255, 0.5)',
-      hint: 'rgba(255, 255, 255, 0.5)',
-      icon: 'rgba(255, 255, 255, 0.5)',
+      default: colors.white,
+      dark: 'rgba(255, 255, 255, 0.7)',
+      muted: 'rgba(255, 255, 255, 0.5)',
+      extraMuted: 'rgba(255, 255, 255, 0.5)',
     },
     divider: 'rgba(255, 255, 255, 0.12)',
     background: {
@@ -59,6 +58,11 @@ const palette = {
     light: colors.red[300],
     main: colors.red[500],
     dark: colors.red[700],
+  },
+  white: {
+    default: colors.white,
+    muted: 'rgba(255,255,255,0.845)',
+    extraMuted: 'rgba(255,255,255,0.7)',
   },
   contrastThreshold: 3,
   tonalOffset: 0.2,

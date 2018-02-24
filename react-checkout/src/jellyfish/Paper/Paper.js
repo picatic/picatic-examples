@@ -1,47 +1,61 @@
-import React from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
+import { theme }from '../styles'
+import injectSheet from 'react-jss'
 
+const shadows = {}
+theme.shadows.forEach((shadow, index) => {
+  shadows[`shadow${index}`] = {
+    boxShadow: shadow
+  }
+})
 
 const styles = {
-  background: '#FFF',
-  boxShadow: '0 4px 24px 0 rgba(0,0,0,.12)',
+  root: {
+    backgroundColor: theme.palette.background.paper
+  },
+  rounded: {
+    borderRadius: 4,
+  },
+  ...shadows,
 }
 
-const Paper = props => {
-  const {
-    classes,
-    className: classNameProp,
-    component: Component,
-    square,
-    ...other
-  } = props
+class Paper extends PureComponent {
+  static propTypes = {
+    children: PropTypes.node,
+    classes: PropTypes.object.isRequired,
+    className: PropTypes.string,
+    component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+    elevation: PropTypes.number,
+    square: PropTypes.bool
+  }
+  static defaultProps = {
+    component: 'div',
+    elevation: 2,
+    square: false,
+  }
+  render() {
+    const {
+      classes,
+      className: classNameProp,
+      component: Component,
+      elevation,
+      square,
+      ...other
+    } = this.props
 
-  const className = classNames(
-    classes.root,
-    classes[`shadow${elevation}`],
-    {
-      [classes.rounded]: !square,
-    },
-    classNameProp,
-  )
+    const className = classNames(
+      classes.root,
+      classes[`shadow${elevation}`],
+      {
+        [classes.rounded]: !square,
+      },
+      classNameProp,
+    )
 
-  return <Component className={className} {...other} />
+    return <Component className={className} {...other} />
+  }
 }
 
-Paper.propTypes = {
-  children: PropTypes.node,
-  classes: PropTypes.object.isRequired,
-  className: PropTypes.string,
-  component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
-  elevation: PropTypes.number,
-  square: PropTypes.bool
-}
-
-Paper.defaultProps = {
-  component: 'div',
-  elevation: 2,
-  square: false,
-}
-
-export default Paper
+export default injectSheet(styles)(Paper)

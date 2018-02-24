@@ -3,6 +3,7 @@ import TicketsContainer from '../containers/TicketsContainer'
 import PromoCode from '../components/PromoCode'
 import Button from 'material-ui/Button'
 import Text from '../jellyfish/Text'
+import Card, { CardMedia, CardContent, CardAction } from '../jellyfish/Card'
 
 class TicketList extends Component {
   render() {
@@ -16,18 +17,10 @@ class TicketList extends Component {
     const { showTitle, cta } = widget
 
     const styles = {
-      eventCard: {
-        maxWidth: 736,
-      },
-      eventHeader: {
-        background: `linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.54) ${
-          event.attributes.intro_box_opacity
-        *100}%)`,
-      },
       eventImage: {
         background: `url(${
           event.attributes.cover_image_uri
-          }) center center / cover no-repeat`,
+        }) center center / cover no-repeat`,
       },
       eventTitle: {
         color: 'white',
@@ -35,36 +28,36 @@ class TicketList extends Component {
     }
 
     return (
-      <div className="rounded" style={styles.eventCard}>
+      <Card className="max-width-3 mx-auto">
+        <CardMedia image={event.attributes.cover_image_uri}>
+          <Text type="title" color="white" style={{ paddingBottom: '4px'}}>
+            Bloom Festival & Conference 2017
+          </Text>
+          <Text color="whiteExtraMuted">
+            Oct 5 - 8 2017 Edmonton, Canada
+          </Text>
+        </CardMedia>
 
-        <div className="rounded-top" style={styles.eventImage}>
-          <div className="p3 rounded-top" style={styles.eventHeader}>
-            <Text type="headline">
-              Bloom Festival & Conference 2017
-            </Text>
-            <Text type="subheading">
-              Oct 5 - 8 2017 Edmonton, Canada
-            </Text>
-          </div>
-        </div>
-        <div className="p3">
+        <CardContent>Hello World</CardContent>
+
+        <CardContent>
           <TicketsContainer />
-          <hr />
-          <div className="flex">
-            <PromoCode {...this.props} error={promoCode.error} />
-            <Button
-              variant="raised"
-              color="primary"
-              size="large"
-              disabled={!hasSelectedTickets}
-              onClick={postEventWebsite}
-              className="mt1"
-            >
-              {cta}
-            </Button>
-          </div>
-        </div>
-      </div>
+        </CardContent>
+
+        <CardAction align="end">
+          {/*<PromoCode {...this.props} error={promoCode.error} />*/}
+          <Button
+            variant="raised"
+            color="primary"
+            size="large"
+            disabled={!hasSelectedTickets}
+            onClick={postEventWebsite}
+            className="mt1"
+          >
+            {cta}
+          </Button>
+        </CardAction>
+      </Card>
     )
   }
 }

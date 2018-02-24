@@ -6,6 +6,7 @@ const fontSize = 14 // px
 const fontWeightLight = 300
 const fontWeightRegular = 400
 const fontWeightMedium = 500
+const fontWeightBold = 600
 const htmlFontSize = 16
 
 function pxToRem(value) {
@@ -16,6 +17,7 @@ export default {
   root: {
     display: 'block',
     margin: 0,
+    color: theme.palette.text.default
   },
   display4: {
     fontSize: pxToRem(112),
@@ -50,8 +52,8 @@ export default {
     fontFamily,
   },
   title: {
-    fontSize: pxToRem(24),
-    fontWeight: fontWeightMedium,
+    fontSize: pxToRem(20),
+    fontWeight: fontWeightBold,
     fontFamily,
   },
   subheading: {
@@ -98,15 +100,30 @@ export default {
     color: 'inherit'
   },
   colorPrimary: {
-    color: theme.palette.primary
+    color: theme.palette.primary.main
   },
   colorSecondary: {
-    color: theme.palette.secondary
-  },
-  colorTextSecondary: {
-    color: theme.palette.text.secondary
+    color: theme.palette.secondary.main
   },
   colorError: {
     color: theme.palette.error.main
+  },
+  colorDark: {
+    color: theme.palette.text.dark
+  },
+  colorMuted: {
+    color: theme.palette.text.muted
+  },
+  colorExtraMuted: {
+    color: theme.palette.text.extraMuted
+  },
+  colorWhite: {
+    color: theme.palette.white.default
+  },
+  colorWhiteMuted: {
+    color: theme.palette.white.muted
+  },
+  colorWhiteExtraMuted: {
+    color: theme.palette.white.extraMuted
   }
 }
