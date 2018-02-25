@@ -28,7 +28,10 @@ class TicketList extends Component {
     }
 
     return (
-      <Card className="max-width-3 mx-auto" elevation={4}>
+      <Card
+        className="max-width-3 mx-auto"
+        style={{ boxShadow: 'rgba(0, 0, 0, 0.2) 0px 2px 10px 0px' }}
+      >
         <CardMedia image={event.attributes.cover_image_uri}>
           <Text type="title" color="white" style={{ paddingBottom: '4px' }}>
             Bloom Festival & Conference 2017
