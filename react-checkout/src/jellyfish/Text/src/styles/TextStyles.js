@@ -17,7 +17,7 @@ export default {
   root: {
     display: 'block',
     margin: 0,
-    color: theme.palette.text.default
+    color: theme.palette.text.default,
   },
   display4: {
     fontSize: pxToRem(112),
@@ -58,11 +58,12 @@ export default {
   },
   subheading: {
     fontSize: pxToRem(16),
-    fontWeight: fontWeightMedium,
+    fontWeight: fontWeightBold,
     fontFamily,
+    lineHeight: pxToRem(24),
   },
   body2: {
-    fontSize: pxToRem(14),
+    fontSize: pxToRem(12),
     fontWeight: fontWeightMedium,
     fontFamily,
   },
@@ -70,6 +71,7 @@ export default {
     fontSize: pxToRem(14),
     fontWeight: fontWeightRegular,
     fontFamily,
+    lineHeight: pxToRem(19),
   },
   caption: {},
   button: {},
@@ -91,39 +93,39 @@ export default {
     whiteSpace: 'nowrap',
   },
   gutterBottom: {
-    marginBottom: '0.35em'
+    marginBottom: '0.35em',
   },
   paragraph: {
-    marginBottom: theme.spacing.unit * 2
+    marginBottom: theme.spacing.unit * 2,
   },
   colorInherit: {
-    color: 'inherit'
+    color: 'inherit',
   },
   colorPrimary: {
-    color: theme.palette.primary.main
+    color: theme.palette.primary.main,
   },
   colorSecondary: {
-    color: theme.palette.secondary.main
+    color: theme.palette.secondary.main,
   },
   colorError: {
-    color: theme.palette.error.main
+    color: theme.palette.error.main,
   },
   colorDark: {
-    color: theme.palette.text.dark
+    color: theme.palette.text.dark,
   },
   colorMuted: {
-    color: theme.palette.text.muted
+    color: theme.palette.text.muted,
   },
   colorExtraMuted: {
-    color: theme.palette.text.extraMuted
+    color: theme.palette.text.extraMuted,
   },
   colorWhite: {
-    color: theme.palette.white.default
+    color: theme.palette.white.default,
   },
   colorWhiteMuted: {
-    color: theme.palette.white.muted
+    color: theme.palette.white.muted,
   },
   colorWhiteExtraMuted: {
-    color: theme.palette.white.extraMuted
-  }
+    color: theme.palette.white.extraMuted,
+  },
 }

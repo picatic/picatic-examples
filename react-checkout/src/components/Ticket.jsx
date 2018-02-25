@@ -58,11 +58,11 @@ const Ticket = ({
         </TextField>
       </div>
       <div className="col flex-auto">
-        <Text type="title">{name}</Text>
-        <Text type="subheading" color="muted">{displayDate}</Text>
+        <Text type="subheading">{name}</Text>
+        <Text color="muted">All Dates - VIP Meet & Greet, Reserved Seating</Text>
       </div>
       <div className="col">
-        <Text type="title">{displayPrice}</Text>
+        <Text type="subheading">{displayPrice}</Text>
         <Text>{discountPrice}</Text>
       </div>
     </div>
