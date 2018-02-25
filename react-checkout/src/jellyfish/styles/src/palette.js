@@ -5,7 +5,7 @@ const types = {
     text: {
       default: 'rgba(0, 0, 0, 0.87)',
       dark: 'rgba(0, 0, 0, 0.54)',
-      muted: 'rgba(0, 0, 0, 0.38)',
+      muted: 'rgba(0, 0, 0, 0.54)',
       extraMuted: 'rgba(0, 0, 0, 0.38)',
     },
     divider: 'rgba(0, 0, 0, 0.12)',
@@ -40,7 +40,7 @@ const types = {
       disabled: 'rgba(255, 255, 255, 0.3)',
       disabledBackground: 'rgba(255, 255, 255, 0.12)',
     },
-  }
+  },
 }
 
 const palette = {
@@ -51,7 +51,7 @@ const palette = {
   },
   secondary: {
     light: colors.green.A200,
-    main: colors.green.A400,
+    main: '#34cb7b',
     dark: colors.green.A700,
   },
   error: {
@@ -66,7 +66,7 @@ const palette = {
   },
   contrastThreshold: 3,
   tonalOffset: 0.2,
-  ...types['light']
+  ...types['light'],
 }
 
 export default palette
