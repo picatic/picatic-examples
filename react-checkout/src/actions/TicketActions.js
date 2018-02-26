@@ -1,9 +1,8 @@
 import * as types from '../constants/ActionTypes'
+import { TICKET_PRICE_URL } from '../constants/ApiConstants'
 import { apiFetch } from '../utils/apiUtils'
 import { sortTickets } from '../utils/ticketUtils'
 import { updateCheckoutTickets } from '../actions/CheckoutActions'
-
-import { TICKET_PRICE_URL } from '../constants/ApiConstants'
 
 export const fetchTickets = eventId => async dispatch => {
   const url = TICKET_PRICE_URL.replace(':eventId', eventId)
@@ -14,6 +13,9 @@ export const fetchTickets = eventId => async dispatch => {
     )
     tickets = sortTickets(tickets)
 
+    const dates = json.included.filter(({ type }) => type === 'event_schedule')
+
+    dispatch({ type: types.FETCH_DATES_SUCCESS, payload: dates })
     dispatch({ type: types.FETCH_TICKET_PRICE_SUCCESS, tickets })
 
     const waitlists = json.included.filter(
@@ -30,8 +32,14 @@ export const fetchTickets = eventId => async dispatch => {
   }
 }
 
-export const selectTicket = (value, id) => (dispatch) => {
-  dispatch({ type: types.SELECT_TICKET_PRICE, id, quantity: Number(value) })
+export const selectTicket = (value, ticket) => dispatch => {
+  const { start_date, end_date, id } = ticket
+  const payload = {
+    start_date,
+    end_date,
+    quantity: Number(value),
+    id,
+  }
+  dispatch({ type: types.SELECT_TICKET_PRICE, payload })
   dispatch(updateCheckoutTickets())
 }
-

@@ -6,6 +6,8 @@ import widget from './widget'
 import tickets from './tickets'
 import checkout from './checkout'
 import promoCode from './promoCode'
+import selectedDay from './selectedDay'
+import eventSchedules from './eventSchedules'
 import selectedTickets from './selectedTickets'
 
 const rootReducer = combineReducers({
@@ -14,6 +16,8 @@ const rootReducer = combineReducers({
   tickets,
   checkout,
   promoCode,
+  selectedDay,
+  eventSchedules,
   selectedTickets,
 })
 
