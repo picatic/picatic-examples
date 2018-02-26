@@ -22,6 +22,7 @@ const styles = {
     minHeight: 36,
     fontWeight: 600,
     padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
+    position: 'relative',
     verticalAlign: 'middle',
     textDecoration: 'none',
     transition: 'box-shadow 80ms ease-in-out',
@@ -41,9 +42,14 @@ const styles = {
   outline: {
     border: '1px solid rgba(0,0,0,.26)',
     color: 'rgba(0,0,0,.38)',
+    fontSize: '12px',
     minHeight: '48px',
     minWidth: '110px',
     [activeState]: {
+      border: '1px solid #2196f3',
+      color: '#2196f3',
+    },
+    [hoverState]: {
       border: '1px solid #2196f3',
       color: '#2196f3',
     },
@@ -65,13 +71,36 @@ const styles = {
     fontSize: pxToRem(14 - 1),
   },
   sizeLarge: {
-    padding: `${theme.spacing.unit}px ${theme.spacing.unit * 10}px`,
-    minWidth: theme.spacing.unit * 14,
+    width: theme.spacing.unit * 30,
     minHeight: 40,
     fontSize: pxToRem(14),
   },
   fullWidth: {
     width: '100%',
+  },
+  badge: {
+    borderRadius: '50%',
+    color: 'rgba(255,255,255,.7)',
+    fontSize: 11,
+    fontWeight: 600,
+    height: 16,
+    minWidth: 16,
+    lineHeight: '17px',
+    textAlign: 'center',
+    verticalAlign: 'baseline',
+    whiteSpace: 'nowrap',
+  },
+  badgeOutline: {
+    backgroundColor: '#2196f3',
+    display: 'block',
+    position: 'absolute',
+    top: '-8px',
+    right: '-8px',
+  },
+  badgeFill: {
+    backgroundColor: 'rgba(0,0,0,.26)',
+    display: 'inline-block',
+    marginLeft: '8px',
   },
 }
 
@@ -88,6 +117,7 @@ class Button extends PureComponent {
     size: PropTypes.oneOf(['small', 'medium', 'large']),
     type: PropTypes.oneOf(['fill', 'outline']),
     isActive: PropTypes.bool,
+    badge: PropTypes.number,
   }
   static defaultProps = {
     color: 'default',
@@ -97,6 +127,7 @@ class Button extends PureComponent {
     component: 'button',
     type: 'fill',
     isActive: false,
+    badge: 0,
   }
   render() {
     const {
@@ -110,6 +141,7 @@ class Button extends PureComponent {
       size,
       type,
       isActive,
+      badge,
       ...other
     } = this.props
 
@@ -130,6 +162,11 @@ class Button extends PureComponent {
       classNameProp,
     )
 
+    const classNameBadge = classNames(classes.badge, {
+      [classes.badgeOutline]: outline,
+      [classes.badgeFill]: fill,
+    })
+
     const children = fill ? childrenProp.toUpperCase() : childrenProp
 
     return (
@@ -139,6 +176,7 @@ class Button extends PureComponent {
         {...other}
       >
         <span>{children}</span>
+        {badge > 0 && <span className={classNameBadge}>{badge}</span>}
       </Component>
     )
   }

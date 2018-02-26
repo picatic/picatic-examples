@@ -3,8 +3,23 @@ import moment from 'moment'
 import TextField from 'material-ui/TextField'
 import { MenuItem } from 'material-ui/Menu'
 import Text from '../jellyfish/Text'
+import injectSheet from 'react-jss'
+import classNames from 'classnames'
+import { getDayOfMonth, getDayOfWeek, getMonth } from '../utils/dateUtils'
 
 const styles = {
+  root: {
+    borderBottom: '1px solid rgba(0,0,0,0.12)',
+    paddingBottom: '16px',
+    paddingTop: '16px',
+    '&:first-child': {
+      paddingTop: 0,
+    },
+    '&:last-child': {
+      paddingBottom: 0,
+      borderBottom: 'none',
+    },
+  },
   price: {
     verticalAlign: 'middle',
     strike: {
@@ -15,25 +30,25 @@ const styles = {
   },
 }
 
-const Ticket = ({
-  id,
-  name,
-  start_date,
-  end_date,
-  price,
-  discount_price,
-  quantity,
-  quantity_sold,
-  status,
-  min_quantity,
-  max_quantity,
-  value,
-  selectTicket,
-  disabled,
-}) => {
-  if (status === 'closed' || status === 'hidden') {
-    return false
-  }
+const Ticket = props => {
+  const {
+    classes,
+    id,
+    name,
+    start_date,
+    end_date,
+    price,
+    discount_price,
+    quantity,
+    quantity_sold,
+    min_quantity,
+    max_quantity,
+    value,
+    selectTicket,
+    selectedDay,
+    disabled,
+    description,
+  } = props
 
   const availableTickets = quantity - quantity_sold
   const maxTickets = max_quantity === 0 ? availableTickets : max_quantity
@@ -42,8 +57,13 @@ const Ticket = ({
   const displayDate = getDisplayDate(start_date, end_date)
   const discountPrice = discount_price ? discount_price : ''
 
+  const month = getMonth(start_date)
+  const startDayOfMonth = getDayOfMonth(start_date)
+  const endDayOfMonth = getDayOfMonth(end_date)
+
+  const className = classNames('flex items-center', classes.root)
   return (
-    <div className="flex items-center">
+    <div className={className}>
       <div className="col pr2">
         <TextField
           id={id}
@@ -51,7 +71,7 @@ const Ticket = ({
           className="ml-auto"
           value={value}
           margin="dense"
-          onChange={ev => selectTicket(ev.target.value, id)}
+          onChange={ev => selectTicket(ev.target.value, props)}
           disabled={disabled}
         >
           {renderMenuItems(maxTickets, min_quantity)}
@@ -59,7 +79,9 @@ const Ticket = ({
       </div>
       <div className="col flex-auto">
         <Text type="subheading">{name}</Text>
-        <Text color="muted">All Dates - VIP Meet & Greet, Reserved Seating</Text>
+        <Text color="muted">
+          {month} {startDayOfMonth} - {endDayOfMonth}
+        </Text>
       </div>
       <div className="col">
         <Text type="subheading">{displayPrice}</Text>
@@ -69,7 +91,7 @@ const Ticket = ({
   )
 }
 
-export default Ticket
+export default injectSheet(styles)(Ticket)
 
 const getDisplayDate = (start_date, end_date) => {
   if (start_date === end_date) {
