@@ -99,7 +99,7 @@ class TicketList extends Component {
           <Button
             type="fill"
             color="secondary"
-            size="large"
+            width="large"
             disabled={!hasSelectedTickets}
             onClick={postEventWebsite}
             badge={checkoutTotalQty}
