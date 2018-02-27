@@ -36,6 +36,7 @@ const Ticket = props => {
     name,
     start_date,
     end_date,
+    allDates,
     price,
     discount_price,
     quantity,
@@ -79,7 +80,14 @@ const Ticket = props => {
       <div className="col flex-auto">
         <Text type="subheading">{name}</Text>
         <Text color="muted">
-          {month} {startDayOfMonth} {endDayLabel} {description}
+          {allDates ? (
+            'All Dates'
+          ) : (
+            <span>
+              {month} {startDayOfMonth} {endDayLabel}
+            </span>
+          )}{' '}
+          {description}
         </Text>
       </div>
       <div className="col">

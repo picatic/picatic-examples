@@ -26,17 +26,25 @@ class TicketList extends Component {
     const { showTitle, cta } = widget
 
     const { title } = event.attributes
+    const { showHeaderImage, showShadow } = widget
+
+    const boxShadow = showShadow
+      ? 'rgba(0, 0, 0, 0.2) 0px 2px 10px 0px'
+      : 'none'
 
     return (
-      <Card
-        className="max-width-3 mx-auto"
-        style={{ boxShadow: 'rgba(0, 0, 0, 0.2) 0px 2px 10px 0px' }}
-      >
-        <CardMedia image={event.attributes.cover_image_uri}>
-          <Text type="title" color="white" style={{ paddingBottom: '4px' }}>
+      <Card className="max-width-3 mx-auto" style={{ boxShadow }}>
+        <CardMedia image={showHeaderImage && event.attributes.cover_image_uri}>
+          <Text
+            type="title"
+            color={showHeaderImage ? 'white' : 'default'}
+            style={{ paddingBottom: '4px' }}
+          >
             {title}
           </Text>
-          <Text color="whiteExtraMuted">Oct 5 - 8 2017 Edmonton, Canada</Text>
+          <Text color={showHeaderImage ? 'whiteExtraMuted' : 'default'}>
+            Oct 5 - 8, 2017 • Edmonton, Canada
+          </Text>
         </CardMedia>
 
         <CardContent>

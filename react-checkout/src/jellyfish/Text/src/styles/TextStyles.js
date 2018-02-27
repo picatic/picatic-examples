@@ -2,6 +2,7 @@ import FontFamilies from './FontFamilies'
 import { theme } from '../../../styles'
 
 const fontFamily = `'Avenir Next W01',sans-serif`
+const futura = 'Futura Std'
 const fontSize = 14 // px
 const fontWeightLight = 300
 const fontWeightRegular = 400
@@ -18,6 +19,10 @@ export default {
     display: 'block',
     margin: 0,
     color: theme.palette.text.default,
+  },
+  display5: {
+    fontFamily: futura,
+    fontWeight: fontWeightBold,
   },
   display4: {
     fontSize: pxToRem(112),

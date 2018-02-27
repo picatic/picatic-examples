@@ -5,6 +5,7 @@ const initialState = {
   cta: 'Buy Now',
   showTitle: false,
   showSummary: false,
+  showHeaderImage: false,
 }
 
 const widget = (state = initialState, action) => {

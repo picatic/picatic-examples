@@ -6,5 +6,15 @@ export const initWidget = root => dispatch => {
   const showSummary = root.hasAttribute('showSummary')
   const ctaAttr = root.getAttribute('cta')
   const cta = ctaAttr ? ctaAttr : 'continue'
-  dispatch({ type: types.UPDATE_WIDGET, app, showTitle, showSummary, cta })
+  const showHeaderImage = root.hasAttribute('showHeaderImage')
+  const showShadow = root.hasAttribute('showShadow')
+  dispatch({
+    type: types.UPDATE_WIDGET,
+    app,
+    showTitle,
+    showSummary,
+    showHeaderImage,
+    showShadow,
+    cta,
+  })
 }
