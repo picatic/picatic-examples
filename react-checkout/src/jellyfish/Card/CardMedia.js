@@ -12,10 +12,14 @@ const styles = {
     borderTopLeftRadius: 4,
     borderTopRightRadius: 4,
     padding: theme.spacing.unit * 3,
-    paddingTop: theme.spacing.unit * 9,
+    paddingBottom: theme.spacing.unit,
   },
   rootMedia: {
     width: '100%',
+  },
+  imageSpacing: {
+    paddingTop: theme.spacing.unit * 9,
+    paddingBottom: theme.spacing.unit * 3,
   },
 }
 
@@ -49,7 +53,8 @@ class CardMedia extends PureComponent {
 
     const isMediaComponent = MEDIA_COMPONENTS.indexOf(Component) !== -1
 
-    const linearGradient = `linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.54) ${opacity * 100}%)`
+    const linearGradient = `linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.54) ${opacity *
+      100}%)`
 
     const style =
       !isMediaComponent && image
@@ -60,6 +65,7 @@ class CardMedia extends PureComponent {
       {
         [classes.root]: !isMediaComponent,
         [classes.rootMedia]: isMediaComponent,
+        [classes.imageSpacing]: image,
       },
       classNameProp,
     )
