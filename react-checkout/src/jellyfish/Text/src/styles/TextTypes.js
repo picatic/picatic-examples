@@ -1,4 +1,5 @@
 export default {
+  display5: 'h1',
   display4: 'h1',
   display3: 'h1',
   display2: 'h1',

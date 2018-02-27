@@ -1,7 +1,7 @@
 import FontFamilies from './FontFamilies'
 import { theme } from '../../../styles'
 
-const fontFamily = `'Avenir Next W01',sans-serif`
+const avenir = `'Avenir Next W01',sans-serif`
 const futura = 'Futura Std'
 const fontSize = 14 // px
 const fontWeightLight = 300
@@ -19,63 +19,69 @@ export default {
     display: 'block',
     margin: 0,
     color: theme.palette.text.default,
+    fontFamily: avenir,
   },
   display5: {
-    fontFamily: futura,
+    fontSize: pxToRem(104),
     fontWeight: fontWeightBold,
+    fontFamily: futura,
+    lineHeight: 'normal',
+    letterSpacing: '-2px',
   },
   display4: {
-    fontSize: pxToRem(112),
-    fontWeight: fontWeightLight,
-    fontFamily,
-    letterSpacing: '-.04em',
-    lineHeight: pxToRem(32),
-    marginLeft: '-.04em',
+    fontSize: pxToRem(72),
+    fontWeight: fontWeightBold,
+    fontFamily: futura,
+    letterSpacing: '-1px',
+    lineHeight: 'normal',
   },
   display3: {
     fontSize: pxToRem(56),
-    fontWeight: fontWeightRegular,
-    fontFamily,
-    lineHeight: '-0.2px',
-    marginLeft: '-.04em',
+    fontWeight: fontWeightBold,
+    fontFamily: futura,
+    lineHeight: '-1px',
   },
   display2: {
     fontSize: pxToRem(45),
     fontWeight: fontWeightRegular,
-    fontFamily,
+    fontFamily: avenir,
     marginLeft: '-.04em',
   },
   display1: {
     fontSize: pxToRem(24),
     fontWeight: fontWeightRegular,
-    fontFamily,
+    fontFamily: avenir,
     marginLeft: '-.04em',
   },
   headline: {
     fontSize: pxToRem(24),
     fontWeight: fontWeightRegular,
-    fontFamily,
+    fontFamily: avenir,
   },
   title: {
     fontSize: pxToRem(20),
     fontWeight: fontWeightBold,
-    fontFamily,
+    fontFamily: avenir,
   },
   subheading: {
     fontSize: pxToRem(16),
     fontWeight: fontWeightBold,
-    fontFamily,
+    fontFamily: avenir,
     lineHeight: pxToRem(24),
+  },
+  body3: {
+    fontSize: pxToRem(16),
+    fontFamily: avenir,
   },
   body2: {
     fontSize: pxToRem(12),
     fontWeight: fontWeightMedium,
-    fontFamily,
+    fontFamily: avenir,
   },
   body1: {
     fontSize: pxToRem(14),
     fontWeight: fontWeightRegular,
-    fontFamily,
+    fontFamily: avenir,
     lineHeight: pxToRem(19),
   },
   caption: {},
