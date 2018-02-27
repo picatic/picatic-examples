@@ -9,9 +9,12 @@ import Text from '../src/jellyfish/Text'
 
 storiesOf('Buttons', module).add('button', () => (
   <div>
-    <Button type="fill" color="secondary">
-      Click Me
-    </Button>
+    <Text>Fill</Text>
+    <div>
+      <Button type="fill" color="secondary">
+        Click Me
+      </Button>
+    </div>
   </div>
 ))
 

@@ -11,7 +11,7 @@ const types = {
     divider: 'rgba(0, 0, 0, 0.12)',
     background: {
       paper: colors.white,
-      default: colors.grey[50],
+      default: colors.grey[2],
     },
     action: {
       active: 'rgba(0, 0, 0, 0.54)',
@@ -30,7 +30,7 @@ const types = {
     },
     divider: 'rgba(255, 255, 255, 0.12)',
     background: {
-      paper: colors.grey[800],
+      paper: colors.grey[5],
       default: '#303030',
     },
     action: {
@@ -44,26 +44,10 @@ const types = {
 }
 
 const palette = {
-  primary: {
-    light: colors.indigo[300],
-    main: colors.indigo[500],
-    dark: colors.indigo[700],
-  },
-  secondary: {
-    light: colors.green.A200,
-    main: '#34cb7b',
-    dark: colors.green.A700,
-  },
-  link: {
-    light: '#2196F3',
-    main: '#2196F3',
-    dark: '#2196F3',
-  },
-  error: {
-    light: colors.red[300],
-    main: colors.red[500],
-    dark: colors.red[700],
-  },
+  primary: colors.shamrock,
+  secondary: colors.heart,
+  link: colors.dodger,
+  error: colors.redOrange,
   white: {
     default: colors.white,
     muted: 'rgba(255,255,255,0.845)',
