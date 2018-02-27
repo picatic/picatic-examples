@@ -7,6 +7,7 @@ export default {
   headline: 'h1',
   title: 'h2',
   subheading: 'h3',
+  body3: 'p',
   body2: 'aside',
   body1: 'p',
 }

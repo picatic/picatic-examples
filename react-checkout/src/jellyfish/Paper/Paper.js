@@ -1,19 +1,19 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { theme }from '../styles'
+import theme from '../styles'
 import injectSheet from 'react-jss'
 
 const shadows = {}
 theme.shadows.forEach((shadow, index) => {
   shadows[`shadow${index}`] = {
-    boxShadow: shadow
+    boxShadow: shadow,
   }
 })
 
 const styles = {
   root: {
-    backgroundColor: theme.palette.background.paper
+    backgroundColor: theme.palette.background.paper,
   },
   rounded: {
     borderRadius: 4,
@@ -28,7 +28,7 @@ class Paper extends PureComponent {
     className: PropTypes.string,
     component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
     elevation: PropTypes.number,
-    square: PropTypes.bool
+    square: PropTypes.bool,
   }
   static defaultProps = {
     component: 'div',

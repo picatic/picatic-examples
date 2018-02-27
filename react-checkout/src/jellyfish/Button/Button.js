@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import injectSheet from 'react-jss'
-import { theme } from '../styles'
+import theme from '../styles'
 import { capitalize, pxToRem } from '../utils'
 
 const hoverState = '&:not([disabled]):not([data-disabled]):hover'

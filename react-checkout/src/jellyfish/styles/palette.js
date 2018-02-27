@@ -1,4 +1,4 @@
-import colors from '../../colors'
+import colors from '../colors'
 
 const types = {
   light: {
@@ -53,6 +53,11 @@ const palette = {
     light: colors.green.A200,
     main: '#34cb7b',
     dark: colors.green.A700,
+  },
+  link: {
+    light: '#2196F3',
+    main: '#2196F3',
+    dark: '#2196F3',
   },
   error: {
     light: colors.red[300],
