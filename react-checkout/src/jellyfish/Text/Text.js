@@ -55,7 +55,6 @@ class Text extends PureComponent {
       typeMapping,
       ...other
     } = this.props
-    console.log(classes)
 
     const className = classNames(
       classes.root,

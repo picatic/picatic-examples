@@ -64,17 +64,21 @@ const styles = {
     boxShadow:
       '0 0 3px 0 rgba(52,203,123,0.12), 0 2px 5px 0 rgba(52,203,123,0.26)',
   },
-  sizeSmall: {
+  widthSmall: {
     padding: `${theme.spacing.unit - 1}px ${theme.spacing.unit}px`,
     minWidth: theme.spacing.unit * 8,
     minHeight: 32,
     fontSize: pxToRem(14 - 1),
   },
-  sizeLarge: {
+  widthMedium: {},
+  widthLarge: {
     width: theme.spacing.unit * 30,
     minHeight: 40,
     fontSize: pxToRem(14),
   },
+  heightSmall: {},
+  heightMedium: {},
+  heightLarge: {},
   fullWidth: {
     width: '100%',
   },
@@ -114,7 +118,8 @@ class Button extends PureComponent {
     disabled: PropTypes.bool,
     fullWidth: PropTypes.bool,
     href: PropTypes.string,
-    size: PropTypes.oneOf(['small', 'medium', 'large']),
+    width: PropTypes.oneOf(['small', 'medium', 'large']),
+    height: PropTypes.oneOf(['small', 'medium', 'large']),
     type: PropTypes.oneOf(['fill', 'outline']),
     isActive: PropTypes.bool,
     badge: PropTypes.number,
@@ -123,7 +128,8 @@ class Button extends PureComponent {
     color: 'default',
     disabled: false,
     fullWidth: false,
-    size: 'medium',
+    width: 'medium',
+    height: 'medium',
     component: 'button',
     type: 'fill',
     isActive: false,
@@ -138,7 +144,8 @@ class Button extends PureComponent {
       component: Component,
       disabled,
       fullWidth,
-      size,
+      width,
+      height,
       type,
       isActive,
       badge,
@@ -150,7 +157,8 @@ class Button extends PureComponent {
 
     const className = classNames(
       classes.root,
-      classes[`size${capitalize(size)}`],
+      classes[`width${capitalize(width)}`],
+      classes[`height${capitalize(height)}`],
       classes[`type${capitalize(type)}`],
       {
         [classes.outline]: outline,
