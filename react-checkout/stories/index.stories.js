@@ -4,9 +4,16 @@ import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
 import { linkTo } from '@storybook/addon-links'
 
-import { Button, Welcome } from '@storybook/react/demo'
-
+import Button from '../src/jellyfish/Button'
 import Text from '../src/jellyfish/Text'
+
+storiesOf('Buttons', module).add('button', () => (
+  <div>
+    <Button type="fill" color="secondary">
+      Click Me
+    </Button>
+  </div>
+))
 
 storiesOf('Typography', module).add('types', () => (
   <div>

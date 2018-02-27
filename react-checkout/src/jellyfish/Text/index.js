@@ -1,1 +1,1 @@
-export { default } from './src/Text'
+export { default } from './Text'

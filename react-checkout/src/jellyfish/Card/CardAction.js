@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import injectSheet from 'react-jss'
-import { theme } from '../styles'
+import theme from '../styles'
 import { capitalize } from '../utils/src/helpers'
 
 const styles = {
@@ -13,17 +13,17 @@ const styles = {
     boxSizing: 'border-box',
   },
   justifyContentEnd: {
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
   },
   justifyContentStart: {
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
   },
   justifyContentCenter: {
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   justifyContentBetween: {
-    justifyContent: 'space-between'
-  }
+    justifyContent: 'space-between',
+  },
 }
 
 class CardAction extends PureComponent {
@@ -32,11 +32,11 @@ class CardAction extends PureComponent {
     classes: PropTypes.object.isRequired,
     className: PropTypes.string,
     component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
-    disableActionSpacing: PropTypes.bool
+    disableActionSpacing: PropTypes.bool,
   }
   static defaultProps = {
     align: 'end',
-    component: 'div'
+    component: 'div',
   }
   render() {
     const {
@@ -44,17 +44,15 @@ class CardAction extends PureComponent {
       classes,
       className: classNameProp,
       component: Component,
-    ...other
+      ...other
     } = this.props
 
     const className = classNames(
       classes.root,
       classes[`justifyContent${capitalize(align)}`],
-      classNameProp
+      classNameProp,
     )
-    return (
-      <Component className={className} {...other} />
-    )
+    return <Component className={className} {...other} />
   }
 }
 

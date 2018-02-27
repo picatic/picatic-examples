@@ -1,5 +1,5 @@
-import FontFamilies from './FontFamilies'
-import { theme } from '../../../styles'
+import palette from './palette'
+import spacing from './spacing'
 
 const avenir = `'Avenir Next W01',sans-serif`
 const futura = 'Futura Std'
@@ -18,7 +18,7 @@ export default {
   root: {
     display: 'block',
     margin: 0,
-    color: theme.palette.text.default,
+    color: palette.text.default,
     fontFamily: avenir,
   },
   display5: {
@@ -107,36 +107,36 @@ export default {
     marginBottom: '0.35em',
   },
   paragraph: {
-    marginBottom: theme.spacing.unit * 2,
+    marginBottom: spacing.unit * 2,
   },
   colorInherit: {
     color: 'inherit',
   },
   colorPrimary: {
-    color: theme.palette.primary.main,
+    color: palette.primary.main,
   },
   colorSecondary: {
-    color: theme.palette.secondary.main,
+    color: palette.secondary.main,
   },
   colorError: {
-    color: theme.palette.error.main,
+    color: palette.error.main,
   },
   colorDark: {
-    color: theme.palette.text.dark,
+    color: palette.text.dark,
   },
   colorMuted: {
-    color: theme.palette.text.muted,
+    color: palette.text.muted,
   },
   colorExtraMuted: {
-    color: theme.palette.text.extraMuted,
+    color: palette.text.extraMuted,
   },
   colorWhite: {
-    color: theme.palette.white.default,
+    color: palette.white.default,
   },
   colorWhiteMuted: {
-    color: theme.palette.white.muted,
+    color: palette.white.muted,
   },
   colorWhiteExtraMuted: {
-    color: theme.palette.white.extraMuted,
+    color: palette.white.extraMuted,
   },
 }

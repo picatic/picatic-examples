@@ -2,9 +2,9 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import injectSheet from 'react-jss'
 import classNames from 'classnames'
-import styles from './styles'
-import TextTypes from './styles/TextTypes'
-import { capitalize } from '../../utils'
+import TextTags from './styles/TextTags'
+import theme from '../styles'
+import { capitalize } from '../utils'
 
 class Text extends PureComponent {
   static propTypes = {
@@ -13,11 +13,23 @@ class Text extends PureComponent {
     className: PropTypes.string,
     classes: PropTypes.object.isRequired,
     component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
-    color: PropTypes.oneOf(['inherit', 'primary', 'secondary', 'error', 'default', 'dark', 'muted', 'extraMuted', 'white', 'whiteMuted', 'whiteExtraMuted']),
+    color: PropTypes.oneOf([
+      'inherit',
+      'primary',
+      'secondary',
+      'error',
+      'default',
+      'dark',
+      'muted',
+      'extraMuted',
+      'white',
+      'whiteMuted',
+      'whiteExtraMuted',
+    ]),
     gutterBottom: PropTypes.bool,
     noWrap: PropTypes.bool,
     paragraph: PropTypes.bool,
-    type: PropTypes.oneOf(Object.getOwnPropertyNames(TextTypes)),
+    type: PropTypes.oneOf(Object.getOwnPropertyNames(TextTags)),
     typeMapping: PropTypes.object,
   }
   static defaultProps = {
@@ -27,7 +39,7 @@ class Text extends PureComponent {
     noWrap: false,
     paragraph: false,
     type: 'body1',
-    typeMapping: TextTypes,
+    typeMapping: TextTags,
   }
   render() {
     const {
@@ -43,6 +55,7 @@ class Text extends PureComponent {
       typeMapping,
       ...other
     } = this.props
+    console.log(classes)
 
     const className = classNames(
       classes.root,
@@ -54,13 +67,14 @@ class Text extends PureComponent {
         [classes.paragraph]: paragraph,
         [classes.noWrap]: noWrap,
       },
-      classNameProp
+      classNameProp,
     )
 
-    const Component = componentProp || (paragraph ? 'p' : typeMapping[type]) || 'span'
+    const Component =
+      componentProp || (paragraph ? 'p' : typeMapping[type]) || 'span'
 
     return <Component className={className} {...other} />
   }
 }
 
-export default injectSheet(styles)(Text)
+export default injectSheet(theme.typography)(Text)

@@ -1,9 +1,11 @@
-import palette from './src/palette'
-import spacing from './src/spacing'
-import shadows from './src/shadows'
+import palette from './palette'
+import spacing from './spacing'
+import shadows from './shadows'
+import typography from './typography'
 
-export const theme = {
+export default {
   palette,
   spacing,
-  shadows
+  shadows,
+  typography,
 }
