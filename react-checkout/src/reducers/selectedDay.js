@@ -1,6 +1,11 @@
 import * as types from '../constants/ActionTypes'
 
-const selectedDay = (state = 'All Dates', action) => {
+const initialState = {
+  day: 'All Dates',
+  tickets: [],
+}
+
+const selectedDay = (state = initialState, action) => {
   switch (action.type) {
     case types.SELECT_DAY:
       return action.payload

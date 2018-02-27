@@ -5,16 +5,20 @@ import Text from '../jellyfish/Text'
 import Button from '../jellyfish/Button'
 import Card, { CardMedia, CardContent, CardAction } from '../jellyfish/Card'
 import moment from 'moment'
+import { getTicketsOnDay } from '../utils/ticketUtils'
 
 class TicketList extends Component {
   render() {
     const {
       event,
+      tickets,
+      eventSchedules,
+      selectedTickets,
+      allDatesSum,
       widget,
       hasSelectedTickets,
       postEventWebsite,
       promoCode,
-      eventSchedules,
       selectDay,
       selectedDay,
       checkoutTotalQty,
@@ -39,14 +43,23 @@ class TicketList extends Component {
           <Button
             type="outline"
             className="mr2"
-            isActive={selectedDay === 'All Dates'}
-            badge={1}
+            isActive={selectedDay.day === 'All Dates'}
+            badge={allDatesSum}
             onClick={() => selectDay('All Dates')}
           >
             All Dates
           </Button>
           {eventSchedules.map((schedule, index) => {
             const { start_date } = schedule.attributes
+
+            const ticketsOnDay = getTicketsOnDay(event, tickets, start_date)
+
+            const badge = selectedTickets.reduce((sum, ticket) => {
+              if (ticketsOnDay.find(({ id }) => id === ticket.id)) {
+                sum += ticket.quantity
+              }
+              return sum
+            }, 0)
 
             const dayOfWeek = moment(start_date).format('ddd')
             const month = moment(start_date).format('MMM')
@@ -57,8 +70,8 @@ class TicketList extends Component {
                 key={index}
                 type="outline"
                 className="mr2"
-                isActive={start_date === selectedDay}
-                badge={1}
+                isActive={start_date === selectedDay.day}
+                badge={badge}
                 onClick={() => selectDay(start_date)}
               >
                 {dayOfWeek}

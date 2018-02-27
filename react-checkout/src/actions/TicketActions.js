@@ -4,7 +4,7 @@ import { apiFetch } from '../utils/apiUtils'
 import { sortTickets } from '../utils/ticketUtils'
 import { updateCheckoutTickets } from '../actions/CheckoutActions'
 
-export const fetchTickets = eventId => async dispatch => {
+export const fetchTickets = eventId => async (dispatch, getState) => {
   const url = TICKET_PRICE_URL.replace(':eventId', eventId)
   const { json } = await apiFetch(url)
   if (json) {

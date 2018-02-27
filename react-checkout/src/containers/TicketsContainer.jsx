@@ -3,8 +3,10 @@ import { connect } from 'react-redux'
 import Tickets from '../components/Tickets'
 import {
   isWaitlistSelected,
+  getTicketSchedules,
   getTicketDates,
   getDisabledState,
+  isOnDay,
 } from '../utils/ticketUtils'
 import { selectTicket } from '../actions/TicketActions'
 
@@ -16,19 +18,20 @@ const mapStateToProps = ({ tickets, event, selectedTickets, selectedDay }) => {
   return {
     selectedDay,
     tickets: tickets.map(ticket => {
-      const { start_date, end_date, allDates } = getTicketDates(ticket, event)
+      const ticketSchedules = getTicketSchedules(ticket, event)
+      const ticketDates = getTicketDates(ticketSchedules, event)
       const disabled = getDisabledState(ticket, waitListSelected)
-
-      const ticketSelected = selectedTickets.find(({ id }) => id === ticket.id)
+      const onDay =
+        selectedDay.tickets.filter(({ id }) => id === ticket.id).length > 0
+      const selectedTicket = selectedTickets.find(({ id }) => id === ticket.id)
 
       return {
         id: ticket.id,
-        start_date,
-        end_date,
-        allDates,
+        onDay,
         disabled,
-        value: ticketSelected ? ticketSelected.quantity : '',
+        value: selectedTicket ? selectedTicket.quantity : '',
         ...ticket.attributes,
+        ...ticketDates,
       }
     }),
   }
