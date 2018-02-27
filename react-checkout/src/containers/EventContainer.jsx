@@ -5,6 +5,7 @@ import Anywhere from '../components/Anywhere'
 import { createCheckout, postEventWebsite } from '../actions/CheckoutActions'
 import { applyPromoCode } from '../actions/EventActions'
 import { selectDay } from '../actions/DayActions'
+import { sortSchedules, getTicketsOnDay } from '../utils/ticketUtils'
 
 const EventComponent = props => {
   const { app } = props.widget
@@ -16,9 +17,9 @@ const EventComponent = props => {
 }
 
 const mapStateToProps = ({
-  eventSchedules,
   event,
   widget,
+  tickets,
   checkout,
   selectedDay,
   selectedTickets,
@@ -29,19 +30,33 @@ const mapStateToProps = ({
     0,
   )
   const checkoutTotalQty = selectedTickets.reduce((sum, ticket) => {
-    sum + ticket
+    sum += ticket.quantity
     return sum
   }, 0)
 
+  const ticketsOnDay = getTicketsOnDay(event, tickets, 'All Dates')
+
+  const allDatesSum = selectedTickets.reduce((sum, ticket) => {
+    if (ticketsOnDay.find(({ id }) => id === ticket.id)) {
+      sum += ticket.quantity
+    }
+    return sum
+  }, 0)
+
+  const eventSchedules = event.schedules && sortSchedules(event.schedules)
+
   return {
     event,
+    tickets,
+    eventSchedules,
+    allDatesSum,
     widget,
     checkout,
     checkoutTotalQty,
     selectedDay,
+    selectedTickets,
     hasSelectedTickets,
     promoCode,
-    eventSchedules,
   }
 }
 

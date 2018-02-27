@@ -8,14 +8,13 @@ class Tickets extends PureComponent {
     return (
       <div>
         {tickets.map((ticket, index) => {
-          const { status, start_date, end_date, allDates } = ticket
+          const { status, onDay, allDates } = ticket
 
-          if (selectedDay === 'All Dates' && !allDates) {
+          if (selectedDay.day === 'All Dates' && !allDates) {
             return false
           }
 
-          const onDay = start_date !== selectedDay || end_date !== selectedDay
-          if (!onDay) {
+          if (selectedDay.day !== 'All Dates' && !onDay) {
             return false
           }
 

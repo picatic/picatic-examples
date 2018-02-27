@@ -1,11 +1,10 @@
 import React from 'react'
-import moment from 'moment'
 import TextField from 'material-ui/TextField'
 import { MenuItem } from 'material-ui/Menu'
 import Text from '../jellyfish/Text'
 import injectSheet from 'react-jss'
 import classNames from 'classnames'
-import { getDayOfMonth, getDayOfWeek, getMonth } from '../utils/dateUtils'
+import { getDayOfMonth, getMonth } from '../utils/dateUtils'
 
 const styles = {
   root: {
@@ -45,7 +44,6 @@ const Ticket = props => {
     max_quantity,
     value,
     selectTicket,
-    selectedDay,
     disabled,
     description,
   } = props
@@ -54,12 +52,13 @@ const Ticket = props => {
   const maxTickets = max_quantity === 0 ? availableTickets : max_quantity
 
   const displayPrice = Number(price) === 0 ? 'Free' : `$${price}`
-  const displayDate = getDisplayDate(start_date, end_date)
   const discountPrice = discount_price ? discount_price : ''
 
   const month = getMonth(start_date)
   const startDayOfMonth = getDayOfMonth(start_date)
   const endDayOfMonth = getDayOfMonth(end_date)
+
+  const endDayLabel = start_date !== end_date ? `- ${endDayOfMonth}` : ''
 
   const className = classNames('flex items-center', classes.root)
   return (
@@ -80,7 +79,7 @@ const Ticket = props => {
       <div className="col flex-auto">
         <Text type="subheading">{name}</Text>
         <Text color="muted">
-          {month} {startDayOfMonth} - {endDayOfMonth}
+          {month} {startDayOfMonth} {endDayLabel} {description}
         </Text>
       </div>
       <div className="col">
@@ -92,16 +91,6 @@ const Ticket = props => {
 }
 
 export default injectSheet(styles)(Ticket)
-
-const getDisplayDate = (start_date, end_date) => {
-  if (start_date === end_date) {
-    return moment(start_date).format('MMM DD, YYYY')
-  } else {
-    return `${moment(start_date).format('MMM DD')} - ${moment(end_date).format(
-      'MMM DD, YYYY',
-    )}`
-  }
-}
 
 const renderMenuItems = (maxTickets, min_quantity) => {
   let arr = [0]
