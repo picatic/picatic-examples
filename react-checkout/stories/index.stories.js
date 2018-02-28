@@ -9,13 +9,37 @@ import Text from '../src/jellyfish/Text'
 
 storiesOf('Buttons', module).add('button', () => (
   <div>
-    <Text>Fill</Text>
-    <div>
-      <Button type="fill">Click Me</Button>
-      <Button type="fill" color="primary">
+    <Text style={{ marginBottom: 15 }}>Raised</Text>
+    <div style={{ marginBottom: 30 }}>
+      <Button style={{ marginRight: 15 }}>Click Me</Button>
+      <Button color="primary" style={{ marginRight: 15 }}>
         Click Me
       </Button>
-      <Button type="fill" color="secondary">
+      <Button color="secondary" style={{ marginRight: 15 }}>
+        Click Me
+      </Button>
+    </div>
+    <Text style={{ marginBottom: 15 }}>Fill</Text>
+    <div style={{ marginBottom: 30 }}>
+      <Button type="fill" style={{ marginRight: 15 }}>
+        Click Me
+      </Button>
+      <Button type="fill" color="primary" style={{ marginRight: 15 }}>
+        Click Me
+      </Button>
+      <Button type="fill" color="secondary" style={{ marginRight: 15 }}>
+        Click Me
+      </Button>
+    </div>
+    <Text style={{ marginBottom: 15 }}>Outline</Text>
+    <div style={{ marginBottom: 30 }}>
+      <Button type="outline" style={{ marginRight: 15 }}>
+        Click Me
+      </Button>
+      <Button type="outline" color="primary" style={{ marginRight: 15 }}>
+        Click Me
+      </Button>
+      <Button type="outline" color="secondary" style={{ marginRight: 15 }}>
         Click Me
       </Button>
     </div>
