@@ -22,7 +22,7 @@ const convertHexToRGB = color => {
 }
 
 const decomposeColor = color => {
-  if (color.chartAt(0) === '#') {
+  if (color.charAt(0) === '#') {
     return decomposeColor(convertHexToRGB(color))
   }
 
@@ -47,7 +47,7 @@ const recomposeColor = color => {
     values[2] = `${values[2]}%`
   }
 
-  return `${color.type}(${values.json(', ')})`
+  return `${color.type}(${values.join(', ')})`
 }
 
 export const fade = (color, value) => {

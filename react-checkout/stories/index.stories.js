@@ -11,6 +11,10 @@ storiesOf('Buttons', module).add('button', () => (
   <div>
     <Text>Fill</Text>
     <div>
+      <Button type="fill">Click Me</Button>
+      <Button type="fill" color="primary">
+        Click Me
+      </Button>
       <Button type="fill" color="secondary">
         Click Me
       </Button>
