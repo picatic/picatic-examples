@@ -44,6 +44,27 @@ const styles = {
       color: theme.palette.default,
     },
   },
+  raised: { boxShadow: getBoxShadow(theme.palette.black.default) },
+  raisedPrimary: {
+    color: theme.palette.primary.main,
+  },
+  raisedSecondary: {
+    color: theme.palette.secondary.main,
+  },
+  fill: {
+    color: theme.palette.text.default,
+    boxShadow: getBoxShadow(theme.palette.black.default),
+  },
+  fillPrimary: {
+    color: theme.palette.white.default,
+    background: theme.palette.primary.main,
+    boxShadow: getBoxShadow(theme.palette.primary.main),
+  },
+  fillSecondary: {
+    color: theme.palette.white.default,
+    background: theme.palette.secondary.main,
+    boxShadow: getBoxShadow(theme.palette.secondary.main),
+  },
   outline: {
     border: '1px solid rgba(0,0,0,.26)',
     color: 'rgba(0,0,0,.38)',
@@ -60,20 +81,6 @@ const styles = {
     },
   },
   outlinePrimary: {},
-  fill: {
-    color: theme.palette.text.default,
-    boxShadow: getBoxShadow(theme.palette.black.default),
-  },
-  fillPrimary: {
-    color: theme.palette.white.default,
-    background: theme.palette.primary.main,
-    boxShadow: getBoxShadow(theme.palette.primary.main),
-  },
-  fillSecondary: {
-    color: theme.palette.white.default,
-    background: theme.palette.secondary.main,
-    boxShadow: getBoxShadow(theme.palette.secondary.main),
-  },
   widthSmall: {
     padding: `${theme.spacing.unit - 1}px ${theme.spacing.unit}px`,
     minWidth: theme.spacing.unit * 8,
@@ -136,7 +143,7 @@ class Button extends PureComponent {
     href: PropTypes.string,
     width: PropTypes.oneOf(['small', 'medium', 'large']),
     height: PropTypes.oneOf(['small', 'medium', 'large']),
-    type: PropTypes.oneOf(['fill', 'outline']),
+    type: PropTypes.oneOf(['raised', 'fill', 'outline']),
     isActive: PropTypes.bool,
     badge: PropTypes.number,
   }
@@ -147,7 +154,7 @@ class Button extends PureComponent {
     width: 'medium',
     height: 'medium',
     component: 'button',
-    type: 'fill',
+    type: 'raised',
     isActive: false,
     badge: 0,
   }
@@ -168,8 +175,9 @@ class Button extends PureComponent {
       ...other
     } = this.props
 
-    const outline = type === 'outline'
+    const raised = type === 'raised'
     const fill = type === 'fill'
+    const outline = type === 'outline'
 
     const className = classNames(
       classes.root,
@@ -177,11 +185,13 @@ class Button extends PureComponent {
       classes[`height${capitalize(height)}`],
       classes[`type${capitalize(type)}`],
       {
-        [classes.outline]: outline,
+        [classes.raised]: raised,
         [classes.fill]: fill,
+        [classes.outline]: outline,
+        [classes[`raised${capitalize(color)}`]]: raised && color !== 'default',
+        [classes[`fill${capitalize(color)}`]]: fill && color !== 'default',
         [classes[`outline${capitalize(color)}`]]:
           outline && color !== 'default',
-        [classes[`fill${capitalize(color)}`]]: fill && color !== 'default',
       },
       classNameProp,
     )
