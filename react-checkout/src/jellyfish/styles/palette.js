@@ -1,4 +1,4 @@
-import colors from '../colors'
+import { primary, monochrome } from '../colors'
 
 const types = {
   light: {
@@ -10,8 +10,8 @@ const types = {
     },
     divider: 'rgba(0, 0, 0, 0.12)',
     background: {
-      paper: colors.white,
-      default: colors.grey[2],
+      paper: monochrome.white,
+      default: monochrome.grey[2],
     },
     action: {
       active: 'rgba(0, 0, 0, 0.54)',
@@ -23,18 +23,18 @@ const types = {
   },
   dark: {
     text: {
-      default: colors.white,
+      default: monochrome.white,
       dark: 'rgba(255, 255, 255, 0.7)',
       muted: 'rgba(255, 255, 255, 0.5)',
       extraMuted: 'rgba(255, 255, 255, 0.5)',
     },
     divider: 'rgba(255, 255, 255, 0.12)',
     background: {
-      paper: colors.grey[5],
+      paper: monochrome.grey[5],
       default: '#303030',
     },
     action: {
-      active: colors.white,
+      active: monochrome.white,
       hover: 'rgba(255, 255, 255, 0.1)',
       selected: 'rgba(255, 255, 255, 0.2)',
       disabled: 'rgba(255, 255, 255, 0.3)',
@@ -44,12 +44,12 @@ const types = {
 }
 
 const palette = {
-  primary: colors.shamrock,
-  secondary: colors.heart,
-  link: colors.dodger,
-  error: colors.redOrange,
+  primary: primary.shamrock,
+  secondary: primary.heart,
+  link: primary.dodger,
+  error: primary.redOrange,
   white: {
-    default: colors.white,
+    default: monochrome.white,
     muted: 'rgba(255,255,255,0.845)',
     extraMuted: 'rgba(255,255,255,0.7)',
   },

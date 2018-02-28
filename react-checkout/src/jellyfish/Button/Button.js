@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import injectSheet from 'react-jss'
 import theme from '../styles'
 import { capitalize, pxToRem } from '../utils'
+import { primary } from '../colors'
 
 const hoverState = '&:not([disabled]):not([data-disabled]):hover'
 const focusState = '&:not([disabled]):not([data-disabled]):focus'
@@ -113,7 +114,13 @@ class Button extends PureComponent {
     children: PropTypes.node.isRequired,
     classes: PropTypes.object.isRequired,
     className: PropTypes.string,
-    color: PropTypes.oneOf(['default', 'inherit', 'primary', 'secondary']),
+    color: PropTypes.oneOf([
+      'default',
+      'inherit',
+      'primary',
+      'secondary',
+      Object.getOwnPropertyNames(primary),
+    ]),
     component: PropTypes.oneOf([PropTypes.string, PropTypes.func]),
     disabled: PropTypes.bool,
     fullWidth: PropTypes.bool,
