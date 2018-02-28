@@ -10,4 +10,5 @@ export default {
   body3: 'p',
   body2: 'aside',
   body1: 'p',
+  caption: 'span',
 }

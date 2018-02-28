@@ -3,8 +3,8 @@ import { primary, monochrome } from '../colors'
 const types = {
   light: {
     text: {
+      dark: 'rgba(0, 0, 0, 1)',
       default: 'rgba(0, 0, 0, 0.87)',
-      dark: 'rgba(0, 0, 0, 0.54)',
       muted: 'rgba(0, 0, 0, 0.54)',
       extraMuted: 'rgba(0, 0, 0, 0.38)',
     },
@@ -23,8 +23,8 @@ const types = {
   },
   dark: {
     text: {
-      default: monochrome.white,
       dark: 'rgba(255, 255, 255, 0.7)',
+      default: monochrome.white,
       muted: 'rgba(255, 255, 255, 0.5)',
       extraMuted: 'rgba(255, 255, 255, 0.5)',
     },
