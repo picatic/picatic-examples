@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import TicketsContainer from '../containers/TicketsContainer'
 import PromoCode from '../components/PromoCode'
 import Text from '../jellyfish/Text'
-import Button from '../jellyfish/Button'
+import Button, { ButtonOutline } from '../jellyfish/Button'
 import Card, { CardMedia, CardContent, CardAction } from '../jellyfish/Card'
 import moment from 'moment'
 import { getTicketsOnDay } from '../utils/ticketUtils'
@@ -48,15 +48,14 @@ class TicketList extends Component {
         </CardMedia>
 
         <CardContent>
-          <Button
-            type="outline"
+          <ButtonOutline
             className="mr2"
             isActive={selectedDay.day === 'All Dates'}
             badge={allDatesSum}
             onClick={() => selectDay('All Dates')}
           >
             All Dates
-          </Button>
+          </ButtonOutline>
           {eventSchedules.map((schedule, index) => {
             const { start_date } = schedule.attributes
 
@@ -74,9 +73,8 @@ class TicketList extends Component {
             const dayOfMonth = moment(start_date).format('D')
 
             return (
-              <Button
+              <ButtonOutline
                 key={index}
-                type="outline"
                 className="mr2"
                 isActive={start_date === selectedDay.day}
                 badge={badge}
@@ -85,7 +83,7 @@ class TicketList extends Component {
                 {dayOfWeek}
                 <br />
                 {month} {dayOfMonth}
-              </Button>
+              </ButtonOutline>
             )
           })}
         </CardContent>
@@ -98,7 +96,7 @@ class TicketList extends Component {
           <PromoCode {...this.props} error={promoCode.error} />
           <div style={{ width: 248 }}>
             <Button
-              type="fill"
+              appearance="fill"
               color="primary"
               disabled={!hasSelectedTickets}
               onClick={postEventWebsite}
