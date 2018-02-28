@@ -1,13 +1,24 @@
 import palette from './palette'
 import spacing from './spacing'
 
-const avenir = `'Avenir Next W01',sans-serif`
-const futura = 'Futura Std'
+// Font Families
+const AVENIR_NEXT = `'Avenir Next W01',sans-serif`
+const FUTURA = 'Futura Std'
+const fontFamily = {
+  primary: AVENIR_NEXT,
+  secondary: FUTURA,
+}
+
+// Font Weights
+const fontWeight = {
+  light: 100,
+  regular: 300,
+  medium: 500,
+  bold: 600,
+}
+
+// Font Sizing
 const fontSize = 14 // px
-const fontWeightLight = 300
-const fontWeightRegular = 400
-const fontWeightMedium = 500
-const fontWeightBold = 600
 const htmlFontSize = 16
 
 function pxToRem(value) {
@@ -17,74 +28,72 @@ function pxToRem(value) {
 export default {
   root: {
     display: 'block',
-    margin: 0,
     color: palette.text.default,
-    fontFamily: avenir,
+    fontWeight: fontWeight.regular,
+    fontFamily: fontFamily.primary,
+    letterSpacing: 0,
+    lineHeight: 'normal',
+    margin: 0,
   },
   display5: {
     fontSize: pxToRem(104),
-    fontWeight: fontWeightBold,
-    fontFamily: futura,
-    lineHeight: 'normal',
+    fontWeight: fontWeight.bold,
+    fontFamily: fontFamily.secondary,
     letterSpacing: '-2px',
   },
   display4: {
     fontSize: pxToRem(72),
-    fontWeight: fontWeightBold,
-    fontFamily: futura,
+    fontWeight: fontWeight.bold,
+    fontFamily: fontFamily.secondary,
     letterSpacing: '-1px',
-    lineHeight: 'normal',
   },
   display3: {
     fontSize: pxToRem(56),
-    fontWeight: fontWeightBold,
-    fontFamily: futura,
+    fontWeight: fontWeight.bold,
+    fontFamily: fontFamily.secondary,
     lineHeight: '-1px',
   },
   display2: {
     fontSize: pxToRem(45),
-    fontWeight: fontWeightRegular,
-    fontFamily: avenir,
-    marginLeft: '-.04em',
+    lineHeight: '48px',
   },
   display1: {
-    fontSize: pxToRem(24),
-    fontWeight: fontWeightRegular,
-    fontFamily: avenir,
-    marginLeft: '-.04em',
+    fontSize: pxToRem(34),
+    lineHeight: '34px',
   },
   headline: {
     fontSize: pxToRem(24),
-    fontWeight: fontWeightRegular,
-    fontFamily: avenir,
+    lineHeight: '32px',
   },
   title: {
     fontSize: pxToRem(20),
-    fontWeight: fontWeightBold,
-    fontFamily: avenir,
+    fontWeight: fontWeight.medium,
+    lineHeight: '28px',
   },
   subheading: {
-    fontSize: pxToRem(16),
-    fontWeight: fontWeightBold,
-    fontFamily: avenir,
+    color: palette.text.muted,
+    fontSize: pxToRem(18),
     lineHeight: pxToRem(24),
   },
   body3: {
     fontSize: pxToRem(16),
-    fontFamily: avenir,
+    fontWeight: fontWeight.medium,
+    lineHeight: '24px',
   },
   body2: {
-    fontSize: pxToRem(12),
-    fontWeight: fontWeightMedium,
-    fontFamily: avenir,
+    fontSize: pxToRem(16),
+    lineHeight: '24px',
   },
   body1: {
     fontSize: pxToRem(14),
-    fontWeight: fontWeightRegular,
-    fontFamily: avenir,
     lineHeight: pxToRem(19),
+    lineHeight: '20px',
   },
-  caption: {},
+  caption: {
+    color: palette.text.muted,
+    fontSize: pxToRem(12),
+    lineHeight: '20px',
+  },
   button: {},
   alignLeft: {
     textAlign: 'left',

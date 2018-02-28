@@ -5,6 +5,7 @@ import { action } from '@storybook/addon-actions'
 import { linkTo } from '@storybook/addon-links'
 
 import { primary } from '../src/jellyfish/colors'
+import TextTags from '../src/jellyfish/Text/styles/TextTags'
 
 import Badge from '../src/jellyfish/Badge'
 import Button from '../src/jellyfish/Button'
@@ -68,17 +69,14 @@ storiesOf('Buttons', module).add('button', () => (
 
 storiesOf('Typography', module).add('types', () => (
   <div>
-    <Text type="display5">Hello World</Text>
-    <Text type="display4">Hello World</Text>
-    <Text type="display3">Hello World</Text>
-    <Text type="display2">Hello World</Text>
-    <Text type="display1">Hello World</Text>
-    <Text type="headline">Hello World</Text>
-    <Text type="title">Hello World</Text>
-    <Text type="subheading">Hello World</Text>
-    <Text type="body2">Hello World</Text>
-    <Text type="body1">Hello World</Text>
-    <Text type="caption">Hello World</Text>
+    {Object.entries(TextTags).map(([key]) => (
+      <div key={key} style={{ display: 'flex', marginBottom: 20 }}>
+        <Text type="subheading" style={{ minWidth: 150, alignSelf: 'center' }}>
+          {key}
+        </Text>
+        <Text type={key}>Types</Text>
+      </div>
+    ))}
   </div>
 ))
 
@@ -87,7 +85,7 @@ storiesOf('Badge', module).add('badges', () => (
     {Object.entries(primary).map(([key]) => {
       return (
         <Badge key={key} color={key} style={{ margin: 5 }}>
-          Label
+          {Label}
         </Badge>
       )
     })}
