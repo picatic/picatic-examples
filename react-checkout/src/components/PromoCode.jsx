@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import TextField from 'material-ui/TextField'
-import IconButton from 'material-ui/IconButton'
-import ChevronRight from 'material-ui-icons/ChevronRight'
+import Button from '../jellyfish/Button'
 
 class PromoCode extends Component {
   state = {
@@ -39,13 +38,13 @@ class PromoCode extends Component {
             error={error}
           />
         </div>
-        <IconButton
+        <Button
           type="submit"
           disabled={value.length === 0 || error}
           color="primary"
         >
-          <ChevronRight />
-        </IconButton>
+          Apply
+        </Button>
       </form>
     )
   }

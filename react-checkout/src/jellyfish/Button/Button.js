@@ -65,29 +65,6 @@ const styles = {
     background: theme.palette.secondary.main,
     boxShadow: getBoxShadow(theme.palette.secondary.main),
   },
-  outline: {
-    border: '1px solid rgba(0,0,0,.26)',
-    color: 'rgba(0,0,0,.38)',
-    fontSize: '12px',
-    minHeight: '48px',
-    minWidth: '110px',
-    [activeState]: {
-      border: '1px solid #2196f3',
-      color: '#2196f3',
-    },
-    [hoverState]: {
-      border: '1px solid #2196f3',
-      color: '#2196f3',
-    },
-  },
-  outlinePrimary: {
-    color: theme.palette.primary.main,
-    border: `1px solid ${theme.palette.primary.main}`,
-  },
-  outlineSecondary: {
-    color: theme.palette.secondary.main,
-    border: `1px solid ${theme.palette.secondary.main}`,
-  },
   sizeSmall: {
     padding: `${theme.spacing.unit - 1}px ${theme.spacing.unit}px`,
     minWidth: theme.spacing.unit * 8,
@@ -146,7 +123,7 @@ class Button extends PureComponent {
     fullWidth: PropTypes.bool,
     href: PropTypes.string,
     size: PropTypes.oneOf(['small', 'medium', 'large']),
-    type: PropTypes.oneOf(['raised', 'fill', 'outline']),
+    appearance: PropTypes.oneOf(['raised', 'fill']),
     isActive: PropTypes.bool,
     badge: PropTypes.number,
   }
@@ -156,7 +133,7 @@ class Button extends PureComponent {
     fullWidth: false,
     size: 'medium',
     component: 'button',
-    type: 'raised',
+    appearance: 'raised',
     isActive: false,
     badge: 0,
   }
@@ -170,35 +147,29 @@ class Button extends PureComponent {
       disabled,
       fullWidth,
       size,
-      type,
+      appearance,
       isActive,
       badge,
       ...other
     } = this.props
 
-    const raised = type === 'raised'
-    const fill = type === 'fill'
-    const outline = type === 'outline'
+    const raised = appearance === 'raised'
+    const fill = appearance === 'fill'
 
     const className = classNames(
       classes.root,
       classes[`size${capitalize(size)}`],
-      classes[`type${capitalize(type)}`],
       {
         [classes.raised]: raised,
         [classes.fill]: fill,
-        [classes.outline]: outline,
         [classes[`raised${capitalize(color)}`]]: raised && color !== 'default',
         [classes[`fill${capitalize(color)}`]]: fill && color !== 'default',
-        [classes[`outline${capitalize(color)}`]]:
-          outline && color !== 'default',
         [classes.fullWidth]: fullWidth,
       },
       classNameProp,
     )
 
     const classNameBadge = classNames(classes.badge, {
-      [classes.badgeOutline]: outline,
       [classes.badgeFill]: fill,
     })
 
