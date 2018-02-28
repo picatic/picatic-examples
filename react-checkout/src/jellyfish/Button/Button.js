@@ -3,13 +3,17 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import injectSheet from 'react-jss'
 import theme from '../styles'
-import { capitalize, pxToRem } from '../utils'
+import { capitalize, pxToRem, fade } from '../utils'
 import { primary } from '../colors'
 
 const hoverState = '&:not([disabled]):not([data-disabled]):hover'
 const focusState = '&:not([disabled]):not([data-disabled]):focus'
 const activeState =
   '&:not([disabled]):not([data-disabled]):active, &:not([disabled]):not([data-disabled])[data-popover-opened], &:not([disabled]):not([data-disabled])[data-active]'
+
+const getBoxShadow = color => {
+  return `0 0 3px 0 ${fade(color, 0.12)}, 0 2px 5px 0 ${fade(color, 0.26)}`
+}
 
 const styles = {
   root: {
@@ -57,13 +61,18 @@ const styles = {
   },
   outlinePrimary: {},
   fill: {
-    color: theme.palette.white.default,
+    color: theme.palette.text.default,
+    boxShadow: getBoxShadow(theme.palette.black.default),
   },
-  fillPrimary: {},
+  fillPrimary: {
+    color: theme.palette.white.default,
+    background: theme.palette.primary.main,
+    boxShadow: getBoxShadow(theme.palette.primary.main),
+  },
   fillSecondary: {
+    color: theme.palette.white.default,
     background: theme.palette.secondary.main,
-    boxShadow:
-      '0 0 3px 0 rgba(52,203,123,0.12), 0 2px 5px 0 rgba(52,203,123,0.26)',
+    boxShadow: getBoxShadow(theme.palette.secondary.main),
   },
   widthSmall: {
     padding: `${theme.spacing.unit - 1}px ${theme.spacing.unit}px`,

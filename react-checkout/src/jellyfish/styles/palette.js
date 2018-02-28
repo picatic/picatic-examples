@@ -53,6 +53,9 @@ const palette = {
     muted: 'rgba(255,255,255,0.845)',
     extraMuted: 'rgba(255,255,255,0.7)',
   },
+  black: {
+    default: monochrome.black,
+  },
   contrastThreshold: 3,
   tonalOffset: 0.2,
   ...types['light'],
