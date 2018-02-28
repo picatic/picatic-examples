@@ -43,6 +43,35 @@ storiesOf('Buttons', module).add('button', () => (
         Click Me
       </Button>
     </div>
+    <Text style={{ marginBottom: 15 }}>Sizes</Text>
+    <div>
+      <Button
+        type="fill"
+        color="primary"
+        size="small"
+        style={{ marginBottom: 15 }}
+      >
+        Click Me
+      </Button>
+      <br />
+      <Button
+        type="fill"
+        color="primary"
+        size="medium"
+        style={{ marginBottom: 15 }}
+      >
+        Click Me
+      </Button>
+      <br />
+      <Button
+        type="fill"
+        color="primary"
+        size="large"
+        style={{ marginBottom: 15 }}
+      >
+        Click Me
+      </Button>
+    </div>
   </div>
 ))
 

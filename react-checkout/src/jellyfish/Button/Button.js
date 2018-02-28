@@ -80,22 +80,26 @@ const styles = {
       color: '#2196f3',
     },
   },
-  outlinePrimary: {},
-  widthSmall: {
+  outlinePrimary: {
+    color: theme.palette.primary.main,
+    border: `1px solid ${theme.palette.primary.main}`,
+  },
+  outlineSecondary: {
+    color: theme.palette.secondary.main,
+    border: `1px solid ${theme.palette.secondary.main}`,
+  },
+  sizeSmall: {
     padding: `${theme.spacing.unit - 1}px ${theme.spacing.unit}px`,
     minWidth: theme.spacing.unit * 8,
     minHeight: 32,
-    fontSize: pxToRem(14 - 1),
+    fontSize: pxToRem(12),
   },
-  widthMedium: {},
-  widthLarge: {
+  sizeMedium: {},
+  sizeLarge: {
     width: theme.spacing.unit * 30,
     minHeight: 40,
     fontSize: pxToRem(14),
   },
-  heightSmall: {},
-  heightMedium: {},
-  heightLarge: {},
   fullWidth: {
     width: '100%',
   },
@@ -141,8 +145,7 @@ class Button extends PureComponent {
     disabled: PropTypes.bool,
     fullWidth: PropTypes.bool,
     href: PropTypes.string,
-    width: PropTypes.oneOf(['small', 'medium', 'large']),
-    height: PropTypes.oneOf(['small', 'medium', 'large']),
+    size: PropTypes.oneOf(['small', 'medium', 'large']),
     type: PropTypes.oneOf(['raised', 'fill', 'outline']),
     isActive: PropTypes.bool,
     badge: PropTypes.number,
@@ -151,8 +154,7 @@ class Button extends PureComponent {
     color: 'default',
     disabled: false,
     fullWidth: false,
-    width: 'medium',
-    height: 'medium',
+    size: 'medium',
     component: 'button',
     type: 'raised',
     isActive: false,
@@ -167,8 +169,7 @@ class Button extends PureComponent {
       component: Component,
       disabled,
       fullWidth,
-      width,
-      height,
+      size,
       type,
       isActive,
       badge,
@@ -181,8 +182,7 @@ class Button extends PureComponent {
 
     const className = classNames(
       classes.root,
-      classes[`width${capitalize(width)}`],
-      classes[`height${capitalize(height)}`],
+      classes[`size${capitalize(size)}`],
       classes[`type${capitalize(type)}`],
       {
         [classes.raised]: raised,
@@ -192,6 +192,7 @@ class Button extends PureComponent {
         [classes[`fill${capitalize(color)}`]]: fill && color !== 'default',
         [classes[`outline${capitalize(color)}`]]:
           outline && color !== 'default',
+        [classes.fullWidth]: fullWidth,
       },
       classNameProp,
     )

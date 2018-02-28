@@ -96,16 +96,18 @@ class TicketList extends Component {
 
         <CardAction align="between">
           <PromoCode {...this.props} error={promoCode.error} />
-          <Button
-            type="fill"
-            color="secondary"
-            width="large"
-            disabled={!hasSelectedTickets}
-            onClick={postEventWebsite}
-            badge={checkoutTotalQty}
-          >
-            Checkout
-          </Button>
+          <div style={{ width: 248 }}>
+            <Button
+              type="fill"
+              color="primary"
+              disabled={!hasSelectedTickets}
+              onClick={postEventWebsite}
+              badge={checkoutTotalQty}
+              fullWidth
+            >
+              Checkout
+            </Button>
+          </div>
         </CardAction>
       </Card>
     )
