@@ -16,6 +16,12 @@ const getBoxShadow = color => {
   return `0 0 3px 0 ${fade(color, 0.12)}, 0 2px 5px 0 ${fade(color, 0.26)}`
 }
 
+const raisedColors = {}
+
+Object.entries(primary).map(([key, value]) => {
+  raisedColors[`raised${capitalize(key)}`] = { color: value.main }
+})
+
 const styles = {
   root: {
     lineHeight: '1.4em',
@@ -42,6 +48,7 @@ const styles = {
       color: theme.palette.default,
     },
   },
+  ...raisedColors,
   raisedPrimary: {
     color: theme.palette.primary.main,
   },
@@ -61,6 +68,9 @@ const styles = {
     color: theme.palette.white.default,
     background: theme.palette.secondary.main,
     boxShadow: getBoxShadow(theme.palette.secondary.main),
+  },
+  sizeSmall: {
+    minHeight: 32,
   },
   sizeLarge: {
     minHeight: 56,
@@ -131,9 +141,19 @@ class Button extends PureComponent {
       classNameProp,
     )
 
-    const variant = size === 'large' ? 'button2' : 'button1'
+    const buttonSize = {
+      small: 1,
+      medium: 2,
+      large: 3,
+    }
 
-    return <Text variant={variant} className={className} {...other} />
+    return (
+      <Text
+        variant={`button${buttonSize[size]}`}
+        className={className}
+        {...other}
+      />
+    )
   }
 }
 

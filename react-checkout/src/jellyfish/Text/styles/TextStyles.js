@@ -80,6 +80,10 @@ export default {
     fontSize: pxToRem(16),
     fontWeight: fontWeight.bold,
   },
+  button3: {
+    fontSize: pxToRem(20),
+    fontWeight: fontWeight.medium,
+  },
   alignLeft: {
     textAlign: 'left',
   },
