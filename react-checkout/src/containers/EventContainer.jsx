@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import TicketList from '../components/TicketList'
 import Anywhere from '../components/Anywhere'
+import AirBnb from '../components/AirBnb'
 import { createCheckout, postEventWebsite } from '../actions/CheckoutActions'
 import { applyPromoCode } from '../actions/EventActions'
 import { selectDay } from '../actions/DayActions'
@@ -13,6 +14,8 @@ const EventComponent = props => {
     return <TicketList {...props} />
   } else if (app === 'anywhere') {
     return <Anywhere {...props} />
+  } else if (app === 'airbnb') {
+    return <AirBnb {...props} />
   }
 }
 
