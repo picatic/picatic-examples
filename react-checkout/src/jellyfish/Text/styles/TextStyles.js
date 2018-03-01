@@ -1,34 +1,12 @@
-import palette from './palette'
-import spacing from './spacing'
-
-// Font Families
-const AVENIR_NEXT = `'Avenir Next W01',sans-serif`
-const FUTURA = 'Futura Std'
-const fontFamily = {
-  primary: AVENIR_NEXT,
-  secondary: FUTURA,
-}
-
-// Font Weights
-const fontWeight = {
-  light: 100,
-  regular: 300,
-  medium: 500,
-  bold: 600,
-}
-
-// Font Sizing
-const fontSize = 14 // px
-const htmlFontSize = 16
-
-function pxToRem(value) {
-  return `${value / htmlFontSize}rem`
-}
+import theme from '../../styles'
+import fontFamily from './FontFamily'
+import fontWeight from './FontWeight'
+import { pxToRem } from '../../utils'
 
 export default {
   root: {
     display: 'block',
-    color: palette.text.default,
+    color: theme.palette.text.default,
     fontWeight: fontWeight.regular,
     fontFamily: fontFamily.primary,
     letterSpacing: 0,
@@ -71,7 +49,7 @@ export default {
     lineHeight: '28px',
   },
   subheading: {
-    color: palette.text.muted,
+    color: theme.palette.text.muted,
     fontSize: pxToRem(18),
     lineHeight: pxToRem(24),
   },
@@ -90,7 +68,7 @@ export default {
     lineHeight: '20px',
   },
   caption: {
-    color: palette.text.muted,
+    color: theme.palette.text.muted,
     fontSize: pxToRem(12),
     lineHeight: '20px',
   },
@@ -116,36 +94,36 @@ export default {
     marginBottom: '0.35em',
   },
   paragraph: {
-    marginBottom: spacing.unit * 2,
+    marginBottom: theme.spacing.unit * 2,
   },
   colorInherit: {
     color: 'inherit',
   },
   colorPrimary: {
-    color: palette.primary.main,
+    color: theme.palette.primary.main,
   },
   colorSecondary: {
-    color: palette.secondary.main,
+    color: theme.palette.secondary.main,
   },
   colorError: {
-    color: palette.error.main,
+    color: theme.palette.error.main,
   },
   colorDark: {
-    color: palette.text.dark,
+    color: theme.palette.text.dark,
   },
   colorMuted: {
-    color: palette.text.muted,
+    color: theme.palette.text.muted,
   },
   colorExtraMuted: {
-    color: palette.text.extraMuted,
+    color: theme.palette.text.extraMuted,
   },
   colorWhite: {
-    color: palette.white.default,
+    color: theme.palette.white.default,
   },
   colorWhiteMuted: {
-    color: palette.white.muted,
+    color: theme.palette.white.muted,
   },
   colorWhiteExtraMuted: {
-    color: palette.white.extraMuted,
+    color: theme.palette.white.extraMuted,
   },
 }
