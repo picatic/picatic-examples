@@ -11,90 +11,52 @@ import Badge from '../src/jellyfish/Badge'
 import Button from '../src/jellyfish/Button'
 import Text from '../src/jellyfish/Text'
 
+const buttonSizes = ['small', 'medium', 'large']
+const buttonColors = ['primary', 'secondary']
+const buttonAppearances = ['fill', 'raised']
+
 storiesOf('Buttons', module).add('button', () => (
   <div>
-    <div style={{ display: 'flex', marginBottom: 30 }}>
-      <div style={{ width: 302, margin: 15 }}>
-        <Button
-          appearance="fill"
-          color="secondary"
-          size="large"
-          style={{ marginBottom: 15 }}
-          fullWidth
-        >
-          Text
-        </Button>
-        <Button
-          appearance="fill"
-          color="secondary"
-          style={{ marginBottom: 15 }}
-          fullWidth
-        >
-          Text
-        </Button>
-      </div>
-      <div style={{ width: 302, margin: 15 }}>
-        <Button
-          appearance="fill"
-          color="primary"
-          size="large"
-          style={{ marginBottom: 15 }}
-          fullWidth
-        >
-          Text
-        </Button>
-        <Button
-          appearance="fill"
-          color="primary"
-          style={{ marginBottom: 15 }}
-          fullWidth
-        >
-          Text
-        </Button>
-      </div>
-      <div style={{ width: 302, margin: 15 }}>
-        <Button
-          color="secondary"
-          size="large"
-          style={{ marginBottom: 15 }}
-          fullWidth
-        >
-          Text
-        </Button>
-        <Button color="secondary" style={{ marginBottom: 15 }} fullWidth>
-          Text
-        </Button>
-      </div>
-      <div style={{ width: 302, margin: 15 }}>
-        <Button
-          color="dodger"
-          size="large"
-          style={{ marginBottom: 15 }}
-          fullWidth
-        >
-          Text
-        </Button>
-        <Button color="dodger" style={{ marginBottom: 15 }} fullWidth>
-          Text
-        </Button>
-      </div>
+    <div style={{ display: 'flex' }}>
+      {buttonAppearances.map(appearance =>
+        buttonColors.map(color => (
+          <div key={`${color}${appearance}`} style={{ width: 302, margin: 15 }}>
+            {buttonSizes.map(size => (
+              <Button
+                key={`${color}${appearance}${size}`}
+                appearance={appearance}
+                color={color}
+                size={size}
+                style={{ marginBottom: 15 }}
+                fullWidth
+              >
+                Text
+              </Button>
+            ))}
+          </div>
+        )),
+      )}
     </div>
+    <Button color="dodger">Apply</Button>
   </div>
 ))
 
 storiesOf('Typography', module).add('types', () => (
   <div>
-    {Object.entries(TextTags).map(([key]) => (
-      <div key={key} style={{ display: 'flex', marginBottom: 20 }}>
-        <Text
-          variant="subheading"
-          style={{ minWidth: 150, alignSelf: 'center' }}
-        >
-          {key}
-        </Text>
-        <Text type={key}>Types</Text>
-      </div>
-    ))}
+    {Object.entries(TextTags).map(([key]) => {
+      if (key.indexOf('button') > -1) return false
+      return (
+        <div key={key} style={{ display: 'flex', marginBottom: 20 }}>
+          <Text
+            variant="subheading"
+            style={{ minWidth: 150, alignSelf: 'center' }}
+          >
+            {key}
+          </Text>
+          <Text variant={key}>Types</Text>
+        </div>
+      )
+    })}
   </div>
 ))
 

@@ -13,4 +13,5 @@ export default {
   caption: 'span',
   button1: 'button',
   button2: 'button',
+  button3: 'button',
 }
