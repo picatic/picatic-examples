@@ -5,6 +5,7 @@ import injectSheet from 'react-jss'
 import theme from '../styles'
 import { capitalize, pxToRem, fade } from '../utils'
 import { primary } from '../colors'
+import Text from '../Text'
 
 const hoverState = '&:not([disabled]):not([data-disabled]):hover'
 const focusState = '&:not([disabled]):not([data-disabled]):focus'
@@ -21,11 +22,8 @@ const styles = {
     border: 'none',
     borderRadius: 4,
     boxSizing: 'border-box',
-    color: theme.palette.text.primary,
-    fontFamily: `'Avenir Next W01',sans-serif`,
-    minWidth: theme.spacing.unit * 11,
-    minHeight: 36,
-    fontWeight: 600,
+    boxShadow: '0 0 2px 0 rgba(0,0,0,.12), 0 2px 5px 0 rgba(0,0,0,.12)',
+    minHeight: 40,
     padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
     position: 'relative',
     verticalAlign: 'middle',
@@ -44,7 +42,6 @@ const styles = {
       color: theme.palette.default,
     },
   },
-  raised: { boxShadow: getBoxShadow(theme.palette.black.default) },
   raisedPrimary: {
     color: theme.palette.primary.main,
   },
@@ -65,50 +62,16 @@ const styles = {
     background: theme.palette.secondary.main,
     boxShadow: getBoxShadow(theme.palette.secondary.main),
   },
-  sizeSmall: {
-    padding: `${theme.spacing.unit - 1}px ${theme.spacing.unit}px`,
-    minWidth: theme.spacing.unit * 8,
-    minHeight: 32,
-    fontSize: pxToRem(12),
-  },
-  sizeMedium: {},
   sizeLarge: {
-    width: theme.spacing.unit * 30,
-    minHeight: 40,
-    fontSize: pxToRem(14),
+    minHeight: 56,
   },
   fullWidth: {
     width: '100%',
-  },
-  badge: {
-    borderRadius: '50%',
-    color: 'rgba(255,255,255,.7)',
-    fontSize: 11,
-    fontWeight: 600,
-    height: 16,
-    minWidth: 16,
-    lineHeight: '17px',
-    textAlign: 'center',
-    verticalAlign: 'baseline',
-    whiteSpace: 'nowrap',
-  },
-  badgeOutline: {
-    backgroundColor: '#2196f3',
-    display: 'block',
-    position: 'absolute',
-    top: '-8px',
-    right: '-8px',
-  },
-  badgeFill: {
-    backgroundColor: 'rgba(0,0,0,.26)',
-    display: 'inline-block',
-    marginLeft: '8px',
   },
 }
 
 class Button extends PureComponent {
   static PropTypes = {
-    children: PropTypes.node.isRequired,
     classes: PropTypes.object.isRequired,
     className: PropTypes.string,
     color: PropTypes.oneOf([
@@ -139,7 +102,6 @@ class Button extends PureComponent {
   }
   render() {
     const {
-      children: childrenProp,
       classes,
       className: classNameProp,
       color,
@@ -169,22 +131,9 @@ class Button extends PureComponent {
       classNameProp,
     )
 
-    const classNameBadge = classNames(classes.badge, {
-      [classes.badgeFill]: fill,
-    })
+    const variant = size === 'large' ? 'button2' : 'button1'
 
-    const children = fill ? childrenProp.toUpperCase() : childrenProp
-
-    return (
-      <Component
-        className={className}
-        {...(isActive ? { 'data-active': true } : {})}
-        {...other}
-      >
-        <span>{children}</span>
-        {badge > 0 && <span className={classNameBadge}>{badge}</span>}
-      </Component>
-    )
+    return <Text variant={variant} className={className} {...other} />
   }
 }
 

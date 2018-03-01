@@ -36,7 +36,7 @@ class TicketList extends Component {
       <Card className="max-width-3 mx-auto" style={{ boxShadow }}>
         <CardMedia image={showHeaderImage && event.attributes.cover_image_uri}>
           <Text
-            type="title"
+            variant="title"
             color={showHeaderImage ? 'white' : 'default'}
             style={{ paddingBottom: '4px' }}
           >
