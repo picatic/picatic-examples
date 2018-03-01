@@ -2,8 +2,7 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import injectSheet from 'react-jss'
 import classNames from 'classnames'
-import TextTags from './styles/TextTags'
-import theme from '../styles'
+import TextStyles, { TextTags } from './styles'
 import { capitalize } from '../utils'
 
 class Text extends PureComponent {
@@ -76,4 +75,4 @@ class Text extends PureComponent {
   }
 }
 
-export default injectSheet(theme.typography)(Text)
+export default injectSheet(TextStyles)(Text)
