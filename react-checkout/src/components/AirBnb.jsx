@@ -8,9 +8,9 @@ class AirBnb extends Component {
   }
 
   componentWillMount() {
-    const { eventId, eventObj, airbnbApi, airbnbOauth, user_id } = this.props
+    const { eventId, eventObj } = this.props
     if (eventObj) {
-      this.createAirbnbEvent(eventObj, airbnbApi, airbnbOauth, user_id)
+      this.geoCode(eventObj)
     }
     else {
       this.getEvent(eventId)
@@ -18,20 +18,34 @@ class AirBnb extends Component {
   }
 
   getEvent = async eventId => {
-    const { airbnbApi, airbnbOauth, user_id } = this.props
     const url = `https://api.picatic.com/v2/event/${eventId}`
     const { json, error } = await apiFetch(url)
 
     if (json) {
       const eventObj = json.data
       console.log(eventObj.attributes.title)
-      this.createAirbnbEvent(eventObj, airbnbApi, airbnbOauth, user_id)
+      this.geoCode(eventObj)
     } else if (error) {
       this.setState({ error })
     }
   }
 
-  createAirbnbEvent = async (eventObj, airbnbApi, airbnbOauth, user_id) => {
+  geoCode = async eventObj => {
+    const { googleMapapikey, airbnbApi, airbnbOauth, user_id } = this.props
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=${googleMapapikey}`
+    const { json, error } = await apiFetch(url)
+
+    if (json) {
+      const lat = json.results[0].geometry.location.lat
+      const lng = json.results[0].geometry.location.lng
+      this.createAirbnbEvent(eventObj, airbnbApi, airbnbOauth, user_id, lat, lng)
+    } else if (error) {
+      this.setState({ error })
+    }
+  }
+
+
+  createAirbnbEvent = async (eventObj, airbnbApi, airbnbOauth, user_id, lat, lng) => {
     const eventData = eventObj.attributes
     const userId = Number(user_id)
     const url = `https://api.airbnb.com/v2/congregations?key=` + airbnbApi
@@ -43,18 +57,24 @@ class AirBnb extends Component {
       check_in_at: eventData.start_date,
       check_out_at: eventData.end_date,
       guests: 1,
-      lat: 53.360712,
-      lng: -6.251209,
+      lat: lat,
+      lng: lng,
       logo_url:"",
       url:"https://www.picatic.com/"+eventObj.id,
       user_id: userId
     })
-    const headers = {
-      'method': 'POST',
-      'X-Airbnb-OAuth-Token': airbnbOauth,
-      'Content-Type': 'application/json',
-    }
-    const { json, error } = await apiFetch(url, 'POST', body, headers)
+    console.log(body,lat,lng)
+    const { json, error } = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Airbnb-OAuth-Token': airbnbOauth,
+      },
+      body: body
+    })
+      .then(res => res.json())
+      .then(json => ({ json }))
+      .catch(error => ({ error }))
 
     if (json) {
       const airbnbEventid = json.congregation.id
