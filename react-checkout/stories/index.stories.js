@@ -13,56 +13,71 @@ import Text from '../src/jellyfish/Text'
 
 storiesOf('Buttons', module).add('button', () => (
   <div>
-    <Text style={{ marginBottom: 15 }}>Raised</Text>
-    <div style={{ marginBottom: 30 }}>
-      <Button style={{ marginRight: 15 }}>Click Me</Button>
-      <Button color="primary" style={{ marginRight: 15 }}>
-        Click Me
-      </Button>
-      <Button color="secondary" style={{ marginRight: 15 }}>
-        Click Me
-      </Button>
-    </div>
-    <Text style={{ marginBottom: 15 }}>Fill</Text>
-    <div style={{ marginBottom: 30 }}>
-      <Button appearance="fill" style={{ marginRight: 15 }}>
-        Click Me
-      </Button>
-      <Button appearance="fill" color="primary" style={{ marginRight: 15 }}>
-        Click Me
-      </Button>
-      <Button appearance="fill" color="secondary" style={{ marginRight: 15 }}>
-        Click Me
-      </Button>
-    </div>
-    <Text style={{ marginBottom: 15 }}>Sizes</Text>
-    <div>
-      <Button
-        appearance="fill"
-        color="primary"
-        size="small"
-        style={{ marginBottom: 15 }}
-      >
-        Click Me
-      </Button>
-      <br />
-      <Button
-        appearance="fill"
-        color="primary"
-        size="medium"
-        style={{ marginBottom: 15 }}
-      >
-        Click Me
-      </Button>
-      <br />
-      <Button
-        appearance="fill"
-        color="primary"
-        size="large"
-        style={{ marginBottom: 15 }}
-      >
-        Click Me
-      </Button>
+    <div style={{ display: 'flex', marginBottom: 30 }}>
+      <div style={{ width: 302, margin: 15 }}>
+        <Button
+          appearance="fill"
+          color="secondary"
+          size="large"
+          style={{ marginBottom: 15 }}
+          fullWidth
+        >
+          Text
+        </Button>
+        <Button
+          appearance="fill"
+          color="secondary"
+          style={{ marginBottom: 15 }}
+          fullWidth
+        >
+          Text
+        </Button>
+      </div>
+      <div style={{ width: 302, margin: 15 }}>
+        <Button
+          appearance="fill"
+          color="primary"
+          size="large"
+          style={{ marginBottom: 15 }}
+          fullWidth
+        >
+          Text
+        </Button>
+        <Button
+          appearance="fill"
+          color="primary"
+          style={{ marginBottom: 15 }}
+          fullWidth
+        >
+          Text
+        </Button>
+      </div>
+      <div style={{ width: 302, margin: 15 }}>
+        <Button
+          color="secondary"
+          size="large"
+          style={{ marginBottom: 15 }}
+          fullWidth
+        >
+          Text
+        </Button>
+        <Button color="secondary" style={{ marginBottom: 15 }} fullWidth>
+          Text
+        </Button>
+      </div>
+      <div style={{ width: 302, margin: 15 }}>
+        <Button
+          color="dodger"
+          size="large"
+          style={{ marginBottom: 15 }}
+          fullWidth
+        >
+          Text
+        </Button>
+        <Button color="dodger" style={{ marginBottom: 15 }} fullWidth>
+          Text
+        </Button>
+      </div>
     </div>
   </div>
 ))
@@ -71,7 +86,10 @@ storiesOf('Typography', module).add('types', () => (
   <div>
     {Object.entries(TextTags).map(([key]) => (
       <div key={key} style={{ display: 'flex', marginBottom: 20 }}>
-        <Text type="subheading" style={{ minWidth: 150, alignSelf: 'center' }}>
+        <Text
+          variant="subheading"
+          style={{ minWidth: 150, alignSelf: 'center' }}
+        >
           {key}
         </Text>
         <Text type={key}>Types</Text>
