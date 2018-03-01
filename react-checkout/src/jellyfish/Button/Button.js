@@ -48,6 +48,11 @@ const styles = {
       color: theme.palette.default,
     },
   },
+  raised: {
+    '&:hover': {
+      boxShadow: '0 0 2px 0 rgba(0,0,0,.12), 0 2px 5px 0 rgba(0,0,0,.16)',
+    },
+  },
   ...raisedColors,
   raisedPrimary: {
     color: theme.palette.primary.main,
@@ -63,11 +68,17 @@ const styles = {
     color: theme.palette.white.default,
     background: theme.palette.primary.main,
     boxShadow: getBoxShadow(theme.palette.primary.main),
+    '&:hover': {
+      backgroundColor: fade(theme.palette.primary.main, 0.86),
+    },
   },
   fillSecondary: {
     color: theme.palette.white.default,
     background: theme.palette.secondary.main,
     boxShadow: getBoxShadow(theme.palette.secondary.main),
+    '&:hover': {
+      backgroundColor: fade(theme.palette.secondary.main, 0.86),
+    },
   },
   sizeSmall: {
     minHeight: 32,

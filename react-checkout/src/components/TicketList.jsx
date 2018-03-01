@@ -51,7 +51,7 @@ class TicketList extends Component {
           <ButtonOutline
             className="mr2"
             isActive={selectedDay.day === 'All Dates'}
-            badge={allDatesSum}
+            // badge={allDatesSum}
             onClick={() => selectDay('All Dates')}
           >
             All Dates
@@ -77,7 +77,7 @@ class TicketList extends Component {
                 key={index}
                 className="mr2"
                 isActive={start_date === selectedDay.day}
-                badge={badge}
+                // badge={badge}
                 onClick={() => selectDay(start_date)}
               >
                 {dayOfWeek}
@@ -100,7 +100,7 @@ class TicketList extends Component {
               color="primary"
               disabled={!hasSelectedTickets}
               onClick={postEventWebsite}
-              badge={checkoutTotalQty}
+              // badge={checkoutTotalQty}
               fullWidth
             >
               Checkout
