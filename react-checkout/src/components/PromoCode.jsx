@@ -41,7 +41,7 @@ class PromoCode extends Component {
         <Button
           type="submit"
           disabled={value.length === 0 || error}
-          color="primary"
+          color="dodger"
         >
           Apply
         </Button>

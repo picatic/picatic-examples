@@ -28,8 +28,8 @@ class Text extends PureComponent {
     gutterBottom: PropTypes.bool,
     noWrap: PropTypes.bool,
     paragraph: PropTypes.bool,
-    type: PropTypes.oneOf(Object.getOwnPropertyNames(TextTags)),
-    typeMapping: PropTypes.object,
+    variant: PropTypes.oneOf(Object.getOwnPropertyNames(TextTags)),
+    tagsMapping: PropTypes.object,
   }
   static defaultProps = {
     align: 'inherit',
@@ -37,8 +37,8 @@ class Text extends PureComponent {
     gutterBottom: false,
     noWrap: false,
     paragraph: false,
-    type: 'body1',
-    typeMapping: TextTags,
+    variant: 'body1',
+    tagsMapping: TextTags,
   }
   render() {
     const {
@@ -50,14 +50,14 @@ class Text extends PureComponent {
       gutterBottom,
       noWrap,
       paragraph,
-      type,
-      typeMapping,
+      variant,
+      tagsMapping,
       ...other
     } = this.props
 
     const className = classNames(
       classes.root,
-      classes[type],
+      classes[variant],
       {
         [classes[`color${capitalize(color)}`]]: color !== 'default',
         [classes[`align${capitalize(align)}`]]: align !== 'inherit',
@@ -69,7 +69,7 @@ class Text extends PureComponent {
     )
 
     const Component =
-      componentProp || (paragraph ? 'p' : typeMapping[type]) || 'span'
+      componentProp || (paragraph ? 'p' : tagsMapping[variant]) || 'span'
 
     return <Component className={className} {...other} />
   }

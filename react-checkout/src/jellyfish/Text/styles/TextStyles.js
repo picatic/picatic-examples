@@ -72,7 +72,18 @@ export default {
     fontSize: pxToRem(12),
     lineHeight: '20px',
   },
-  button: {},
+  button1: {
+    fontSize: pxToRem(14),
+    fontWeight: fontWeight.bold,
+  },
+  button2: {
+    fontSize: pxToRem(16),
+    fontWeight: fontWeight.bold,
+  },
+  button3: {
+    fontSize: pxToRem(20),
+    fontWeight: fontWeight.medium,
+  },
   alignLeft: {
     textAlign: 'left',
   },
@@ -96,6 +107,7 @@ export default {
   paragraph: {
     marginBottom: theme.spacing.unit * 2,
   },
+
   colorInherit: {
     color: 'inherit',
   },
