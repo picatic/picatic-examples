@@ -6,7 +6,16 @@ import Text from '../Text'
 import theme from '../styles'
 import { primary } from '../colors'
 import { capitalize } from '../utils'
-import { fills } from '../utils'
+
+// TODO: Refactor
+const getStyle = color => ({
+  color: theme.palette.white.default,
+  backgroundColor: color,
+})
+const fills = {}
+Object.entries(primary).forEach(([key, value]) => {
+  fills[`fill${capitalize(key)}`] = getStyle(primary[key].main)
+})
 
 const styles = {
   root: {
@@ -15,13 +24,19 @@ const styles = {
     padding: `4px ${theme.spacing.unit}px`,
   },
   ...fills,
+  fillPrimary: getStyle(theme.palette.primary.main),
+  fillSecondary: getStyle(theme.palette.secondary.main),
 }
 
 class Badge extends PureComponent {
   static PropTypes = {
     className: PropTypes.string,
     classes: PropTypes.object.isRequired,
-    color: PropTypes.oneOf(Object.getOwnPropertyNames(primary)),
+    color: PropTypes.oneOf([
+      'primary',
+      'secondary',
+      Object.getOwnPropertyNames(primary),
+    ]),
   }
   static defaultProps = {
     color: 'heart',

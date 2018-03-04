@@ -78,7 +78,7 @@ const Ticket = props => {
         </TextField>
       </div>
       <div className="col flex-auto">
-        <Text type="subheading">{name}</Text>
+        <Text variant="subheading">{name}</Text>
         <Text color="muted">
           {allDates ? (
             'All Dates'
@@ -91,7 +91,7 @@ const Ticket = props => {
         </Text>
       </div>
       <div className="col">
-        <Text type="subheading">{displayPrice}</Text>
+        <Text variant="subheading">{displayPrice}</Text>
         <Text>{discountPrice}</Text>
       </div>
     </div>

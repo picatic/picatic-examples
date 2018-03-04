@@ -11,72 +11,52 @@ import Badge from '../src/jellyfish/Badge'
 import Button from '../src/jellyfish/Button'
 import Text from '../src/jellyfish/Text'
 
+const buttonSizes = ['small', 'medium', 'large']
+const buttonColors = ['primary', 'secondary']
+const buttonAppearances = ['fill', 'raised']
+
 storiesOf('Buttons', module).add('button', () => (
   <div>
-    <Text style={{ marginBottom: 15 }}>Raised</Text>
-    <div style={{ marginBottom: 30 }}>
-      <Button style={{ marginRight: 15 }}>Click Me</Button>
-      <Button color="primary" style={{ marginRight: 15 }}>
-        Click Me
-      </Button>
-      <Button color="secondary" style={{ marginRight: 15 }}>
-        Click Me
-      </Button>
+    <div style={{ display: 'flex' }}>
+      {buttonAppearances.map(appearance =>
+        buttonColors.map(color => (
+          <div key={`${color}${appearance}`} style={{ width: 302, margin: 15 }}>
+            {buttonSizes.map(size => (
+              <Button
+                key={`${color}${appearance}${size}`}
+                appearance={appearance}
+                color={color}
+                size={size}
+                style={{ marginBottom: 15 }}
+                fullWidth
+              >
+                Text
+              </Button>
+            ))}
+          </div>
+        )),
+      )}
     </div>
-    <Text style={{ marginBottom: 15 }}>Fill</Text>
-    <div style={{ marginBottom: 30 }}>
-      <Button appearance="fill" style={{ marginRight: 15 }}>
-        Click Me
-      </Button>
-      <Button appearance="fill" color="primary" style={{ marginRight: 15 }}>
-        Click Me
-      </Button>
-      <Button appearance="fill" color="secondary" style={{ marginRight: 15 }}>
-        Click Me
-      </Button>
-    </div>
-    <Text style={{ marginBottom: 15 }}>Sizes</Text>
-    <div>
-      <Button
-        appearance="fill"
-        color="primary"
-        size="small"
-        style={{ marginBottom: 15 }}
-      >
-        Click Me
-      </Button>
-      <br />
-      <Button
-        appearance="fill"
-        color="primary"
-        size="medium"
-        style={{ marginBottom: 15 }}
-      >
-        Click Me
-      </Button>
-      <br />
-      <Button
-        appearance="fill"
-        color="primary"
-        size="large"
-        style={{ marginBottom: 15 }}
-      >
-        Click Me
-      </Button>
-    </div>
+    <Button color="dodger">Apply</Button>
   </div>
 ))
 
 storiesOf('Typography', module).add('types', () => (
   <div>
-    {Object.entries(TextTags).map(([key]) => (
-      <div key={key} style={{ display: 'flex', marginBottom: 20 }}>
-        <Text type="subheading" style={{ minWidth: 150, alignSelf: 'center' }}>
-          {key}
-        </Text>
-        <Text type={key}>Types</Text>
-      </div>
-    ))}
+    {Object.entries(TextTags).map(([key]) => {
+      if (key.indexOf('button') > -1) return false
+      return (
+        <div key={key} style={{ display: 'flex', marginBottom: 20 }}>
+          <Text
+            variant="subheading"
+            style={{ minWidth: 150, alignSelf: 'center' }}
+          >
+            {key}
+          </Text>
+          <Text variant={key}>Types</Text>
+        </div>
+      )
+    })}
   </div>
 ))
 
@@ -85,7 +65,7 @@ storiesOf('Badge', module).add('badges', () => (
     {Object.entries(primary).map(([key]) => {
       return (
         <Badge key={key} color={key} style={{ margin: 5 }}>
-          {Label}
+          Label
         </Badge>
       )
     })}
