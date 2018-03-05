@@ -21,11 +21,14 @@ const styles = {
   root: {
     width: 'max-content',
     borderRadius: 2,
+    lineHeight: '16px',
     padding: `4px ${theme.spacing.unit}px`,
   },
   ...fills,
   fillPrimary: getStyle(theme.palette.primary.main),
   fillSecondary: getStyle(theme.palette.secondary.main),
+  fillNeutral: getStyle('#424242'),
+  pill: { borderRadius: 20 },
 }
 
 class Badge extends PureComponent {
@@ -37,20 +40,29 @@ class Badge extends PureComponent {
       'secondary',
       Object.getOwnPropertyNames(primary),
     ]),
+    pill: PropTypes.bool,
   }
   static defaultProps = {
     color: 'heart',
+    pill: false,
   }
   render() {
-    const { classes, className: classNameProp, color, ...other } = this.props
+    const {
+      classes,
+      className: classNameProp,
+      color,
+      pill,
+      ...other
+    } = this.props
 
     const className = classNames(
       classes.root,
       [classes[`fill${capitalize(color)}`]],
+      { [classes.pill]: pill },
       classNameProp,
     )
 
-    return <Text className={className} {...other} />
+    return <Text variant="label" className={className} {...other} />
   }
 }
 

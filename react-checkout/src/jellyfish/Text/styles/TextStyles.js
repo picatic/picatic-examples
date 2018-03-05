@@ -72,6 +72,9 @@ export default {
     fontSize: pxToRem(12),
     lineHeight: '20px',
   },
+  label: {
+    fontSize: pxToRem(13),
+  },
   button1: {
     fontSize: pxToRem(14),
     fontWeight: fontWeight.bold,

@@ -4,6 +4,7 @@ import PromoCode from '../components/PromoCode'
 import Text from '../jellyfish/Text'
 import Button, { ButtonOutline } from '../jellyfish/Button'
 import Card, { CardMedia, CardContent, CardAction } from '../jellyfish/Card'
+import Badge from '../jellyfish/Badge'
 import moment from 'moment'
 import { getTicketsOnDay } from '../utils/ticketUtils'
 
@@ -47,11 +48,17 @@ class TicketList extends Component {
           </Text>
         </CardMedia>
 
-        <CardContent>
+        <CardContent style={{ display: 'flex' }}>
           <ButtonOutline
             className="mr2"
             isActive={selectedDay.day === 'All Dates'}
-            // badge={allDatesSum}
+            badge={
+              allDatesSum > 0 && (
+                <Badge color="dodger" pill>
+                  {allDatesSum}
+                </Badge>
+              )
+            }
             onClick={() => selectDay('All Dates')}
           >
             All Dates
@@ -77,7 +84,13 @@ class TicketList extends Component {
                 key={index}
                 className="mr2"
                 isActive={start_date === selectedDay.day}
-                // badge={badge}
+                badge={
+                  badge > 0 && (
+                    <Badge color="dodger" pill>
+                      {badge}
+                    </Badge>
+                  )
+                }
                 onClick={() => selectDay(start_date)}
               >
                 {dayOfWeek}
@@ -100,7 +113,13 @@ class TicketList extends Component {
               color="primary"
               disabled={!hasSelectedTickets}
               onClick={postEventWebsite}
-              // badge={checkoutTotalQty}
+              rightIcon={
+                checkoutTotalQty > 0 && (
+                  <Badge color="neutral" pill style={{ opacity: 0.54 }}>
+                    {checkoutTotalQty}
+                  </Badge>
+                )
+              }
               fullWidth
             >
               Checkout

@@ -24,12 +24,12 @@ Object.entries(primary).map(([key, value]) => {
 
 const styles = {
   root: {
-    lineHeight: '1.4em',
     border: 'none',
     borderRadius: 4,
     boxSizing: 'border-box',
     boxShadow: '0 0 2px 0 rgba(0,0,0,.12), 0 2px 5px 0 rgba(0,0,0,.12)',
     height: 40,
+    lineHeight: '1.4em',
     padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
     position: 'relative',
     verticalAlign: 'middle',
@@ -109,7 +109,7 @@ class Button extends PureComponent {
     size: PropTypes.oneOf(['small', 'medium', 'large']),
     appearance: PropTypes.oneOf(['raised', 'fill']),
     isActive: PropTypes.bool,
-    badge: PropTypes.number,
+    badge: PropTypes.node,
   }
   static defaultProps = {
     color: 'default',
@@ -123,6 +123,7 @@ class Button extends PureComponent {
   }
   render() {
     const {
+      children,
       classes,
       className: classNameProp,
       color,
@@ -132,7 +133,7 @@ class Button extends PureComponent {
       size,
       appearance,
       isActive,
-      badge,
+      rightIcon,
       ...other
     } = this.props
 
@@ -163,7 +164,18 @@ class Button extends PureComponent {
         variant={`button${buttonSize[size]}`}
         className={className}
         {...other}
-      />
+      >
+        <span>{children}</span>
+        <span
+          style={{
+            position: 'absolute',
+            top: 8,
+            right: 8,
+          }}
+        >
+          {rightIcon || null}
+        </span>
+      </Text>
     )
   }
 }

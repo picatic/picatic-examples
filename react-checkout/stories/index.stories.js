@@ -69,5 +69,12 @@ storiesOf('Badge', module).add('badges', () => (
         </Badge>
       )
     })}
+    {Object.entries(primary).map(([key]) => {
+      return (
+        <Badge key={key} color={key} pill style={{ margin: 5 }}>
+          Label
+        </Badge>
+      )
+    })}
   </div>
 ))
