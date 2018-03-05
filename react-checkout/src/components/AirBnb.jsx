@@ -4,11 +4,13 @@ import { apiFetch } from '../utils/apiUtils'
 class AirBnb extends Component {
   static defaultProps = {
     eventId: 'event15198432929104',
+    // eventId: 'slack',
     airbnbApi: 'd306zoyjsyarp7ifhu67rjxn52tv0t20',
     airbnbOauth: '9hpyczc6vjwr4cofnvdbokysn',
     user_id: '175906773',
     googleMapapikey: 'AIzaSyAUuwkvQXJdqclRNcchQTpQFJAMlGpxGO4',
   }
+
   state = {
     airbnbEventid: 40069,
     error: null,
@@ -38,7 +40,11 @@ class AirBnb extends Component {
 
   geoCode = async eventObj => {
     const { googleMapapikey, airbnbApi, airbnbOauth, user_id } = this.props
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=${googleMapapikey}`
+    const location = encodeURI(eventObj.attributes.venue_street)
+    const url =
+      `https://maps.googleapis.com/maps/api/geocode/json?address=` +
+      location +
+      `&key=${googleMapapikey}`
     const { json, error } = await apiFetch(url)
 
     if (json) {
@@ -52,6 +58,7 @@ class AirBnb extends Component {
         lat,
         lng,
       )
+      console.log(lat, lng)
     } else if (error) {
       this.setState({ error })
     }
@@ -67,27 +74,40 @@ class AirBnb extends Component {
   ) => {
     const eventData = eventObj.attributes
     const userId = Number(user_id)
-    const url = `https://api.airbnb.com/v2/congregations?key=` + airbnbApi
-    const body = JSON.stringify({
-      name: eventData.title,
-      address_1: eventData.venue_name,
-      address_2: '',
-      location: eventData.venue_street,
-      check_in_at: eventData.start_date,
-      check_out_at: eventData.end_date,
-      guests: 1,
-      lat: lat,
-      lng: lng,
+    const url =
+      'https://api.airbnb.com/v2/congregations?key=d306zoyjsyarp7ifhu67rjxn52tv0t20'
+    // const url = `https://api.airbnb.com/v2/congregations?key=` + airbnbApi
+    // const body = JSON.stringify({
+    //   name: eventData.title,
+    //   address_1: eventData.venue_name,
+    //   address_2: '',
+    //   location: eventData.venue_street,
+    //   check_in_at: eventData.start_date,
+    //   check_out_at: eventData.end_date,
+    //   guests: 1,
+    //   lat: lat,
+    //   lng: lng,
+    //   logo_url: '',
+    //   url: 'https://www.picatic.com/' + eventObj.id,
+    //   user_id: userId,
+    // })
+    const body = {
+      name: 'Congregation Test Event',
+      lat: 53.360712,
+      lng: -6.251209,
+      guests: 2,
+      location: '888 Brannan St, San Francisco, CA 94103',
+      address_1: 'Airbnb',
+      check_in_at: '2017-10-10',
+      check_out_at: '2017-10-20',
       logo_url: '',
-      url: 'https://www.picatic.com/' + eventObj.id,
-      user_id: userId,
-    })
-    console.log(body, lat, lng)
+    }
     const { json, error } = await fetch(url, {
-      method: 'POST',
+      method: 'post',
       headers: {
         'Content-Type': 'application/json',
-        'X-Airbnb-OAuth-Token': airbnbOauth,
+        // 'X-Airbnb-OAuth-Token': airbnbOauth,
+        'X-Airbnb-OAuth-Token': '9hpyczc6vjwr4cofnvdbokysn',
       },
       body: body,
     })

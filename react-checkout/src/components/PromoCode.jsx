@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import TextField from 'material-ui/TextField'
 import Button from '../jellyfish/Button'
+import Input from '../jellyfish/Input'
 
 class PromoCode extends Component {
   state = {
@@ -30,7 +31,7 @@ class PromoCode extends Component {
     return (
       <form className="flex justify-between" onSubmit={this.handleSubmit}>
         <div className="mt1">
-          <TextField
+          <Input
             placeholder="Promo Code"
             value={value}
             onChange={this.handleChange}
