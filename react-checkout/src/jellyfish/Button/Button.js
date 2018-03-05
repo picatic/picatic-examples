@@ -29,7 +29,7 @@ const styles = {
     borderRadius: 4,
     boxSizing: 'border-box',
     boxShadow: '0 0 2px 0 rgba(0,0,0,.12), 0 2px 5px 0 rgba(0,0,0,.12)',
-    minHeight: 40,
+    height: 40,
     padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
     position: 'relative',
     verticalAlign: 'middle',

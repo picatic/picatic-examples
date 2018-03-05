@@ -2,14 +2,24 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import injectSheet from 'react-jss'
 import classNames from 'classnames'
+import TextStyles from '../Text/styles'
 
-const styles = {}
+const styles = {
+  root: {
+    border: '1px solid rgba(0,0,0,.26)',
+    borderRadius: '4px',
+    padding: '6px 12px',
+    height: 26,
+    ...TextStyles.root,
+    ...TextStyles.body1,
+  },
+}
 
 class Input extends Component {
   state = {
     focused: false,
   }
-  static PropTypes = {
+  static propTypes = {
     autoComplete: PropTypes.string,
     autoFocus: PropTypes.bool,
     classes: PropTypes.object.isRequired,
@@ -41,8 +51,14 @@ class Input extends Component {
     type: 'text',
   }
   render() {
-    const { inputComponent: InputComponent, ...other } = this.props
-    return <InputComponent {...other} />
+    const {
+      classes,
+      className: classNameProp,
+      inputComponent: InputComponent,
+      ...other
+    } = this.props
+    const className = classNames(classes.root, classNameProp)
+    return <InputComponent className={className} {...other} />
   }
 }
 
