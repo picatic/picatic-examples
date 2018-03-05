@@ -7,6 +7,7 @@ export default {
   root: {
     display: 'block',
     color: theme.palette.text.default,
+    fontSize: pxToRem(14),
     fontWeight: fontWeight.regular,
     fontFamily: fontFamily.primary,
     letterSpacing: 0,
@@ -65,7 +66,6 @@ export default {
   body1: {
     fontSize: pxToRem(14),
     lineHeight: pxToRem(19),
-    lineHeight: '20px',
   },
   caption: {
     color: theme.palette.text.muted,

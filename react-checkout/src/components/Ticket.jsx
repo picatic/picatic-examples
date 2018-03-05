@@ -2,6 +2,7 @@ import React from 'react'
 import TextField from 'material-ui/TextField'
 import { MenuItem } from 'material-ui/Menu'
 import Text from '../jellyfish/Text'
+import Select from '../jellyfish/Select'
 import injectSheet from 'react-jss'
 import classNames from 'classnames'
 import { getDayOfMonth, getMonth } from '../utils/dateUtils'
@@ -65,7 +66,7 @@ const Ticket = props => {
   return (
     <div className={className}>
       <div className="col pr2">
-        <TextField
+        <Select
           id={id}
           select
           className="ml-auto"
@@ -73,9 +74,10 @@ const Ticket = props => {
           margin="dense"
           onChange={ev => selectTicket(ev.target.value, props)}
           disabled={disabled}
+          style={{ width: 64 }}
         >
           {renderMenuItems(maxTickets, min_quantity)}
-        </TextField>
+        </Select>
       </div>
       <div className="col flex-auto">
         <Text variant="subheading">{name}</Text>
@@ -108,8 +110,8 @@ const renderMenuItems = (maxTickets, min_quantity) => {
     }
   }
   return arr.map(i => (
-    <MenuItem key={i} value={i} style={{ minWidth: 36 }}>
+    <option key={i} value={i}>
       {i}
-    </MenuItem>
+    </option>
   ))
 }

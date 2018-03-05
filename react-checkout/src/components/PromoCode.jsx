@@ -29,16 +29,18 @@ class PromoCode extends Component {
   render() {
     const { value, error } = this.state
     return (
-      <form className="flex justify-between" onSubmit={this.handleSubmit}>
-        <div className="mt1">
-          <Input
-            placeholder="Promo Code"
-            value={value}
-            onChange={this.handleChange}
-            helperText={error ? 'Please try again' : ''}
-            error={error}
-          />
-        </div>
+      <form
+        className="flex justify-between items-center"
+        onSubmit={this.handleSubmit}
+      >
+        <Input
+          placeholder="Promo Code"
+          value={value}
+          onChange={this.handleChange}
+          helperText={error ? 'Please try again' : ''}
+          error={error}
+          style={{ marginRight: 8 }}
+        />
         <Button
           type="submit"
           disabled={value.length === 0 || error}
