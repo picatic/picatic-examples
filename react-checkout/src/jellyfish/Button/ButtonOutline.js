@@ -16,9 +16,11 @@ const styles = {
     border: '1px solid rgba(0,0,0,.26)',
     borderRadius: 4,
     color: 'rgba(0,0,0,.38)',
+    cursor: 'pointer',
     fontSize: '12px',
     minHeight: '48px',
     minWidth: '110px',
+    position: 'relative',
     [activeState]: {
       border: '1px solid #2196f3',
       color: '#2196f3',
@@ -63,6 +65,8 @@ class ButtonOutline extends PureComponent {
   }
   render() {
     const {
+      badge,
+      children,
       classes,
       className: classNameProp,
       color,
@@ -89,7 +93,18 @@ class ButtonOutline extends PureComponent {
         className={className}
         {...(isActive ? { 'data-active': true } : {})}
         {...other}
-      />
+      >
+        <span>{children}</span>
+        <span
+          style={{
+            position: 'absolute',
+            top: '-8px',
+            right: '-8px',
+          }}
+        >
+          {badge}
+        </span>
+      </Component>
     )
   }
 }

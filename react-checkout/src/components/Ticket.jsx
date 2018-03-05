@@ -80,7 +80,7 @@ const Ticket = props => {
         </Select>
       </div>
       <div className="col flex-auto">
-        <Text variant="subheading">{name}</Text>
+        <Text variant="body3">{name}</Text>
         <Text color="muted">
           {allDates ? (
             'All Dates'
@@ -93,7 +93,7 @@ const Ticket = props => {
         </Text>
       </div>
       <div className="col">
-        <Text variant="subheading">{displayPrice}</Text>
+        <Text variant="body3">{displayPrice}</Text>
         <Text>{discountPrice}</Text>
       </div>
     </div>

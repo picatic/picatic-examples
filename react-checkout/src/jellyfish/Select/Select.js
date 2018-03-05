@@ -25,7 +25,6 @@ const styles = {
   root: {
     cursor: 'pointer',
     display: 'inline-flex',
-
     boxSize: 'border-box',
     flex: `1 1 0%`,
     height: 40,
@@ -37,11 +36,13 @@ const styles = {
     cursor: 'pointer',
     margin: 0,
     lineHeight: '32px',
+    background: 'transparent',
     border: '1px solid rgba(0,0,0,.12)',
     borderRadius: 4,
     padding: '4px 24px 4px 16px',
     WebkitAppearance: 'none',
     WebkitFontSmoothing: 'antialiased',
+    zIndex: 10,
     ...TextStyles.root,
   },
   disabled: {},

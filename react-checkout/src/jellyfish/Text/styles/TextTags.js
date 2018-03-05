@@ -11,6 +11,7 @@ export default {
   body2: 'aside',
   body1: 'p',
   caption: 'span',
+  label: 'label',
   button1: 'button',
   button2: 'button',
   button3: 'button',
