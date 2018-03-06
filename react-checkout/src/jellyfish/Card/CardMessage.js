@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import injectSheet from 'react-jss'
@@ -25,7 +25,43 @@ const styles = {
   ...fills,
 }
 
-class CardMessage extends PureComponent {
+class CardMessage extends Component {
+  componentDidMount() {
+    if (this.props.open) {
+      this.setAutoHideTimer()
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.open !== this.props.open) {
+      if (this.props.open) {
+        this.setAutoHideTimer()
+      } else {
+        clearTimeout(this.timerAutoHide)
+      }
+    }
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.timerAutoHide)
+  }
+
+  setAutoHideTimer = (autoHideDuration = null) => {
+    if (!this.props.onClose || this.props.autoHideDuration == null) {
+      return
+    }
+    clearTimeout(this.timerAutoHide)
+    this.timerAutoHide = setTimeout(() => {
+      if (!this.props.onClose || this.props.autoHideDuration == null) {
+        return
+      }
+
+      this.props.onClose(null, 'timeout')
+    }, autoHideDuration || this.props.autoHideDuration || 0)
+  }
+
+  timerAutoHide = null
+
   static propTypes = {
     classes: PropTypes.object.isRequired,
     className: PropTypes.string,
@@ -33,7 +69,9 @@ class CardMessage extends PureComponent {
     color: PropTypes.oneOf(Object.getOwnPropertyNames(primary)),
   }
   static defaultProps = {
+    autoHideDuration: 3000,
     color: 'shamrock',
+    open: false,
   }
   render() {
     const {
@@ -41,8 +79,13 @@ class CardMessage extends PureComponent {
       className: classNameProp,
       color,
       message,
+      open,
       ...other
     } = this.props
+
+    if (!open) {
+      return null
+    }
 
     const className = classNames(classes.root, classNameProp)
 
