@@ -9,7 +9,7 @@ const STORE_PICATIC_TICKET_PRICE_ID = 136022
 
 class AirBnb extends Component {
   state = {
-    airbnbEventId: null,
+    airbnbEventId: 40069,
     error: null,
     eventObj: null,
     lat: null,
