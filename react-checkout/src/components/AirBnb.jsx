@@ -9,7 +9,7 @@ const STORE_PICATIC_TICKET_PRICE_ID = 136022
 
 class AirBnb extends Component {
   state = {
-    airbnbEventId: null,
+    airbnbEventId: 40069,
     error: null,
     eventObj: null,
     lat: null,
@@ -99,15 +99,17 @@ class AirBnb extends Component {
     } = eventObj.attributes
 
     const eventTitle = encodeURI(title)
-    const address_1 = encodeURI(venue_name)
     const location = encodeURI(venue_street)
+    const address_1 = encodeURI(venue_name) || location
     const check_in_at = start_date
     const check_out_at = end_date
     const logo_url = promoter_avatar_uri
 
-    const url = `https://labs-api-197200.appspot.com/event?name=${eventTitle}&address_1=${address_1}&location=${location}&check_in_at=${start_date}&check_out_at=${end_date}&guests=1&lat=${lat}&lng=${lng}&logo_url=${promoter_avatar_uri}&url=https://www.picatic.com/${
+    const url = `https://labs-api-197200.appspot.com/event?name=${eventTitle}&address_1=${address_1}&location=${location}&check_in_at=${start_date}&check_out_at=${end_date}&guests=1&lat=${lat}&lng=${lng}&logo_url=&url=https://www.picatic.com/${
       eventObj.id
     }&method=PUT&congregation_id=${airbnbEventid}`
+
+    console.log(url)
 
     const { error } = await apiFetch(url)
 
@@ -128,15 +130,17 @@ class AirBnb extends Component {
     } = eventObj.attributes
 
     const eventTitle = encodeURI(title)
-    const address_1 = encodeURI(venue_name)
     const location = encodeURI(venue_street)
+    const address_1 = encodeURI(venue_name) || location
     const check_in_at = start_date
     const check_out_at = end_date
     const logo_url = promoter_avatar_uri
 
-    const url = `https://labs-api-197200.appspot.com/event?name=${eventTitle}&address_1=${address_1}&location=${location}&check_in_at=${start_date}&check_out_at=${end_date}&guests=1&lat=${lat}&lng=${lng}&logo_url=${promoter_avatar_uri}&url=https://www.picatic.com/${
+    const url = `https://labs-api-197200.appspot.com/event?name=${eventTitle}&address_1=${address_1}&location=${location}&check_in_at=${start_date}&check_out_at=${end_date}&guests=1&lat=${lat}&lng=${lng}&logo_url=&url=https://www.picatic.com/${
       eventObj.id
     }&method=POST`
+
+    console.log(url)
 
     const { json, error } = await apiFetch(url)
 

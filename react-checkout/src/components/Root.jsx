@@ -13,21 +13,6 @@ class App extends Component {
     const eventId = root.getAttribute('event-id')
     initEvent(eventId)
     initWidget(root)
-
-    const primaryAttr = root.getAttribute('primary')
-    const secondaryAttr = root.getAttribute('secondary')
-
-    if (primaryAttr) {
-      import(`material-ui/colors/${primaryAttr}`)
-        .then(module => this.setState({ primary: module.default }))
-        .catch(err => console.log(err))
-    }
-
-    if (secondaryAttr) {
-      import(`material-ui/colors/${secondaryAttr}`)
-        .then(module => this.setState({ secondary: module.default }))
-        .catch(err => console.log(err))
-    }
   }
   render() {
     const { event } = this.props
