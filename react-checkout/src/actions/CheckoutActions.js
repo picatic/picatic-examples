@@ -4,12 +4,17 @@ import { CREATE_CHECKOUT_URL } from '../constants/ApiConstants'
 
 export const updateCheckoutTickets = () => (dispatch, getState) => {
   const { selectedTickets } = getState()
-  const tickets = Object.entries(selectedTickets).reduce((tickets, ticket) => {
-    for (let index = 0; index < ticket[1]; index++) {
-      tickets.push({ ticket_price: { ticket_price_id: Number(ticket[0]) } })
-    }
-    return tickets
-  }, [])
+  const tickets = Object.entries(selectedTickets).reduce(
+    (tickets, [index, ticket]) => {
+      for (let index = 0; index < ticket.quantity; index++) {
+        tickets.push({ ticket_price: { ticket_price_id: Number(ticket.id) } })
+      }
+      return tickets
+    },
+    [],
+  )
+  console.log('tickets', tickets)
+
   dispatch({
     type: types.UPDATE_CHECKOUT_ATTRIBUTE,
     attribute: 'tickets',
@@ -20,12 +25,23 @@ export const updateCheckoutTickets = () => (dispatch, getState) => {
 export const createCheckout = () => async (dispatch, getState) => {
   const { checkout } = getState()
 
-  const body = JSON.stringify(checkout)
+  const body = JSON.stringify({ data: checkout })
 
   const { json } = await apiFetch(CREATE_CHECKOUT_URL, 'POST', body)
 
   if (json) {
-    console.log('Checkout object: ', json)
+    return { json }
+  }
+}
+
+export const postCheckoutId = () => async (dispatch, getState) => {
+  const { event } = getState()
+  const { json } = await dispatch(createCheckout())
+  if (json) {
+    const checkoutId = json.data.id
+    window.location.replace(
+      `https://www.picatic.com/${event.id}?waitlist_checkout_id=${checkoutId}`,
+    )
   }
 }
 

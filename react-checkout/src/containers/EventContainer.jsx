@@ -3,13 +3,18 @@ import { connect } from 'react-redux'
 import TicketList from '../components/TicketList'
 import Anywhere from '../components/Anywhere'
 import AirBnb from '../components/AirBnb'
-import { createCheckout, postEventWebsite } from '../actions/CheckoutActions'
+import {
+  createCheckout,
+  postEventWebsite,
+  postCheckoutId,
+} from '../actions/CheckoutActions'
 import { applyPromoCode } from '../actions/EventActions'
 import { selectDay } from '../actions/DayActions'
 import { sortSchedules, getTicketsOnDay } from '../utils/ticketUtils'
 
 const EventComponent = props => {
   const { app } = props.widget
+
   if (app === 'ticket-list') {
     return <TicketList {...props} />
   } else if (app === 'anywhere') {
@@ -66,6 +71,7 @@ const mapStateToProps = ({
 export default connect(mapStateToProps, {
   createCheckout,
   postEventWebsite,
+  postCheckoutId,
   applyPromoCode,
   selectDay,
 })(EventComponent)

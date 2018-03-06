@@ -72,7 +72,7 @@ class App extends Component {
       overrides: {
         MuiButton: {
           sizeLarge: {
-              width: 248,
+            width: 248,
           },
         },
       },
