@@ -3,165 +3,171 @@ import { apiFetch } from '../utils/apiUtils'
 
 class AirBnb extends Component {
   static defaultProps = {
-    eventId: 'event15198432929104',
-    // eventId: 'slack',
+    eventId: '132389',
     airbnbApi: 'd306zoyjsyarp7ifhu67rjxn52tv0t20',
     airbnbOauth: '9hpyczc6vjwr4cofnvdbokysn',
     user_id: '175906773',
     googleMapapikey: 'AIzaSyAUuwkvQXJdqclRNcchQTpQFJAMlGpxGO4',
+    picaticapikey: 'sk_live_e007e558626178f2fe755e7ae53e24a1',
+    storeEventid: 199666,
+    storeTicketid: 136022
   }
 
   state = {
-    airbnbEventid: 40069,
+    airbnbEventid: null,
     error: null,
+    eventObj:null,
+    lat:null,
+    lng:null
   }
 
   componentWillMount() {
     const { eventId, eventObj } = this.props
-    if (eventObj) {
-      const eventId = eventObj.id
-      this.checkEvents(eventId)
-    } else {
-      this.checkEvents(eventId)
-    }
-  }
-
-  checkEvents = async eventId => {
-    const { eventId, eventObj } = this.props
-    const url = `https://api.picatic.com/v2/ledger_invoice?filter[first_name]=${eventId}&filter[reference_id]=199666&filter[reference_name]=Event&filter[method]=free&page[limit]=1&page[offset]=0&sort=-id`
-    const { json, error } = await apiFetch(url)
-
-    if (json) {
-      const list = json.data
-      if (list.length > 0) {
-        const airbnbEventid = json.data[0].attributes.last_name
-        this.setState({ airbnbEventid })
-      }
-      else {
-        if (eventObj) {
-          this.geoCode(eventObj)
-        } else {
-          this.getEvent(eventId)
-        }
-      }
-    } else if (error) {
-      this.setState({ error })
-    }
+    this.getEvent(eventId)
   }
 
   getEvent = async eventId => {
-    const url = `https://api.picatic.com/v2/event/${eventId}`
+    const url = `https://api.picatic.com/v2/event/${eventId}?include=region`
     const { json, error } = await apiFetch(url)
 
     if (json) {
       const eventObj = json.data
-      console.log('title: ', eventObj.attributes.title)
-      this.geoCode(eventObj)
+      const include = json.included
+      this.setState({eventObj})
+      this.geoCode(eventObj,include)
     } else if (error) {
       this.setState({ error })
     }
   }
 
-  geoCode = async eventObj => {
+  geoCode = async (eventObj,include) => {
     const { googleMapapikey, airbnbApi, airbnbOauth, user_id } = this.props
-    const location = encodeURI(eventObj.attributes.venue_street)
+    const eventRegion = include.find(
+      ({ type }) => type === 'region'
+    )
+    const regionName = eventRegion.attributes.iso
+    const countryName = eventRegion.attributes.country_iso
+    let location = encodeURI(eventObj.attributes.venue_street+","+eventObj.attributes.venue_locality+","+regionName+","+countryName)
+    if (!location){
+      let location = "375 Water St, Vancouver, BC, Canada"
+    }
     const url = `https://maps.googleapis.com/maps/api/geocode/json?address=` + location + `&key=${googleMapapikey}`
     const { json, error } = await apiFetch(url)
 
     if (json) {
       const lat = json.results[0].geometry.location.lat
       const lng = json.results[0].geometry.location.lng
-      this.createAirbnbEvent(
-        eventObj,
-        airbnbApi,
-        airbnbOauth,
-        user_id,
-        lat,
-        lng,
-      )
+      const eventId = eventObj.id
+      this.setState({lat,lng})
+      this.checkEvents(eventId)
       console.log(lat, lng)
     } else if (error) {
       this.setState({ error })
     }
   }
 
-  createAirbnbEvent = async (
-    eventObj,
-    airbnbApi,
-    airbnbOauth,
-    user_id,
-    lat,
-    lng,
-  ) => {
-    const eventData = eventObj.attributes
-    const userId = Number(user_id)
-    const url = "https://api.airbnb.com/v2/congregations?key=d306zoyjsyarp7ifhu67rjxn52tv0t20"
-    // const url = `https://api.airbnb.com/v2/congregations?key=` + airbnbApi
-    // const body = JSON.stringify({
-    //   name: eventData.title,
-    //   address_1: eventData.venue_name,
-    //   address_2: '',
-    //   location: eventData.venue_street,
-    //   check_in_at: eventData.start_date,
-    //   check_out_at: eventData.end_date,
-    //   guests: 1,
-    //   lat: lat,
-    //   lng: lng,
-    //   logo_url: '',
-    //   url: 'https://www.picatic.com/' + eventObj.id,
-    //   user_id: userId,
-    // })
-    const body = {
-      "name": "Congregation Test Event",
-      "lat": 53.360712,
-      "lng": -6.251209,
-      "guests": 2,
-      "location": "888 Brannan St, San Francisco, CA 94103",
-      "address_1": "Airbnb",
-      "check_in_at": "2017-10-10",
-      "check_out_at": "2017-10-20",
-      "logo_url": ""
-    }
+  checkEvents = async eventId => {
+    const { picaticapikey,storeEventid, airbnbApi, airbnbOauth, user_id } = this.props
+    const {eventObj} = this.state
+    const url = `https://api.picatic.com/v2/ledger_invoice?filter[first_name]=${eventId}&filter[reference_id]=${storeEventid}&filter[reference_name]=Event&filter[method]=free&page[limit]=1&page[offset]=0&sort=-id`
     const { json, error } = await fetch(url, {
-      method: 'post',
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        // 'X-Airbnb-OAuth-Token': airbnbOauth,
-        'X-Airbnb-OAuth-Token': "9hpyczc6vjwr4cofnvdbokysn",
+        'Authorization': 'Bearer '+ picaticapikey
       },
-      body: body,
     })
       .then(res => res.json())
       .then(json => ({ json }))
       .catch(error => ({ error }))
 
     if (json) {
-      const airbnbEventid = json.congregation.id
-      console.log(airbnbEventid)
-      this.setState({ airbnbEventid })
-      storeAirbnb(peventId, aeventId)
+      const list = json.data
+      if (list.length > 0) {
+        const airbnbEventid = json.data[0].attributes.last_name
+        this.setState({ airbnbEventid })
+        this.updateAirbnbEvent(eventObj)
+      }
+      else {
+       this.createAirbnbEvent(eventObj)
+      }
     } else if (error) {
       this.setState({ error })
     }
   }
 
-  storeAirbnb = (peventId, aeventId) => {
+  updateAirbnbEvent = async (eventObj) => {
+    const { lat, lng, airbnbEventid } = this.state
+    const eventData = eventObj.attributes
+    const eventTitle = encodeURI(eventData.title)
+    const address_1= encodeURI(eventData.venue_name)
+    const location= encodeURI(eventData.venue_street)
+    const check_in_at= eventData.start_date
+    const check_out_at= eventData.end_date
+    const logo_url = eventData.promoter_avatar_uri
+    const url = "https://labs-api-197200.appspot.com/event?name="+eventTitle+"&address_1="+address_1+"&location="+location+"&check_in_at="+check_in_at+"&check_out_at="+check_out_at+"&guests=1&lat="+lat+"&lng="+lng+"&logo_url="+logo_url+"&url=https://www.picatic.com/"+eventObj.id+"&method=PUT&congregation_id="+airbnbEventid
+    const { json, error } = await fetch(url, {
+      method: 'GET',
+    })
+      .then(res => res.json())
+      .then(json => ({ json }))
+      .catch(error => ({ error }))
+
+    if (json) {
+      // const airbnbEventid = String(json.congregation.id)
+      // this.setState({ airbnbEventid })
+    } else if (error) {
+      this.setState({ error })
+    }
+  }
+
+
+  createAirbnbEvent = async (eventObj) => {
+    const { lat, lng } = this.state
+    const eventData = eventObj.attributes
+    const eventTitle = encodeURI(eventData.title)
+    const address_1= encodeURI(eventData.venue_name)
+    const location= encodeURI(eventData.venue_street)
+    const check_in_at= eventData.start_date
+    const check_out_at= eventData.end_date
+    const logo_url = eventData.promoter_avatar_uri
+    const url = "https://labs-api-197200.appspot.com/event?name="+eventTitle+"&address_1="+address_1+"&location="+location+"&check_in_at="+check_in_at+"&check_out_at="+check_out_at+"&guests=1&lat="+lat+"&lng="+lng+"&logo_url="+logo_url+"&url=https://www.picatic.com/"+eventObj.id+"&method=POST"
+    const { json, error } = await fetch(url, {
+      method: 'GET',
+    })
+      .then(res => res.json())
+      .then(json => ({ json }))
+      .catch(error => ({ error }))
+
+    if (json) {
+      const airbnbEventid = String(json.congregation.id)
+      const peventId = String(eventObj.id)
+      this.setState({ airbnbEventid })
+      //this isis to store airbnb events
+      this.storeAirbnb(peventId, airbnbEventid)
+    } else if (error) {
+      this.setState({ error })
+    }
+  }
+
+  storeAirbnb = async (peventId, airbnbEventid) => {
+    const { storeEventid, storeTicketid } = this.props
     var body = JSON.stringify({
       "data": {
         "attributes": {
-          "event_id": 199666,
+          "event_id": storeEventid,
           "invoice": {
             "email": "jason@picatic.com",
             "first_name": peventId,
-            "last_name": aeventId,
+            "last_name": airbnbEventid,
           },
           "tickets": [
             {
               "email": "jason@picatic.com",
               "first_name": peventId,
-              "last_name": aeventId,
+              "last_name": airbnbEventid,
               "ticket_price": {
-                "ticket_price_id": 136022
+                "ticket_price_id": storeTicketid
               }
             }
           ]
@@ -183,11 +189,11 @@ class AirBnb extends Component {
 
     if (json) {
       const checkoutId = json.data.id
-      confirmAirbnb(checkoutId)
+      this.confirmAirbnb(checkoutId)
     }
   }
 
-  confirmAirbnb = (checkoutId) => {
+  confirmAirbnb = async checkoutId => {
     const url = 'https://api.picatic.com/v2/checkout/' + checkoutId + '/confirm'
     const { json, error } = await fetch(url, {
       method: 'post',
@@ -205,7 +211,7 @@ class AirBnb extends Component {
     const links = {
       src: 'https://events.withairbnb.com/index.html?eventid=' + airbnbEventid,
     }
-    return <iframe src={links.src} width="100%" height="100%" scrolling="no" />
+    return <iframe src={links.src} width="100%" height="500px" scrolling="no" />
   }
 }
 
