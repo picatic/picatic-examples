@@ -14,6 +14,12 @@ import moment from 'moment'
 import { getTicketsOnDay } from '../utils/ticketUtils'
 
 class TicketList extends Component {
+  state = {
+    open: true,
+  }
+  handleCloseMessage = (event, reason) => {
+    this.setState({ open: false })
+  }
   render() {
     const {
       event,
@@ -54,10 +60,11 @@ class TicketList extends Component {
           </Text>
         </CardMedia>
 
-        {/* <CardMessage message="Your promo code was applied." /> */}
         <CardMessage
           color="redOrange"
           message="Your promo code is invalid or has expired."
+          open={this.state.open}
+          onClose={this.handleCloseMessage}
         />
 
         <CardContent style={{ display: 'flex' }}>
