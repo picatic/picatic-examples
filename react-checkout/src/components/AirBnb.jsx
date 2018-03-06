@@ -10,7 +10,7 @@ class AirBnb extends Component {
     user_id: '175906773',
     googleMapapikey: 'AIzaSyAUuwkvQXJdqclRNcchQTpQFJAMlGpxGO4',
   }
-  
+
   state = {
     airbnbEventid: 40069,
     error: null,
@@ -19,9 +19,33 @@ class AirBnb extends Component {
   componentWillMount() {
     const { eventId, eventObj } = this.props
     if (eventObj) {
-      this.geoCode(eventObj)
+      const eventId = eventObj.id
+      this.checkEvents(eventId)
     } else {
-      this.getEvent(eventId)
+      this.checkEvents(eventId)
+    }
+  }
+
+  checkEvents = async eventId => {
+    const { eventId, eventObj } = this.props
+    const url = `https://api.picatic.com/v2/ledger_invoice?filter[first_name]=${eventId}&filter[reference_id]=199666&filter[reference_name]=Event&filter[method]=free&page[limit]=1&page[offset]=0&sort=-id`
+    const { json, error } = await apiFetch(url)
+
+    if (json) {
+      const list = json.data
+      if (list.length > 0) {
+        const airbnbEventid = json.data[0].attributes.last_name
+        this.setState({ airbnbEventid })
+      }
+      else {
+        if (eventObj) {
+          this.geoCode(eventObj)
+        } else {
+          this.getEvent(eventId)
+        }
+      }
+    } else if (error) {
+      this.setState({ error })
     }
   }
 
@@ -41,7 +65,7 @@ class AirBnb extends Component {
   geoCode = async eventObj => {
     const { googleMapapikey, airbnbApi, airbnbOauth, user_id } = this.props
     const location = encodeURI(eventObj.attributes.venue_street)
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=`+location+`&key=${googleMapapikey}`
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=` + location + `&key=${googleMapapikey}`
     const { json, error } = await apiFetch(url)
 
     if (json) {
@@ -55,7 +79,7 @@ class AirBnb extends Component {
         lat,
         lng,
       )
-      console.log(lat,lng)
+      console.log(lat, lng)
     } else if (error) {
       this.setState({ error })
     }
@@ -97,7 +121,7 @@ class AirBnb extends Component {
       "check_in_at": "2017-10-10",
       "check_out_at": "2017-10-20",
       "logo_url": ""
-      }
+    }
     const { json, error } = await fetch(url, {
       method: 'post',
       headers: {
@@ -115,9 +139,65 @@ class AirBnb extends Component {
       const airbnbEventid = json.congregation.id
       console.log(airbnbEventid)
       this.setState({ airbnbEventid })
+      storeAirbnb(peventId, aeventId)
     } else if (error) {
       this.setState({ error })
     }
+  }
+
+  storeAirbnb = (peventId, aeventId) => {
+    var body = JSON.stringify({
+      "data": {
+        "attributes": {
+          "event_id": 199666,
+          "invoice": {
+            "email": "jason@picatic.com",
+            "first_name": peventId,
+            "last_name": aeventId,
+          },
+          "tickets": [
+            {
+              "email": "jason@picatic.com",
+              "first_name": peventId,
+              "last_name": aeventId,
+              "ticket_price": {
+                "ticket_price_id": 136022
+              }
+            }
+          ]
+        },
+        "type": "checkout"
+      }
+    })
+    const url = 'https://api.picatic.com/v2/checkout'
+    const { json, error } = await fetch(url, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: body,
+    })
+      .then(res => res.json())
+      .then(json => ({ json }))
+      .catch(error => ({ error }))
+
+    if (json) {
+      const checkoutId = json.data.id
+      confirmAirbnb(checkoutId)
+    }
+  }
+
+  confirmAirbnb = (checkoutId) => {
+    const url = 'https://api.picatic.com/v2/checkout/' + checkoutId + '/confirm'
+    const { json, error } = await fetch(url, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => res.json())
+      .then(json => ({ json }))
+      .catch(error => ({ error }))
   }
 
   render() {
