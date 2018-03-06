@@ -3,7 +3,12 @@ import TicketsContainer from '../containers/TicketsContainer'
 import PromoCode from '../components/PromoCode'
 import Text from '../jellyfish/Text'
 import Button, { ButtonOutline } from '../jellyfish/Button'
-import Card, { CardMedia, CardContent, CardAction } from '../jellyfish/Card'
+import Card, {
+  CardMedia,
+  CardContent,
+  CardAction,
+  CardMessage,
+} from '../jellyfish/Card'
 import Badge from '../jellyfish/Badge'
 import moment from 'moment'
 import { getTicketsOnDay } from '../utils/ticketUtils'
@@ -19,6 +24,7 @@ class TicketList extends Component {
       widget,
       hasSelectedTickets,
       postEventWebsite,
+      postCheckoutId,
       promoCode,
       selectDay,
       selectedDay,
@@ -47,6 +53,12 @@ class TicketList extends Component {
             Oct 5 - 8, 2017 • Edmonton, Canada
           </Text>
         </CardMedia>
+
+        {/* <CardMessage message="Your promo code was applied." /> */}
+        <CardMessage
+          color="redOrange"
+          message="Your promo code is invalid or has expired."
+        />
 
         <CardContent style={{ display: 'flex' }}>
           <ButtonOutline
@@ -112,7 +124,7 @@ class TicketList extends Component {
               appearance="fill"
               color="primary"
               disabled={!hasSelectedTickets}
-              onClick={postEventWebsite}
+              onClick={postCheckoutId}
               rightIcon={
                 checkoutTotalQty > 0 && (
                   <Badge color="neutral" pill style={{ opacity: 0.54 }}>

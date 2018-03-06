@@ -74,6 +74,22 @@ class AirBnb extends Component {
   ) => {
     const eventData = eventObj.attributes
     const userId = Number(user_id)
+    console.log(
+      JSON.stringify({
+        name: eventData.title,
+        address_1: eventData.venue_name,
+        address_2: '',
+        location: eventData.venue_street,
+        check_in_at: eventData.start_date,
+        check_out_at: eventData.end_date,
+        guests: 1,
+        lat: lat,
+        lng: lng,
+        logo_url: '',
+        url: 'https://www.picatic.com/' + eventObj.id,
+        user_id: userId,
+      }),
+    )
     const url =
       'https://api.airbnb.com/v2/congregations?key=d306zoyjsyarp7ifhu67rjxn52tv0t20'
     // const url = `https://api.airbnb.com/v2/congregations?key=` + airbnbApi
@@ -129,7 +145,11 @@ class AirBnb extends Component {
     const links = {
       src: 'https://events.withairbnb.com/index.html?eventid=' + airbnbEventid,
     }
-    return <iframe src={links.src} width="100%" height="100%" scrolling="no" />
+    return (
+      <div style={{ height: '500px' }}>
+        <iframe src={links.src} width="100%" height="100%" scrolling="no" />
+      </div>
+    )
   }
 }
 
