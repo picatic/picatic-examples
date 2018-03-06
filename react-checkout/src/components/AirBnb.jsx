@@ -94,20 +94,18 @@ class AirBnb extends Component {
       venue_name,
       venue_street,
       start_date,
-      end_date,
-      promoter_avatar_uri,
+      end_date
     } = eventObj.attributes
 
-    let venue = venue_name
-    if (!venue_name){
-      let venue = venue_street
-    }
     const eventTitle = encodeURI(title)
-    const address_1 = encodeURI(venue)
     const location = encodeURI(venue_street)
-    const logo_url = promoter_avatar_uri
 
-    const url = `https://labs-api-197200.appspot.com/event?name=${eventTitle}&address_1=${address_1}&location=${location}&check_in_at=${start_date}&check_out_at=${end_date}&guests=1&lat=${lat}&lng=${lng}&logo_url=${promoter_avatar_uri}&url=https://www.picatic.com/${
+    let address_1 = location
+    if (venue_name != ""){
+      let address_1 = encodeURI(venue_name)
+    }
+
+    const url = `https://labs-api-197200.appspot.com/event?name=${eventTitle}&address_1=${address_1}&location=${location}&check_in_at=${start_date}&check_out_at=${end_date}&guests=1&lat=${lat}&lng=${lng}&logo_url=&url=https://www.picatic.com/${
       eventObj.id
     }&method=PUT&congregation_id=${airbnbEventid}`
 
@@ -125,21 +123,18 @@ class AirBnb extends Component {
       venue_name,
       venue_street,
       start_date,
-      end_date,
-      promoter_avatar_uri,
+      end_date
     } = eventObj.attributes
 
-    let venue = venue_name
-    if (!venue_name){
-      let venue = venue_street
+    const eventTitle = encodeURI(title)
+    const location = encodeURI(venue_street)
+
+    let address_1 = location
+    if (venue_name != ""){
+      let address_1 = encodeURI(venue_name)
     }
 
-    const eventTitle = encodeURI(title)
-    const address_1 = encodeURI(venue)
-    const location = encodeURI(venue_street)
-    const logo_url = promoter_avatar_uri
-
-    const url = `https://labs-api-197200.appspot.com/event?name=${eventTitle}&address_1=${address_1}&location=${location}&check_in_at=${start_date}&check_out_at=${end_date}&guests=1&lat=${lat}&lng=${lng}&logo_url=${promoter_avatar_uri}&url=https://www.picatic.com/${
+    const url = `https://labs-api-197200.appspot.com/event?name=${eventTitle}&address_1=${address_1}&location=${location}&check_in_at=${start_date}&check_out_at=${end_date}&guests=1&lat=${lat}&lng=${lng}&logo_url=&url=https://www.picatic.com/${
       eventObj.id
     }&method=POST`
 
