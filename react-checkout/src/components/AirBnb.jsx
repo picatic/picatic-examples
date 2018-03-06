@@ -98,11 +98,13 @@ class AirBnb extends Component {
       promoter_avatar_uri,
     } = eventObj.attributes
 
+    let venue = venue_name
+    if (!venue_name){
+      let venue = venue_street
+    }
     const eventTitle = encodeURI(title)
-    const address_1 = encodeURI(venue_name)
+    const address_1 = encodeURI(venue)
     const location = encodeURI(venue_street)
-    const check_in_at = start_date
-    const check_out_at = end_date
     const logo_url = promoter_avatar_uri
 
     const url = `https://labs-api-197200.appspot.com/event?name=${eventTitle}&address_1=${address_1}&location=${location}&check_in_at=${start_date}&check_out_at=${end_date}&guests=1&lat=${lat}&lng=${lng}&logo_url=${promoter_avatar_uri}&url=https://www.picatic.com/${
@@ -127,11 +129,14 @@ class AirBnb extends Component {
       promoter_avatar_uri,
     } = eventObj.attributes
 
+    let venue = venue_name
+    if (!venue_name){
+      let venue = venue_street
+    }
+
     const eventTitle = encodeURI(title)
-    const address_1 = encodeURI(venue_name)
+    const address_1 = encodeURI(venue)
     const location = encodeURI(venue_street)
-    const check_in_at = start_date
-    const check_out_at = end_date
     const logo_url = promoter_avatar_uri
 
     const url = `https://labs-api-197200.appspot.com/event?name=${eventTitle}&address_1=${address_1}&location=${location}&check_in_at=${start_date}&check_out_at=${end_date}&guests=1&lat=${lat}&lng=${lng}&logo_url=${promoter_avatar_uri}&url=https://www.picatic.com/${
