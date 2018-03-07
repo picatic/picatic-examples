@@ -8,7 +8,10 @@ import {
   postEventWebsite,
   postCheckoutId,
 } from '../actions/CheckoutActions'
-import { applyPromoCode } from '../actions/EventActions'
+import {
+  applyPromoCode,
+  handleClosePromoCode,
+} from '../actions/PromoCodeActions'
 import { selectDay } from '../actions/DayActions'
 import { sortSchedules, getTicketsOnDay } from '../utils/ticketUtils'
 
@@ -76,4 +79,5 @@ export default connect(mapStateToProps, {
   postCheckoutId,
   applyPromoCode,
   selectDay,
+  handleClosePromoCode,
 })(EventComponent)
