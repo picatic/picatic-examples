@@ -3,19 +3,15 @@ import { connect } from 'react-redux'
 import TicketList from '../components/TicketList'
 import Anywhere from '../components/Anywhere'
 import AirBnb from '../components/AirBnb'
-import {
-  createCheckout,
-  postEventWebsite,
-  postCheckoutId,
-} from '../actions/CheckoutActions'
+import { postCheckoutId } from '../actions/CheckoutActions'
 import {
   applyPromoCode,
   handleClosePromoCode,
 } from '../actions/PromoCodeActions'
 import { selectDay } from '../actions/DayActions'
-import { sortSchedules, getTicketsOnDay } from '../utils/ticketUtils'
+import { getTicketsOnDay } from '../utils/ticketUtils'
 
-const EventComponent = props => {
+const AppComponent = props => {
   const { app } = props.widget
 
   if (app === 'ticket-list') {
@@ -56,12 +52,9 @@ const mapStateToProps = ({
     return sum
   }, 0)
 
-  const eventSchedules = event.schedules && sortSchedules(event.schedules)
-
   return {
     event,
     tickets,
-    eventSchedules,
     allDatesSum,
     widget,
     checkout,
@@ -74,10 +67,8 @@ const mapStateToProps = ({
 }
 
 export default connect(mapStateToProps, {
-  createCheckout,
-  postEventWebsite,
   postCheckoutId,
   applyPromoCode,
   selectDay,
   handleClosePromoCode,
-})(EventComponent)
+})(AppComponent)

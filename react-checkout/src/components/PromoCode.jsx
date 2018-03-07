@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import TextField from 'material-ui/TextField'
 import Button from '../jellyfish/Button'
 import Input from '../jellyfish/Input'
 
@@ -37,7 +36,7 @@ class PromoCode extends Component {
           placeholder="Promo Code"
           value={value}
           onChange={this.handleChange}
-          helperText={error ? 'Please try again' : ''}
+          // helperText={error ? 'Please try again' : ''}
           error={error}
           style={{ marginRight: 8 }}
         />

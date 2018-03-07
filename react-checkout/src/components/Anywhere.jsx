@@ -3,7 +3,7 @@ import Button from 'material-ui/Button'
 
 class Anywhere extends Component {
   render() {
-    const { event, widget, hidden } = this.props
+    const { event, widget } = this.props
     return (
       <Button
         variant="raised"

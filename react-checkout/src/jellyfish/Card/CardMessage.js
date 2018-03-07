@@ -6,7 +6,6 @@ import theme from '../styles'
 import { capitalize } from '../utils'
 import { primary } from '../colors'
 import Text from '../Text'
-import { CommunicationInvertColorsOff } from 'material-ui'
 
 const getStyle = color => ({
   backgroundColor: color,

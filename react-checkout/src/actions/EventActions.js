@@ -2,6 +2,7 @@ import * as types from '../constants/ActionTypes'
 import { apiFetch } from '../utils/apiUtils'
 import { EVENT_URL, EVENT_SCHEDULE_URL } from '../constants/ApiConstants'
 import { fetchTickets } from './TicketActions'
+import { sortSchedules } from '../utils/ticketUtils'
 
 const fetchEvent = eventId => async dispatch => {
   const url = EVENT_URL.replace(':eventId', eventId)
@@ -17,6 +18,7 @@ const fetchEvent = eventId => async dispatch => {
         attribute: 'event_id',
         value: Number(event.id),
       })
+      dispatch(fetchEventSchedules(event.id))
       dispatch({ type: types.FETCH_EVENT_SUCCESS, event })
     }
   }
@@ -28,13 +30,12 @@ const fetchEventSchedules = eventId => async dispatch => {
   if (json) {
     dispatch({
       type: types.FETCH_EVENT_SCHEDULES_SUCCESS,
-      schedules: json.data,
+      schedules: sortSchedules(json.data),
     })
   }
 }
 
 export const initEvent = eventId => dispatch => {
   dispatch(fetchEvent(eventId))
-  dispatch(fetchEventSchedules(eventId))
   dispatch(fetchTickets(eventId))
 }
