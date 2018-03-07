@@ -226,13 +226,15 @@ class App extends Component {
 
     return (
       <section>
-        <div >
+        <div>
+        <div className="airBnblogo">
           <img
             src="https://s3.amazonaws.com/files.picatic.com/events/199842/b489e4ec-8493-4236-c72d-f78162102e7a?height=300"
             width="100%"
             height="100%"
-            className="airBnblogo"
+            
           />
+        </div>
         </div>
         <div className="card-wide-transparent mdl-card">
           {authentication}

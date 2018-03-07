@@ -135,92 +135,18 @@
    border-top: none;
    border-right: none;
    border-left: none;
+   background-color: transparent;
    /* border-bottom-width:0.5px;
    border-bottom-color:rgba(36, 36, 36, 0.075);
    border-bottom-style: solid; */
   }
 
   th{
-    Margin:0;border-collapse:collapse!important;color:#212121;font-family:'Avenir Next',Avenir,sans-serif;font-size:16px;font-weight:400;line-height:1.5;margin:0;padding:0;text-align:left;vertical-align:top;word-wrap:break-word
+    background-color: transparent;Margin:0;border-collapse:collapse!important;color:#212121;font-family:'Avenir Next',Avenir,sans-serif;font-size:16px;font-weight:400;line-height:1.5;margin:0;padding:0;text-align:left;vertical-align:top;word-wrap:break-word
   }
-
-
-  .ticketinfo{
-    color: rgba(0, 0, 0, 0.733);
-    font-size: 14px;
-  }
-
-  .ticketsubinfo{
-    color: rgba(0, 0, 0, 0.479);
-    font-size: 14px;
-  }
-
-  .totalamount{
-    color:#34CB7B;
-    font-size: 15px;
-  }
-
-  .ticketaction{
-    height:80px;
-    margin-top:8%;
-    margin-bottom:5%;
-    position: relative;
-    text-align: center;
-  }
-
-  .powered-by {
-    width: 500px;
-    height:60px;
-    position: relative;
-    margin-top: 5px;
-    left:68%;
-    opacity: 0.3;
-  }
-
-  .power{
-    color: white;
-    font-family: 'Avenir Next';
-    font-size: 10px;
-    font-weight: bold;
-    opacity: 1;
-  }
-
-  .plogo{
-    width:80px
-  }
-
   .inline { 
     display: inline-block; 
     margin:5px;
-    }
-
-    .remaining{
-      color: white;
-      font-family: 'Avenir Next';
-      font-size: 12px;
-      position: relative;
-      text-align: center;
-      margin: 0;
-    }
-
-    .timer{
-      height:50px;
-      position: relative;
-      margin-top: 2%;
-      left:2%;
-      width: 100%
-    }
-
-
-    .expirytext {
-      height:50px;
-      position: relative;
-      margin-top: 10%;
-      left:0%;
-    }
-
-    .apple-passbook-svg{
-      width:170px
     }
 
     @media screen and (min-width: 420px) and (max-width:512px) {    
@@ -263,15 +189,6 @@
         /*background: url('../assets/demos/welcome_card.jpg') center / cover;*/
       }
 
-      .powered-by {
-        width: 500px;
-        height:60px;
-        position: relative;
-        margin-top: 5px;
-        left:60%;
-        opacity: 0.3;
-      }
-
       .h1-subtitle{
         color: white;
         font-size: 20px;
@@ -279,14 +196,6 @@
         left:3%;
         margin-bottom: 0 auto;
         position: relative;
-      }
-
-      .ticketaction{
-        height:80px;
-        margin-top:8%;
-        margin-bottom:5%;
-        position: relative;
-        text-align: center;
       }
     }
 
@@ -346,15 +255,6 @@
         font-weight: bold;
       }
 
-      .powered-by {
-        width: 500px;
-        height:60px;
-        position: relative;
-        margin-top: 5px;
-        left:50%;
-        opacity: 0.3;
-      }
-
       .ordertable{
         position: relative;
         margin-top: 15px;
@@ -366,32 +266,6 @@
         padding: 0px;
         position: relative;
         border:none;
-      }
-
-      .ticketinfo{
-        color: rgba(0, 0, 0, 0.733);
-        font-size: 12px;
-      }
-
-      .ticketsubinfo{
-        color: rgba(0, 0, 0, 0.479);
-        font-size: 12px;
-      }
-
-      .timer{
-        height:50px;
-        position: fixed;
-        margin-top: 0%;
-        left:2%;
-        width: 100%
-      }
-
-      .ticketaction{
-        height:80px;
-        margin-top:8%;
-        margin-bottom:5%;
-        position: relative;
-        text-align: center;
       }
     }
 
@@ -408,6 +282,7 @@
       width: 120px;
       height:90px;
       position: relative;
+      top: 40px;
       margin: auto;
       padding: 10px;
     }
