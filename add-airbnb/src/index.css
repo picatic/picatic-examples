@@ -1,0 +1,35 @@
+@import url('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css');
+
+body, html {
+  height: 100%;
+  min-height: 625px;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.bg {
+   /*background-image: url("https://picatic.global.ssl.fastly.net/events/132389/983f575d-536c-4822-c129-1a668c24cd41");*/
+  /* background: #454bb6;
+  background: linear-gradient(to bottom right,#454bb6, #5899E4); */
+  background: #FFFFFF;
+  /* background: linear-gradient(to bottom right,#FFFFFF, #FFFFFF); */
+  height: 100%; 
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+#root{
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+#child{
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  padding-right: 17px; /* Increase/decrease this value for cross-browser compatibility */
+}

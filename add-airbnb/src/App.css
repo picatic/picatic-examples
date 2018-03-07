@@ -1,0 +1,439 @@
+@import url('https://picatic.global.ssl.fastly.net/v1.1.274/css/app.min.css');
+@import url('https://picatic.global.ssl.fastly.net/v1.1.274/css/picatic.min.css');
+@import url('https://picatic.global.ssl.fastly.net/v1.1.274/spa/marketing/css/app.min.css');
+@import url('https://code.getmdl.io/1.3.0/material.indigo-pink.min.css');
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.mdl-spinner--single-color{
+  color: white
+}
+
+.picaticlogo {
+  width: 60px;
+  height:50px;
+  position: relative;
+  margin-bottom: 8%;
+  left:45%;
+}
+
+.airBnblogo {
+  width: 120px;
+  height:90px;
+  position: relative;
+  margin-top: 5%;
+  left:45%
+}
+
+
+
+.tada {
+  width: 50px;
+  height:50px;
+  position: relative;
+  margin-top: 5%;
+  left:46%;
+}
+
+.confirm-text{
+  font-size: 25px;
+  height:20px;
+  position: relative;
+  text-align: center;
+  bottom:0px
+}
+
+.confirm-sub{
+  position: relative;
+  top:0px;
+  text-align: center
+}
+
+.card-wide.mdl-card {
+  width: 512px;
+  background-color: white
+}
+
+.card-wide-transparent.mdl-card {
+  width: 512px;
+  position: fixed;
+  top: 55%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+  background-color: transparent;
+}
+
+.errorcard.mdl-card {
+  width: 512px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+  background-color: white;
+}
+
+.card-inner.mdl-card {
+  width: 85%;
+  margin: auto;
+  background-color: transparent
+}
+
+.card-wide > .mdl-card__title {
+  color: rgba(255, 255, 255, 0.151);
+  height: 80px;
+  background-color: transparent
+  /*background: url('../assets/demos/welcome_card.jpg') center / cover;*/
+}
+
+.title-text{
+  color: #ffffff;
+  font-family: 'Avenir Next';
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.h1-subtitle{
+  color: white;
+  font-size: 25px;
+  float: left;
+  margin-bottom: 0 auto;
+  position: relative;
+}
+
+.mdl-shadow--1dp {
+  background: #ffffff;
+  box-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+}
+
+.circle {
+  width:70px;
+  height:70px;
+  border-radius:35px;
+  border: 2px solid rgb(190, 190, 190);
+  margin-bottom: 5 auto;
+  float: right;
+  right:3%;
+  padding: 0px;
+  position: relative;
+  z-index: 10;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+
+  .profile{
+    height:40px
+  }
+
+  .ordertable{
+    position: relative;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    width: 100%;
+    height: auto;
+    margin-left: 0 auto;
+    margin-right: 0 auto;
+    padding: 10px;
+    position: relative;
+    border:none;
+  }
+
+  tr{
+   border-top: none;
+   border-right: none;
+   border-left: none;
+   border-bottom-width:0.5px;
+   border-bottom-color:rgba(36, 36, 36, 0.075);
+   border-bottom-style: solid;
+  }
+
+  th{
+    Margin:0;border-collapse:collapse!important;color:#212121;font-family:'Avenir Next',Avenir,sans-serif;font-size:16px;font-weight:400;line-height:1.5;margin:0;padding:0;text-align:left;vertical-align:top;word-wrap:break-word
+  }
+
+
+  .ticketinfo{
+    color: rgba(0, 0, 0, 0.733);
+    font-size: 14px;
+  }
+
+  .ticketsubinfo{
+    color: rgba(0, 0, 0, 0.479);
+    font-size: 14px;
+  }
+
+  .totalamount{
+    color:#34CB7B;
+    font-size: 15px;
+  }
+
+  .ticketaction{
+    height:80px;
+    margin-top:8%;
+    margin-bottom:5%;
+    position: relative;
+    text-align: center;
+  }
+
+  .powered-by {
+    width: 500px;
+    height:60px;
+    position: relative;
+    margin-top: 5px;
+    left:68%;
+    opacity: 0.3;
+  }
+
+  .power{
+    color: white;
+    font-family: 'Avenir Next';
+    font-size: 10px;
+    font-weight: bold;
+    opacity: 1;
+  }
+
+  .plogo{
+    width:80px
+  }
+
+  .inline { 
+    display: inline-block; 
+    margin:5px;
+    }
+
+    .remaining{
+      color: white;
+      font-family: 'Avenir Next';
+      font-size: 12px;
+      position: relative;
+      text-align: center;
+      margin: 0;
+    }
+
+    .timer{
+      height:50px;
+      position: relative;
+      margin-top: 2%;
+      left:2%;
+      width: 100%
+    }
+
+
+    .expirytext {
+      height:50px;
+      position: relative;
+      margin-top: 10%;
+      left:0%;
+    }
+
+    .apple-passbook-svg{
+      width:170px
+    }
+
+    @media screen and (min-width: 420px) and (max-width:512px) {    
+      
+      .card-wide.mdl-card {
+        width: 100%;
+        background-color: white
+      }
+      
+      .card-wide-transparent.mdl-card {
+        width: 100%;
+        position: fixed;
+        top: 55%;
+        left: 50%;
+        /* bring your own prefixes */
+        transform: translate(-50%, -50%);
+        background-color: transparent;
+      }
+      
+      .errorcard.mdl-card {
+        width: 100%;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        /* bring your own prefixes */
+        transform: translate(-50%, -50%);
+        background-color: white;
+      }
+      
+      .card-inner.mdl-card {
+        width: 90%;
+        margin: auto;
+        background-color: transparent
+      }
+      
+      .card-wide > .mdl-card__title {
+        color: rgba(255, 255, 255, 0.151);
+        height: 80px;
+        background-color: transparent
+        /*background: url('../assets/demos/welcome_card.jpg') center / cover;*/
+      }
+
+      .powered-by {
+        width: 500px;
+        height:60px;
+        position: relative;
+        margin-top: 5px;
+        left:60%;
+        opacity: 0.3;
+      }
+
+      .h1-subtitle{
+        color: white;
+        font-size: 20px;
+        float: left;
+        left:3%;
+        margin-bottom: 0 auto;
+        position: relative;
+      }
+
+      .ticketaction{
+        height:80px;
+        margin-top:8%;
+        margin-bottom:5%;
+        position: relative;
+        text-align: center;
+      }
+    }
+
+    @media screen and (max-width:419px) {    
+      
+      .card-wide.mdl-card {
+        width: 100%;
+        background-color: white
+      }
+      
+      .card-wide-transparent.mdl-card {
+        width: 100%;
+        position: fixed;
+        top: 55%;
+        left: 50%;
+        /* bring your own prefixes */
+        transform: translate(-50%, -50%);
+        background-color: transparent;
+      }
+      
+      .errorcard.mdl-card {
+        width: 100%;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        /* bring your own prefixes */
+        transform: translate(-50%, -50%);
+        background-color: white;
+      }
+      
+      .card-inner.mdl-card {
+        width: 100%;
+        margin: auto;
+        background-color: transparent
+      }
+      
+      .card-wide > .mdl-card__title {
+        color: rgba(255, 255, 255, 0.151);
+        height: 80px;
+        background-color: transparent
+        /*background: url('../assets/demos/welcome_card.jpg') center / cover;*/
+      }
+
+      .h1-subtitle{
+        color: white;
+        font-size: 20px;
+        float: left;
+        left:3%;
+        margin-bottom: 0 auto;
+        position: relative;
+      }
+
+      .title-text{
+        color: #ffffff;
+        font-family: 'Avenir Next';
+        font-size: 18px;
+        font-weight: bold;
+      }
+
+      .powered-by {
+        width: 500px;
+        height:60px;
+        position: relative;
+        margin-top: 5px;
+        left:50%;
+        opacity: 0.3;
+      }
+
+      .ordertable{
+        position: relative;
+        margin-top: 15px;
+        margin-bottom: 10px;
+        width: 100%;
+        height: auto;
+        margin-left: 0 auto;
+        margin-right: 0 auto;
+        padding: 0px;
+        position: relative;
+        border:none;
+      }
+
+      .ticketinfo{
+        color: rgba(0, 0, 0, 0.733);
+        font-size: 12px;
+      }
+
+      .ticketsubinfo{
+        color: rgba(0, 0, 0, 0.479);
+        font-size: 12px;
+      }
+
+      .timer{
+        height:50px;
+        position: fixed;
+        margin-top: 0%;
+        left:2%;
+        width: 100%
+      }
+
+      .ticketaction{
+        height:80px;
+        margin-top:8%;
+        margin-bottom:5%;
+        position: relative;
+        text-align: center;
+      }
+    }
+
+    .eventSelection{
+      width: 100%
+    }
+
+    .authButton{
+      float: right
+    }
