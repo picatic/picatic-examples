@@ -1,9 +1,6 @@
 # dependencies
 /node_modules
 
-#config
-/config
-
 #editor
 .vscode
 
