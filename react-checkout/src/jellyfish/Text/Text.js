@@ -25,7 +25,7 @@ class Text extends PureComponent {
       'white',
       'whiteMuted',
       'whiteExtraMuted',
-      Object.getOwnPropertyNames(primary),
+      ...Object.getOwnPropertyNames(primary),
     ]),
     gutterBottom: PropTypes.bool,
     noWrap: PropTypes.bool,

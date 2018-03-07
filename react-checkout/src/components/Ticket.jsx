@@ -95,10 +95,10 @@ const Ticket = props => {
           <Text variant="body3">{displayPrice}</Text>
         ) : (
           <div className="right-align">
-            <Text color="shamrock" variant="body3">
+            <Text color="primary" variant="body3">
               ${discountPrice}
             </Text>
-            <Text color="shamrock">Save ${price - discount_price}</Text>
+            <Text color="primary">Save ${price - discount_price}</Text>
           </div>
         )}
       </div>
