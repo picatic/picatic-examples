@@ -12,9 +12,11 @@ class App extends Component {
     PICATIC_API_KEY: null,
     PICATIC_USER_ID: null,
     selectedEvent: null,
+    noEvent: null,
     events: null,
     event: null,
     error: null,
+    apiError: null,
   }
 
   componentWillMount() {
@@ -60,7 +62,7 @@ class App extends Component {
       this.setState({ PICATIC_USER_ID })
       this.getEvents()
     } else if (error) {
-      this.setState({ error })
+      this.setState({ apiError: error })
     }
   }
 
@@ -115,8 +117,12 @@ class App extends Component {
 
     if (json) {
       const events = json.data
-      const selectedEvent = events[0].id
-      this.setState({ events, selectedEvent })
+      if (events.length > 0) {
+        const selectedEvent = events[0].id
+        this.setState({ events, selectedEvent })
+      }else {
+        this.setState({noEvent: true})
+      }
     } else if (error) {
       this.setState({ error })
     }
@@ -128,8 +134,10 @@ class App extends Component {
 
   render() {
     const {
+      noEvent,
       events,
-      error
+      error,
+      apiError
     } = this.state
 
     const renderMenuItems = () => {
@@ -149,9 +157,9 @@ class App extends Component {
           </th> */}
           <th>
             <Button
-              onClick={() =>this.addAirbnb(null,i.value)}
-              className = "addButton"
-              >
+              onClick={() => this.addAirbnb(null, i.value)}
+              className="addButton"
+            >
               Add to Event: {i.text}
             </Button>
           </th>
@@ -159,9 +167,54 @@ class App extends Component {
       ))
     }
 
-    //test code for airbnb
+    if (apiError) {
+      // const errorstatus = error[0].status
+      // let errordetail = error[0].title
+      return (
+        <div className="errorcard mdl-card mdl-shadow--1dp">
+          <div>
+            <div className="tada">
+              <img
+                src="https://s3.amazonaws.com/files.picatic.com/events/135491/21d3bf7a-e29a-4c70-bc1b-a2a99d506b7a?height=300"
+                width="100%"
+                height="100%"
+              />
+            </div>
+            {/* <h2 className="confirm-text">We got an error {error[0].status}</h2> */}
+            <h2 className="confirm-text">We got an error.</h2>
+            <p className="confirm-sub">
+              Your API key is invalid.
+          </p>
+          </div>
+        </div>
+      )
+    }
+
+    if (error) {
+      // const errorstatus = error[0].status
+      // let errordetail = error[0].title
+      return (
+        <div className="errorcard mdl-card mdl-shadow--1dp">
+          <div>
+            <div className="tada">
+              <img
+                src="https://s3.amazonaws.com/files.picatic.com/events/135491/21d3bf7a-e29a-4c70-bc1b-a2a99d506b7a?height=300"
+                width="100%"
+                height="100%"
+              />
+            </div>
+            <h2 className="confirm-text">We got an error {error[0].status}</h2>
+            <p className="confirm-sub">
+              {error[0].title}
+            </p>
+          </div>
+        </div>
+      )
+    }
+
     let authentication
     let eventSelect
+
     if (!events) {
       authentication = (
         <section>
@@ -176,10 +229,10 @@ class App extends Component {
               </input>
             </label>
             <div className="authButton">
-            <Button
-              onClick={this.handleSubmit}
+              <Button
+                onClick={this.handleSubmit}
               >
-              Authenticate
+                Authenticate
             </Button>
             </div>
           </div>
@@ -201,40 +254,30 @@ class App extends Component {
       )
     }
 
-    if (error) {
+    if (noEvent) {
       // const errorstatus = error[0].status
       // let errordetail = error[0].title
-      return (
-        <div className="errorcard mdl-card mdl-shadow--1dp">
-          <div>
-            <div className="tada">
-              <img
-                src="https://s3.amazonaws.com/files.picatic.com/events/135491/21d3bf7a-e29a-4c70-bc1b-a2a99d506b7a?height=300"
-                width="100%"
-                height="100%"
-              />
-            </div>
-            {/* <h2 className="confirm-text">We got an error {error[0].status}</h2> */}
-            <h2 className="confirm-text">We got an error</h2>
-            {/* <p className="confirm-sub">
-              {errordetail}.
-          </p> */}
+      authentication = (
+        <section>
+          <div className="card-inner mdl-card">
+            <label> You have no active events. Let's now create one on picatic.com.
+            </label>
           </div>
-        </div>
+        </section>
       )
     }
 
     return (
       <section>
         <div>
-        <div className="airBnblogo">
-          <img
-            src="https://s3.amazonaws.com/files.picatic.com/events/199842/b489e4ec-8493-4236-c72d-f78162102e7a?height=300"
-            width="100%"
-            height="100%"
-            
-          />
-        </div>
+          <div className="airBnblogo">
+            <img
+              src="https://s3.amazonaws.com/files.picatic.com/events/199842/b489e4ec-8493-4236-c72d-f78162102e7a?height=300"
+              width="100%"
+              height="100%"
+
+            />
+          </div>
         </div>
         <div className="card-wide-transparent mdl-card">
           {authentication}
