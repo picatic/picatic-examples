@@ -67,7 +67,7 @@ class App extends Component {
   addAirbnb = async (key_param, event_param) => {
     const { PICATIC_API_KEY, selectedEvent } = this.state
     const apiKey = PICATIC_API_KEY || key_param
-    const event = selectedEvent || event_param
+    const event = event_param || selectedEvent
     const url = `${host}/event/${event}`
     const body = JSON.stringify(
       {
@@ -142,16 +142,17 @@ class App extends Component {
       }
       return arr.map(i => (
         <tr id={i}>
-          <th className="mdl-data-table__cell--non-numeric ">
+          {/* <th className="mdl-data-table__cell--non-numeric ">
             <span className="ticketinfo">
               {i.text}
             </span>
-          </th>
+          </th> */}
           <th>
             <Button
-              onClick={this.addAirbnb}
+              onClick={() =>this.addAirbnb(null,i.value)}
+              className = "addButton"
               >
-              Add
+              Add to Event: {i.text}
             </Button>
           </th>
         </tr>
@@ -164,7 +165,7 @@ class App extends Component {
     if (!events) {
       authentication = (
         <section>
-          <div>
+          <div className="card-inner mdl-card">
             <label> Put your Picatic API key
       <input
                 type="text"
@@ -174,10 +175,13 @@ class App extends Component {
                 onChange={ev => this.handleChange(ev)}>
               </input>
             </label>
+            <div className="authButton">
             <Button
-              handleClick={this.handleSubmit}>
+              onClick={this.handleSubmit}
+              >
               Authenticate
             </Button>
+            </div>
           </div>
         </section>
       )
@@ -222,11 +226,12 @@ class App extends Component {
 
     return (
       <section>
-        <div className="airBnblogo">
+        <div >
           <img
             src="https://s3.amazonaws.com/files.picatic.com/events/199842/b489e4ec-8493-4236-c72d-f78162102e7a?height=300"
             width="100%"
             height="100%"
+            className="airBnblogo"
           />
         </div>
         <div className="card-wide-transparent mdl-card">

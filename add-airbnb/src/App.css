@@ -36,15 +36,6 @@
   color: white
 }
 
-.picaticlogo {
-  width: 60px;
-  height:50px;
-  position: relative;
-  margin-bottom: 8%;
-  left:45%;
-}
-
-
 
 .tada {
   width: 50px;
@@ -127,24 +118,6 @@
   border-radius: 4px;
 }
 
-.circle {
-  width:70px;
-  height:70px;
-  border-radius:35px;
-  border: 2px solid rgb(190, 190, 190);
-  margin-bottom: 5 auto;
-  float: right;
-  right:3%;
-  padding: 0px;
-  position: relative;
-  z-index: 10;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  }
-
-  .profile{
-    height:40px
-  }
-
   .ordertable{
     position: relative;
     margin-top: 20px;
@@ -162,9 +135,9 @@
    border-top: none;
    border-right: none;
    border-left: none;
-   border-bottom-width:0.5px;
+   /* border-bottom-width:0.5px;
    border-bottom-color:rgba(36, 36, 36, 0.075);
-   border-bottom-style: solid;
+   border-bottom-style: solid; */
   }
 
   th{
@@ -427,13 +400,18 @@
     }
 
     .authButton{
-      float: right
+      width: 50%;
+      margin: 10px
     }
 
     .airBnblogo {
       width: 120px;
       height:90px;
       position: relative;
-      margin-top: 5%;
-      left:45%
+      margin: auto;
+      padding: 10px;
+    }
+
+    .addButton{
+      width: 100%
     }
