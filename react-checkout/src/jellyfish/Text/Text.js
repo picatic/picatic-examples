@@ -4,6 +4,7 @@ import injectSheet from 'react-jss'
 import classNames from 'classnames'
 import TextStyles, { TextTags } from './styles'
 import { capitalize } from '../utils'
+import { primary } from '../colors'
 
 class Text extends PureComponent {
   static propTypes = {
@@ -24,6 +25,7 @@ class Text extends PureComponent {
       'white',
       'whiteMuted',
       'whiteExtraMuted',
+      Object.getOwnPropertyNames(primary),
     ]),
     gutterBottom: PropTypes.bool,
     noWrap: PropTypes.bool,

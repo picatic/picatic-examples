@@ -91,8 +91,16 @@ const Ticket = props => {
         </Text>
       </div>
       <div className="col">
-        <Text variant="body3">{displayPrice}</Text>
-        <Text>{discountPrice}</Text>
+        {isNaN(discount_price) ? (
+          <Text variant="body3">{displayPrice}</Text>
+        ) : (
+          <div className="right-align">
+            <Text color="shamrock" variant="body3">
+              ${discountPrice}
+            </Text>
+            <Text color="shamrock">Save ${price - discount_price}</Text>
+          </div>
+        )}
       </div>
     </div>
   )

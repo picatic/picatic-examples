@@ -1,7 +1,15 @@
 import theme from '../../styles'
 import fontFamily from './FontFamily'
 import fontWeight from './FontWeight'
-import { pxToRem } from '../../utils'
+import { pxToRem, capitalize } from '../../utils'
+import { primary } from '../../colors'
+
+const colors = {}
+Object.entries(primary).map(([key, value]) => {
+  colors[`color${capitalize(key)}`] = {
+    color: value.main,
+  }
+})
 
 export default {
   root: {
@@ -110,7 +118,6 @@ export default {
   paragraph: {
     marginBottom: theme.spacing.unit * 2,
   },
-
   colorInherit: {
     color: 'inherit',
   },
@@ -141,4 +148,5 @@ export default {
   colorWhiteExtraMuted: {
     color: theme.palette.white.extraMuted,
   },
+  ...colors,
 }
