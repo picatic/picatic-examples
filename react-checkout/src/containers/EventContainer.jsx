@@ -21,6 +21,8 @@ const EventComponent = props => {
     return <Anywhere {...props} />
   } else if (app === 'airbnb') {
     return <AirBnb eventId={props.event.id} {...props} />
+  } else {
+    return <AirBnb eventId={props.event.id} {...props} />
   }
 }
 

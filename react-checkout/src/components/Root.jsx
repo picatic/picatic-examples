@@ -10,14 +10,17 @@ class App extends Component {
   }
   componentWillMount() {
     const { root, initEvent, initWidget } = this.props
-    const eventId = root.getAttribute('event-id')
+    let eventId = root.getAttribute('event-id')
+    if (window.location.host === 'www.picatic.com') {
+      eventId = window.location.pathname.substr(1)
+    }
     initEvent(eventId)
     initWidget(root)
   }
   render() {
     const { event } = this.props
 
-    if (!event) return <div>No event found.</div>
+    if (!event) return null
     if (!event.attributes) return <div>Event Loading.</div>
 
     const { primary, secondary } = this.state
