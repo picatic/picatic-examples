@@ -24,20 +24,17 @@ class TicketList extends Component {
     const {
       event,
       tickets,
-      eventSchedules,
       selectedTickets,
       allDatesSum,
-      widget,
       hasSelectedTickets,
-      postEventWebsite,
       postCheckoutId,
       promoCode,
       selectDay,
       selectedDay,
       checkoutTotalQty,
       handleClosePromoCode,
+      widget,
     } = this.props
-    const { showTitle, cta } = widget
 
     const { title } = event.attributes
     const { showHeaderImage, showShadow } = widget
@@ -83,7 +80,7 @@ class TicketList extends Component {
           >
             All Dates
           </ButtonOutline>
-          {eventSchedules.map((schedule, index) => {
+          {event.schedules.map((schedule, index) => {
             const { start_date } = schedule.attributes
 
             const ticketsOnDay = getTicketsOnDay(event, tickets, start_date)

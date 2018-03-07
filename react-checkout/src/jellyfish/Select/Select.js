@@ -50,7 +50,7 @@ const styles = {
 
 class Select extends PureComponent {
   static propTypes = {
-    children: PropTypes.nod,
+    children: PropTypes.node,
     classes: PropTypes.object.isRequired,
   }
   static defaultProps = {}

@@ -55,6 +55,8 @@ class Input extends Component {
       classes,
       className: classNameProp,
       inputComponent: InputComponent,
+      fullWidth,
+      error,
       ...other
     } = this.props
     const className = classNames(classes.root, classNameProp)

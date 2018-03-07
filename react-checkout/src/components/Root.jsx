@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import EventContainer from '../containers/EventContainer'
+import AppContainer from '../containers/AppContainer'
 import { MuiThemeProvider } from 'material-ui/styles'
 import theme from '../styles/theme'
 
@@ -17,11 +17,12 @@ class App extends Component {
     const { event } = this.props
 
     if (!event) return null
-    if (!event.attributes) return <div>Event Loading.</div>
+    if (!event.attributes || !event.schedules) return <div>Event Loading.</div>
+    console.log(event.schedules)
 
     return (
       <MuiThemeProvider theme={theme}>
-        <EventContainer />
+        <AppContainer />
       </MuiThemeProvider>
     )
   }

@@ -109,7 +109,6 @@ class Button extends PureComponent {
     size: PropTypes.oneOf(['small', 'medium', 'large']),
     appearance: PropTypes.oneOf(['raised', 'fill']),
     isActive: PropTypes.bool,
-    badge: PropTypes.node,
   }
   static defaultProps = {
     color: 'default',
@@ -119,7 +118,6 @@ class Button extends PureComponent {
     component: 'button',
     appearance: 'raised',
     isActive: false,
-    badge: 0,
   }
   render() {
     const {

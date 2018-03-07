@@ -6,7 +6,6 @@ import {
   getTicketSchedules,
   getTicketDates,
   getDisabledState,
-  isOnDay,
 } from '../utils/ticketUtils'
 import { selectTicket } from '../actions/TicketActions'
 

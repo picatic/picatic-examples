@@ -68,10 +68,8 @@ const Ticket = props => {
       <div className="col pr2">
         <Select
           id={id}
-          select
           className="ml-auto"
           value={value}
-          margin="dense"
           onChange={ev => selectTicket(ev.target.value, props)}
           disabled={disabled}
           style={{ width: 64 }}
