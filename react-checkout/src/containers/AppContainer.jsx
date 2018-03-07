@@ -38,6 +38,7 @@ const mapStateToProps = ({
     (qty, ticket) => (qty += ticket[1]),
     0,
   )
+
   const checkoutTotalQty = selectedTickets.reduce((sum, ticket) => {
     sum += ticket.quantity
     return sum
