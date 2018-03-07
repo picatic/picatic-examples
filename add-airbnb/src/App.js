@@ -22,9 +22,13 @@ class App extends Component {
     const params = new URLSearchParams(searchstring);
     const PICATIC_API_KEY = params.get('PICATIC_API_KEY');
     const selectedEvent = params.get('selectedEvent');
-    if (PICATIC_API_KEY){
+    if (PICATIC_API_KEY && !selectedEvent){
     this.setState({ PICATIC_API_KEY })
-    this.getPicaticUserId(PICATIC_API_KEY)
+    this.handleSubmit(PICATIC_API_KEY)
+    }
+    else if (PICATIC_API_KEY && selectedEvent){
+      this.setState({ PICATIC_API_KEY, selectedEvent })
+      this.addAirbnb(PICATIC_API_KEY, selectedEvent)
     }
   }
 
@@ -36,14 +40,15 @@ class App extends Component {
     this.setState({ [name]: value })
   }
 
-  handleSubmit = async () => {
+  handleSubmit = async (key_param) => {
     const { PICATIC_API_KEY } = this.state
+    const apiKey = PICATIC_API_KEY || key_param
     const url = `${host}/user/me`
     const { json, error } = await fetch(url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${PICATIC_API_KEY}`,
+        Authorization: `Bearer ${apiKey}`,
       },
     })
       .then(res => res.json())
@@ -59,16 +64,18 @@ class App extends Component {
     }
   }
 
-   addAirbnb = async () => {
+   addAirbnb = async (key_param, event_param) => {
     const { PICATIC_API_KEY, selectedEvent } = this.state
-    const url = `${host}/event/${selectedEvent}`
+    const apiKey = PICATIC_API_KEY || key_param
+    const event = selectedEvent || event_param
+    const url = `${host}/event/${event}`
     const body = JSON.stringify(
       {
         "data": {
           "attributes": { 
               "custom_js": "<script async src='https://storage.googleapis.com/picatic/injectwidget-div-css.js'></script><script async src='https://storage.googleapis.com/picatic/latest/js/main.js'></script>"
           },
-          "id": `${selectedEvent}`,
+          "id": `${event}`,
           "type": "event"
         }
     }
@@ -77,7 +84,7 @@ class App extends Component {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${PICATIC_API_KEY}`,
+        Authorization: `Bearer ${apiKey}`,
       },
       body: body
     })
@@ -86,29 +93,7 @@ class App extends Component {
       .catch(error => ({ error }))
 
     if (json) {
-      window.location.href = `http://www.picatic.com/${selectedEvent}`;
-    } else if (error) {
-      this.setState({ error })
-    }
-  }
-
-  getPicaticUserId = async (PICATIC_API_KEY) => {
-    const url = `${host}/user/me`
-    const { json, error } = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${PICATIC_API_KEY}`,
-      },
-    })
-      .then(res => res.json())
-      .then(json => ({ json }))
-      .catch(error => ({ error }))
-
-    if (json) {
-      const PICATIC_USER_ID = json.data.id
-      this.setState({PICATIC_USER_ID})
-      this.getEvents()
+      window.location.href = `http://www.picatic.com/${event}`;
     } else if (error) {
       this.setState({ error })
     }
