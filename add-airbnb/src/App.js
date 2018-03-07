@@ -142,15 +142,6 @@ class App extends Component {
 
   render() {
     const {
-      checkoutObj,
-      eventObj,
-      eventOwnerObj,
-      pkStripe,
-      slackProfileUrl,
-      error,
-      striperror,
-      timeOut,
-
       events
     } = this.state
 
