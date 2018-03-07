@@ -7,14 +7,13 @@ import theme from '../styles'
 import { primary } from '../colors'
 import { capitalize } from '../utils'
 
-// TODO: Refactor
 const getStyle = color => ({
   color: theme.palette.white.default,
   backgroundColor: color,
 })
 const fills = {}
 Object.entries(primary).forEach(([key, value]) => {
-  fills[`fill${capitalize(key)}`] = getStyle(primary[key].main)
+  fills[`fill${capitalize(key)}`] = getStyle(value.main)
 })
 
 const styles = {
@@ -38,7 +37,7 @@ class Badge extends PureComponent {
     color: PropTypes.oneOf([
       'primary',
       'secondary',
-      Object.getOwnPropertyNames(primary),
+      ...Object.getOwnPropertyNames(primary),
     ]),
     pill: PropTypes.bool,
   }

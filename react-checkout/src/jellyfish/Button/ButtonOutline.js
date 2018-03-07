@@ -49,7 +49,7 @@ class ButtonOutline extends PureComponent {
       'inherit',
       'primary',
       'secondary',
-      Object.getOwnPropertyNames(primary),
+      ...Object.getOwnPropertyNames(primary),
     ]),
     component: PropTypes.oneOf([PropTypes.string, PropTypes.func]),
     disabled: PropTypes.bool,

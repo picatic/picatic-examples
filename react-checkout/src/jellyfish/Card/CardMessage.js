@@ -81,7 +81,6 @@ class CardMessage extends Component {
       color,
       message,
       open,
-      ...other
     } = this.props
 
     if (!open) {
@@ -92,7 +91,7 @@ class CardMessage extends Component {
 
     return (
       <div className={classes[`fill${capitalize(color)}`]}>
-        <Text color="white" className={className} {...other}>
+        <Text color="white" className={className}>
           {message}
         </Text>
       </div>

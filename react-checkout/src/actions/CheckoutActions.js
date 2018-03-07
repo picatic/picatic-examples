@@ -13,7 +13,6 @@ export const updateCheckoutTickets = () => (dispatch, getState) => {
     },
     [],
   )
-  console.log('tickets', tickets)
 
   dispatch({
     type: types.UPDATE_CHECKOUT_ATTRIBUTE,

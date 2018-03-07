@@ -18,7 +18,6 @@ class App extends Component {
 
     if (!event) return null
     if (!event.attributes || !event.schedules) return <div>Event Loading.</div>
-    console.log(event.schedules)
 
     return (
       <MuiThemeProvider theme={theme}>
