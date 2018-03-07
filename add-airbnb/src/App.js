@@ -21,6 +21,7 @@ class App extends Component {
     const searchstring = this.props.location.search
     const params = new URLSearchParams(searchstring);
     const PICATIC_API_KEY = params.get('PICATIC_API_KEY');
+    const selectedEvent = params.get('selectedEvent');
     if (PICATIC_API_KEY){
     this.setState({ PICATIC_API_KEY })
     this.getPicaticUserId(PICATIC_API_KEY)
@@ -142,7 +143,8 @@ class App extends Component {
 
   render() {
     const {
-      events
+      events,
+      error
     } = this.state
 
     const renderMenuItems = () => {

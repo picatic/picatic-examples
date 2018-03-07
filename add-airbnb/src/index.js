@@ -7,7 +7,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 ReactDOM.render(
   <Router>
     <div>
-      <Route search="? PICATIC_API_KEY=: PICATIC_API_KEY" component={App} />
+      <Route search="?PICATIC_API_KEY=:PICATIC_API_KEY&selectedEvent:selectedEvent" component={App} />
     </div>
   </Router>,
   document.getElementById('root'),
