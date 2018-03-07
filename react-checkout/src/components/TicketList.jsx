@@ -35,6 +35,7 @@ class TicketList extends Component {
       selectDay,
       selectedDay,
       checkoutTotalQty,
+      handleClosePromoCode,
     } = this.props
     const { showTitle, cta } = widget
 
@@ -61,10 +62,10 @@ class TicketList extends Component {
         </CardMedia>
 
         <CardMessage
-          color="redOrange"
-          message="Your promo code is invalid or has expired."
-          open={this.state.open}
-          onClose={this.handleCloseMessage}
+          color={promoCode.color}
+          message={promoCode.message}
+          open={promoCode.open}
+          onClose={handleClosePromoCode}
         />
 
         <CardContent style={{ display: 'flex' }}>
