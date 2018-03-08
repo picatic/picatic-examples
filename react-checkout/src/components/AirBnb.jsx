@@ -193,7 +193,14 @@ class AirBnb extends Component {
           color="muted"
           style={{ marginTop: 5, marginBottom: 20 }}
         >
-          Results provided by <span style={{ color: '#ee565c' }}>Airbnb</span>.
+          Results provided by{' '}
+          <a
+            href="https://www.airbnb.com"
+            style={{ color: '#ee565c', textDecoration: 'none' }}
+            target="_blank"
+          >
+            Airbnb
+          </a>.
         </Text>
         <iframe
           src={`https://events.withairbnb.com/index.html?eventid=${airbnbEventID}`}
