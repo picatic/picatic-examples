@@ -17,9 +17,18 @@ const getBoxShadow = color => {
 }
 
 const raisedColors = {}
+const fillColors = {}
 
 Object.entries(primary).map(([key, value]) => {
   raisedColors[`raised${capitalize(key)}`] = { color: value.main }
+  fillColors[`fill${capitalize(key)}`] = {
+    color: theme.palette.white.default,
+    background: value.main,
+    boxShadow: getBoxShadow(value.main),
+    '&:hover': {
+      backgroundColor: fade(value.main, 0.86),
+    },
+  }
 })
 
 const styles = {
@@ -64,6 +73,7 @@ const styles = {
     color: theme.palette.text.default,
     boxShadow: getBoxShadow(theme.palette.black.default),
   },
+  ...fillColors,
   fillPrimary: {
     color: theme.palette.white.default,
     background: theme.palette.primary.main,
@@ -100,7 +110,7 @@ class Button extends PureComponent {
       'inherit',
       'primary',
       'secondary',
-      Object.getOwnPropertyNames(primary),
+      ...Object.getOwnPropertyNames(primary),
     ]),
     component: PropTypes.oneOf([PropTypes.string, PropTypes.func]),
     disabled: PropTypes.bool,

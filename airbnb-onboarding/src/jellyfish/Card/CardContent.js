@@ -6,7 +6,6 @@ import theme from '../styles'
 
 const styles = {
   root: {
-    borderBottom: `1px solid rgba(0,0,0,0.12)`,
     padding: `${theme.spacing.unit * 2}px 0px`,
     margin: `0px ${theme.spacing.unit * 2}px`,
   },
