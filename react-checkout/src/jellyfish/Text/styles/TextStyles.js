@@ -1,7 +1,7 @@
 import theme from '../../styles'
 import fontFamily from './FontFamily'
 import fontWeight from './FontWeight'
-import { pxToRem, capitalize } from '../../utils'
+import { capitalize } from '../../utils'
 import { primary } from '../../colors'
 
 const colors = {}
@@ -15,7 +15,7 @@ export default {
   root: {
     display: 'block',
     color: theme.palette.text.default,
-    fontSize: pxToRem(14),
+    fontSize: 14,
     fontWeight: fontWeight.regular,
     fontFamily: fontFamily.primary,
     letterSpacing: 0,
@@ -23,76 +23,76 @@ export default {
     margin: 0,
   },
   display5: {
-    fontSize: pxToRem(104),
+    fontSize: 104,
     fontWeight: fontWeight.bold,
     fontFamily: fontFamily.secondary,
     letterSpacing: '-2px',
   },
   display4: {
-    fontSize: pxToRem(72),
+    fontSize: 72,
     fontWeight: fontWeight.bold,
     fontFamily: fontFamily.secondary,
     letterSpacing: '-1px',
   },
   display3: {
-    fontSize: pxToRem(56),
+    fontSize: 56,
     fontWeight: fontWeight.bold,
     fontFamily: fontFamily.secondary,
     lineHeight: '-1px',
   },
   display2: {
-    fontSize: pxToRem(45),
+    fontSize: 45,
     lineHeight: '48px',
   },
   display1: {
-    fontSize: pxToRem(34),
+    fontSize: 34,
     lineHeight: '34px',
   },
   headline: {
-    fontSize: pxToRem(24),
+    fontSize: 24,
     lineHeight: '32px',
   },
   title: {
-    fontSize: pxToRem(20),
+    fontSize: 20,
     fontWeight: fontWeight.medium,
     lineHeight: '28px',
   },
   subheading: {
     color: theme.palette.text.muted,
-    fontSize: pxToRem(18),
-    lineHeight: pxToRem(24),
+    fontSize: 18,
+    lineHeight: 24,
   },
   body3: {
-    fontSize: pxToRem(16),
+    fontSize: 16,
     fontWeight: fontWeight.medium,
     lineHeight: '24px',
   },
   body2: {
-    fontSize: pxToRem(16),
+    fontSize: 16,
     lineHeight: '24px',
   },
   body1: {
-    fontSize: pxToRem(14),
-    lineHeight: pxToRem(19),
+    fontSize: 14,
+    lineHeight: 19,
   },
   caption: {
     color: theme.palette.text.muted,
-    fontSize: pxToRem(12),
+    fontSize: 12,
     lineHeight: '20px',
   },
   label: {
-    fontSize: pxToRem(13),
+    fontSize: 13,
   },
   button1: {
-    fontSize: pxToRem(14),
+    fontSize: 14,
     fontWeight: fontWeight.bold,
   },
   button2: {
-    fontSize: pxToRem(16),
+    fontSize: 16,
     fontWeight: fontWeight.bold,
   },
   button3: {
-    fontSize: pxToRem(20),
+    fontSize: 20,
     fontWeight: fontWeight.medium,
   },
   alignLeft: {
