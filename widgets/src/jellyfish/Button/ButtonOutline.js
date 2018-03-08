@@ -3,11 +3,10 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import injectSheet from 'react-jss'
 import theme from '../styles'
-import { capitalize } from '../utils'
 import { primary } from '../colors'
 
 const hoverState = '&:not([disabled]):not([data-disabled]):hover'
-const focusState = '&:not([disabled]):not([data-disabled]):focus'
+// const focusState = '&:not([disabled]):not([data-disabled]):focus'
 const activeState =
   '&:not([disabled]):not([data-disabled]):active, &:not([disabled]):not([data-disabled])[data-popover-opened], &:not([disabled]):not([data-disabled])[data-active]'
 

@@ -13,7 +13,7 @@ const getStyle = color => ({
 
 const fills = {}
 Object.entries(primary).map(([key, value]) => {
-  fills[`fill${capitalize(key)}`] = getStyle(primary[key].main)
+  return (fills[`fill${capitalize(key)}`] = getStyle(primary[key].main))
 })
 
 const styles = {

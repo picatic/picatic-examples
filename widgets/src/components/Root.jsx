@@ -8,7 +8,12 @@ class App extends Component {
     const { root, initEvent, initWidget } = this.props
     let eventId = root.getAttribute('event-id')
     if (window.location.host === 'www.picatic.com') {
-      eventId = window.location.pathname.substr(1)
+      const { pathname } = window.location
+      if (pathname.indexOf('edit') > 0) {
+        eventId = pathname.substr('/manage/events/edit/'.length)
+      } else {
+        eventId = pathname.substr(1)
+      }
     }
     initEvent(eventId)
     initWidget(root)

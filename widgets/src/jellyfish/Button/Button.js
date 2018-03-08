@@ -3,14 +3,14 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import injectSheet from 'react-jss'
 import theme from '../styles'
-import { capitalize, pxToRem, fade } from '../utils'
+import { capitalize, fade } from '../utils'
 import { primary } from '../colors'
 import Text from '../Text'
 
-const hoverState = '&:not([disabled]):not([data-disabled]):hover'
-const focusState = '&:not([disabled]):not([data-disabled]):focus'
-const activeState =
-  '&:not([disabled]):not([data-disabled]):active, &:not([disabled]):not([data-disabled])[data-popover-opened], &:not([disabled]):not([data-disabled])[data-active]'
+// const hoverState = '&:not([disabled]):not([data-disabled]):hover'
+// const focusState = '&:not([disabled]):not([data-disabled]):focus'
+// const activeState =
+//   '&:not([disabled]):not([data-disabled]):active, &:not([disabled]):not([data-disabled])[data-popover-opened], &:not([disabled]):not([data-disabled])[data-active]'
 
 const getBoxShadow = color => {
   return `0 0 3px 0 ${fade(color, 0.12)}, 0 2px 5px 0 ${fade(color, 0.26)}`
@@ -19,7 +19,7 @@ const getBoxShadow = color => {
 const raisedColors = {}
 
 Object.entries(primary).map(([key, value]) => {
-  raisedColors[`raised${capitalize(key)}`] = { color: value.main }
+  return (raisedColors[`raised${capitalize(key)}`] = { color: value.main })
 })
 
 const styles = {
