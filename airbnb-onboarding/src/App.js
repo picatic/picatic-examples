@@ -6,6 +6,7 @@ import Card, { CardContent } from './jellyfish/Card'
 
 import TextField from 'material-ui/TextField'
 import List, { ListItem, ListItemText } from 'material-ui/List'
+import Switch from 'material-ui/Switch';
 
 const picaticAPIFetch = (url, method = 'GET', apiKey, body) =>
   fetch(url, {
@@ -22,13 +23,18 @@ const picaticAPIFetch = (url, method = 'GET', apiKey, body) =>
 
 const HOST_PICATIC = 'https://api.picatic.com/v2'
 //const HOST_PICATIC = 'https://api-staging.picatic.com/v2'
+const PICATIC_API_KEY = 'sk_live_e007e558626178f2fe755e7ae53e24a1'
+const STORE_PICATIC_EVENT_ID = 199666
 
 class App extends Component {
   state = {
     picaticAPIKey: null,
     picaticUserID: null,
     events: [],
+    checkProcess: null,
     error: null,
+    checkedA: true,
+    checkedB: false,
   }
 
   componentWillMount() {
@@ -54,6 +60,16 @@ class App extends Component {
     this.setState({ [name]: value, error: false })
   }
 
+  toggleChange = (eventId, originValue) => {
+    const { picaticAPIKey } = this.state
+    if (originValue) {
+      this.removeAirbnb(picaticAPIKey, eventId)
+    }
+    else {
+      this.addAirbnb(picaticAPIKey, eventId)
+    }
+  };
+
   handleSubmit = ev => {
     ev.preventDefault()
     this.fetchUser(this.state.picaticAPIKey)
@@ -77,6 +93,7 @@ class App extends Component {
   }
 
   addAirbnb = async (apiKey, eventID) => {
+    const { events } = this.state
     const url = `${HOST_PICATIC}/event/${eventID}`
     const body = JSON.stringify({
       data: {
@@ -91,7 +108,36 @@ class App extends Component {
     const { json, error } = await picaticAPIFetch(url, 'PATCH', apiKey, body)
 
     if (json) {
-      window.location.href = `http://www.picatic.com/${eventID}`
+      const index = events.map(event => event.id).indexOf(eventID);
+      events[index].attributes.custom_js = true
+      events[index].find = true
+      this.setState({events})
+      // window.location.href = `http://www.picatic.com/${eventID}`
+    } else if (error) {
+      this.setState({ error })
+    }
+  }
+
+  removeAirbnb = async (apiKey, eventID) => {
+    const { events } = this.state
+    const url = `${HOST_PICATIC}/event/${eventID}`
+    const body = JSON.stringify({
+      data: {
+        attributes: {
+          custom_js:null
+        },
+        id: eventID,
+        type: 'event',
+      },
+    })
+    const { json, error } = await picaticAPIFetch(url, 'PATCH', apiKey, body)
+
+    if (json) {
+      const index = events.map(event => event.id).indexOf(eventID);
+      events[index].attributes.custom_js = null
+      events[index].find = false
+      this.setState({events})
+      // window.location.href = `http://www.picatic.com/${eventID}`
     } else if (error) {
       this.setState({ error })
     }
@@ -105,13 +151,37 @@ class App extends Component {
 
     if (json) {
       this.setState({ events: json.data })
+      this.checkEventstatus()
     } else if (error) {
       this.setState({ error })
     }
   }
 
+  checkEventstatus = async () => {
+    const { events } = this.state
+    
+    for (let i = 0; i < events.length; i++) {
+      let eventJs = events[i].attributes.custom_js
+      if (eventJs) {
+        events[i].find = true
+      } else {
+        events[i].find = false
+      }
+      if (i === events.length - 1) {
+        this.setState({ checkProcess: true })
+      }
+    }
+    this.setState({ events })
+  }
+
+  viewEvent = (eventId) => {
+    const url = `https://www.picatic.com/${eventId}`
+    const win = window.open(url, '_blank');
+    win.focus();
+  }
+
   render() {
-    const { picaticAPIKey, picaticUserID, events, error } = this.state
+    const { picaticAPIKey, picaticUserID, events, checkProcess, error } = this.state
 
     let content
     if (!picaticUserID) {
@@ -149,17 +219,30 @@ class App extends Component {
           <a href="https://www.picatic.com/">picatic.com</a>
         </Text>
       )
-    } else if (events) {
+    } else if (events && checkProcess) {
       content = (
         <List>
           {events.map(event => {
             return (
               <ListItem
-                button
                 key={event.id}
-                onClick={() => this.addAirbnb(picaticAPIKey, event.id)}
               >
                 <ListItemText primary={event.attributes.title} />
+                <Switch
+                  checked={event.find}
+                  onChange={() => this.toggleChange(event.id, event.find)}
+                />
+                <Button
+                  color="amaranth"
+                  appearance="raised"
+                  size="small"
+                  className="mt2"
+                  style={{ margin: 'auto' }}
+                  type="submit"
+                  onClick={() => this.viewEvent(event.id)}
+                >
+                  VIEW
+            </Button>
               </ListItem>
             )
           })}
