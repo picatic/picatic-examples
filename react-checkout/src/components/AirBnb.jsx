@@ -16,6 +16,10 @@ class AirBnb extends Component {
     error: null,
   }
 
+  static defaultProps = {
+    eventId: '132389',
+  }
+
   componentWillMount() {
     this.getEvent(this.props.eventId)
   }
@@ -49,8 +53,11 @@ class AirBnb extends Component {
     const { json, error } = await apiFetch(url)
 
     if (json) {
+      if (json.results.length === 0) {
+        this.setState({ error: true })
+        return
+      }
       const { lat, lng } = json.results[0].geometry.location
-      console.log(lat, lng)
 
       this.setState({ lat, lng })
       this.checkEvents(eventObj.id)
@@ -60,6 +67,15 @@ class AirBnb extends Component {
   }
 
   checkEvents = async eventId => {
+    const { lat, lng, eventObj } = this.state
+    const {
+      title,
+      venue_name,
+      venue_street,
+      start_date,
+      end_date,
+    } = eventObj.attributes
+
     const url = `https://api.picatic.com/v2/ledger_invoice?filter[first_name]=${eventId}&filter[reference_id]=${STORE_PICATIC_EVENT_ID}&filter[reference_name]=Event&filter[method]=free&page[limit]=1&page[offset]=0&sort=-id`
 
     const { json, error } = await fetch(url, {
@@ -74,76 +90,38 @@ class AirBnb extends Component {
       .catch(error => ({ error }))
 
     if (json) {
+      const body = JSON.stringify({
+        name: title,
+        location: venue_street,
+        address_1: venue_name || venue_street,
+        check_in_at: start_date,
+        check_out_at: end_date,
+        guests: 1,
+        lat,
+        lng,
+        logo_url: '',
+        url: `https://www.picatic.com/${eventObj.id}`,
+      })
+
       const list = json.data
       if (list.length > 0) {
         const existingAirbnbEventID = json.data[0].attributes.last_name
+        apiFetch(
+          `https://labs-api-197200.appspot.com/airbnb_event/${existingAirbnbEventID}`,
+          'PUT',
+          body,
+        )
         this.setState({ airbnbEventID: existingAirbnbEventID })
-        this.putAirbnbEvent(existingAirbnbEventID)
       } else {
-        this.createAirbnbEvent()
+        this.createAirbnbEvent(body)
       }
     } else if (error) {
       this.setState({ error })
     }
   }
 
-  putAirbnbEvent = async airbnbEventID => {
-    const { lat, lng, eventObj } = this.state
-    const {
-      title,
-      venue_name,
-      venue_street,
-      start_date,
-      end_date,
-    } = eventObj.attributes
-
-    const location = encodeURI(venue_street)
-
-    const body = JSON.stringify({
-      name: encodeURI(title),
-      location,
-      address_1: encodeURI(venue_name) || location,
-      check_in_at: start_date,
-      check_out_at: end_date,
-      guests: 1,
-      lat,
-      lng,
-      logo_url: '',
-      url: `https://www.picatic.com/${eventObj.id}`,
-    })
-
-    apiFetch(
-      `https://labs-api-197200.appspot.com/airbnb_event/${airbnbEventID}`,
-      'PUT',
-      body,
-    )
-  }
-
-  createAirbnbEvent = async () => {
-    const { lat, lng, airbnbEventID, eventObj } = this.state
-    const {
-      title,
-      venue_name,
-      venue_street,
-      start_date,
-      end_date,
-    } = eventObj.attributes
-
-    const location = encodeURI(venue_street)
-
-    const body = JSON.stringify({
-      name: encodeURI(title),
-      location,
-      address_1: encodeURI(venue_name) || location,
-      check_in_at: start_date,
-      check_out_at: end_date,
-      guests: 1,
-      lat,
-      lng,
-      logo_url: '',
-      url: `https://www.picatic.com/${eventObj.id}`,
-    })
-
+  createAirbnbEvent = async body => {
+    const { eventObj } = this.state
     const { json, error } = await apiFetch(
       'https://labs-api-197200.appspot.com/airbnb_event/',
       'POST',
@@ -195,19 +173,22 @@ class AirBnb extends Component {
     }
   }
 
-  static defaultProps = {
-    eventId: '132389',
-  }
-
   render() {
+    const { airbnbEventID, error } = this.state
+    if (error) {
+      console.log('Could not render Airbnb Event')
+      return null
+    }
     return (
       <iframe
-        src={`https://events.withairbnb.com/index.html?eventid=${
-          this.state.airbnbEventID
-        }`}
+        src={`https://events.withairbnb.com/index.html?eventid=${airbnbEventID}`}
         width="100%"
         height="500px"
         scrolling="no"
+        style={{
+          border: 'none',
+          boxShadow: 'rgba(0, 0, 0, 0.2) 0px 2px 10px 0px',
+        }}
       />
     )
   }
