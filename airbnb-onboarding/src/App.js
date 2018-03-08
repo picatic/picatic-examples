@@ -12,6 +12,13 @@ import List, {
 } from 'material-ui/List'
 import Switch from 'material-ui/Switch'
 import Snackbar from 'material-ui/Snackbar'
+import { MuiThemeProvider, createMuiTheme } from 'material-ui'
+
+const theme = createMuiTheme({
+  typography: {
+    fontFamily: `'Avenir Next W01', 'Helvetica Neue', Helvetica, sans-serif`,
+  },
+})
 
 const airbnbCustomJS = `<script async src='https://storage.googleapis.com/picatic/injectwidget-div-css.js'></script><script async src='https://storage.googleapis.com/picatic/latest/js/main.js'></script>`
 
@@ -279,65 +286,67 @@ class App extends Component {
     }
 
     return (
-      <section className="max-width-3 mx-auto mt4">
-        <Card
-          className="center"
-          style={{ boxShadow: '0px 24px 32px 0px rgba(0,0,0,.12)' }}
-        >
-          <CardContent style={{ margin: '0px 24px', padding: '32px 0px' }}>
-            <div className="mb2">{airbnbLogo}</div>
-            {content}
-          </CardContent>
-        </Card>
-        <div className="flex justify-between mt3">
-          <Text color="extraMuted">© 2018 Picatic E-Ticket Inc.</Text>
-          <div className="flex">
-            <Text color="extraMuted" className="pl2">
-              <a
-                href="https://help.picatic.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ textDecoration: 'none', color: 'inherit' }}
-              >
-                Help
-              </a>
-            </Text>
-            <Text color="extraMuted" className="pl2">
-              <a
-                href="https://www.picatic.com/p/privacy-policy"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ textDecoration: 'none', color: 'inherit' }}
-              >
-                Privacy
-              </a>
-            </Text>
-            <Text color="extraMuted" className="pl2">
-              <a
-                href="https://www.picatic.com/p/terms"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ textDecoration: 'none', color: 'inherit' }}
-              >
-                Terms
-              </a>
-            </Text>
-            <Snackbar
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={openSnackbar}
-              autoHideDuration={3000}
-              onClose={this.handleClose}
-              SnackbarContentProps={{
-                'aria-describedby': 'message-id',
-              }}
-              message={<span id="message-id">{messageSnackbar}</span>}
-            />
+      <MuiThemeProvider theme={theme}>
+        <section className="max-width-3 mx-auto mt4">
+          <Card
+            className="center"
+            style={{ boxShadow: '0px 24px 32px 0px rgba(0,0,0,.12)' }}
+          >
+            <CardContent style={{ margin: '0px 24px', padding: '32px 0px' }}>
+              <div className="mb2">{airbnbLogo}</div>
+              {content}
+            </CardContent>
+          </Card>
+          <div className="flex justify-between mt3">
+            <Text color="extraMuted">© 2018 Picatic E-Ticket Inc.</Text>
+            <div className="flex">
+              <Text color="extraMuted" className="pl2">
+                <a
+                  href="https://help.picatic.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  Help
+                </a>
+              </Text>
+              <Text color="extraMuted" className="pl2">
+                <a
+                  href="https://www.picatic.com/p/privacy-policy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  Privacy
+                </a>
+              </Text>
+              <Text color="extraMuted" className="pl2">
+                <a
+                  href="https://www.picatic.com/p/terms"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  Terms
+                </a>
+              </Text>
+              <Snackbar
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={openSnackbar}
+                autoHideDuration={3000}
+                onClose={this.handleClose}
+                SnackbarContentProps={{
+                  'aria-describedby': 'message-id',
+                }}
+                message={<span id="message-id">{messageSnackbar}</span>}
+              />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </MuiThemeProvider>
     )
   }
 }
