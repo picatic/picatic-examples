@@ -1,0 +1,11 @@
+# dependencies
+/node_modules
+/build
+
+#editor
+.vscode
+
+# misc
+.DS_Store
+
+yarn.lock
