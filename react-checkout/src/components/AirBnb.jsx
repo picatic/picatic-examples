@@ -1,5 +1,11 @@
 import React, { Component } from 'react'
 import { apiFetch } from '../utils/apiUtils'
+import Text from '../jellyfish/Text'
+
+const HOST_LABS_PRODUCTION = 'https://labs-api-197200.appspot.com'
+const HOST_LABS_STAGING = 'http://localhost:8080'
+
+const HOST_PICATIC_PRODUCTION = 'https://api.picatic.com'
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyAUuwkvQXJdqclRNcchQTpQFJAMlGpxGO4'
 const PICATIC_API_KEY = 'sk_live_e007e558626178f2fe755e7ae53e24a1'
@@ -25,7 +31,7 @@ class AirBnb extends Component {
   }
 
   getEvent = async eventId => {
-    const url = `https://api.picatic.com/v2/event/${eventId}?include=region`
+    const url = `${HOST_PICATIC_PRODUCTION}/v2/event/${eventId}?include=region`
     const { json, error } = await apiFetch(url)
 
     if (json) {
@@ -76,7 +82,7 @@ class AirBnb extends Component {
       end_date,
     } = eventObj.attributes
 
-    const url = `https://api.picatic.com/v2/ledger_invoice?filter[first_name]=${eventId}&filter[reference_id]=${STORE_PICATIC_EVENT_ID}&filter[reference_name]=Event&filter[method]=free&page[limit]=1&page[offset]=0&sort=-id`
+    const url = `${HOST_PICATIC_PRODUCTION}/v2/ledger_invoice?filter[first_name]=${eventId}&filter[reference_id]=${STORE_PICATIC_EVENT_ID}&filter[reference_name]=Event&filter[method]=free&page[limit]=1&page[offset]=0&sort=-id`
 
     const { json, error } = await fetch(url, {
       method: 'GET',
@@ -107,7 +113,7 @@ class AirBnb extends Component {
       if (list.length > 0) {
         const existingAirbnbEventID = json.data[0].attributes.last_name
         apiFetch(
-          `https://labs-api-197200.appspot.com/airbnb_event/${existingAirbnbEventID}`,
+          `${HOST_LABS_PRODUCTION}/airbnb_event/${existingAirbnbEventID}`,
           'PUT',
           body,
         )
@@ -123,7 +129,7 @@ class AirBnb extends Component {
   createAirbnbEvent = async body => {
     const { eventObj } = this.state
     const { json, error } = await apiFetch(
-      'https://labs-api-197200.appspot.com/airbnb_event/',
+      `${HOST_LABS_PRODUCTION}/airbnb_event`,
       'POST',
       body,
     )
@@ -163,12 +169,12 @@ class AirBnb extends Component {
         type: 'checkout',
       },
     })
-    const url = 'https://api.picatic.com/v2/checkout'
+    const url = `${HOST_PICATIC_PRODUCTION}/v2/checkout`
     const { json, error } = await apiFetch(url, 'POST', body)
 
     if (json) {
       const checkoutId = json.data.id
-      const confirmURL = `https://api.picatic.com/v2/checkout/${checkoutId}/confirm`
+      const confirmURL = `${HOST_PICATIC_PRODUCTION}/v2/checkout/${checkoutId}/confirm`
       apiFetch(confirmURL, 'POST')
     }
   }
@@ -180,16 +186,23 @@ class AirBnb extends Component {
       return null
     }
     return (
-      <iframe
-        src={`https://events.withairbnb.com/index.html?eventid=${airbnbEventID}`}
-        width="100%"
-        height="500px"
-        scrolling="no"
-        style={{
-          border: 'none',
-          boxShadow: 'rgba(0, 0, 0, 0.2) 0px 2px 10px 0px',
-        }}
-      />
+      <div>
+        <Text variant="title">Where to stay</Text>
+        <Text
+          variant="body2"
+          color="muted"
+          style={{ marginTop: 5, marginBottom: 20 }}
+        >
+          Results provided by <span style={{ color: '#ee565c' }}>Airbnb</span>.
+        </Text>
+        <iframe
+          src={`https://events.withairbnb.com/index.html?eventid=${airbnbEventID}`}
+          width="100%"
+          height="500px"
+          scrolling="no"
+          style={{ border: `1px solid #e0e0e0` }}
+        />
+      </div>
     )
   }
 }
