@@ -47,8 +47,8 @@ class App extends Component {
 
     if (picaticAPIKey) {
       if (selectedEvent) {
-        this.addAirbnb(picaticAPIKey, selectedEvent)
-        return
+        this.addAirbnbinitial(picaticAPIKey, selectedEvent)
+        // return window.location.replace(`https://www.picatic.com`)
       }
 
       this.fetchUser(picaticAPIKey)
@@ -130,11 +130,35 @@ class App extends Component {
     }
   }
 
+  addAirbnbinitial = async (apiKey, eventID) => {
+    const url = `${HOST_PICATIC}/event/${eventID}`
+    const body = JSON.stringify({
+      data: {
+        attributes: {
+          custom_js: `${airbnbCustomJS}`,
+        },
+        id: eventID,
+        type: 'event',
+      },
+    })
+    const { json, error } = await picaticAPIFetch(url, 'PATCH', apiKey, body)
+
+    if (json) {
+      window.location.replace(`https://www.picatic.com/${eventID}`)
+    } else if (error) {
+      this.setState({ error })
+    }
+  }
+
   removeAirbnb = async (apiKey, eventID) => {
     const { events } = this.state
     const url = `${HOST_PICATIC}/event/${eventID}`
     const event = events.find(({ id }) => id === eventID)
-    const custom_js = event.attributes.custom_js.replace(airbnbCustomJS, '')
+    const eventCustomjs = event.attributes.custom_js
+    let custom_js = null
+    if (eventCustomjs){
+    let custom_js = event.attributes.custom_js.replace(airbnbCustomJS, '')
+    }
     const body = JSON.stringify({
       data: {
         attributes: {
@@ -197,7 +221,9 @@ class App extends Component {
   }
 
   viewEvent = id => {
-    window.location.href = `http://www.picatic.com/${id}`
+    const url = `http://www.picatic.com/${id}`
+    const win = window.open(url, '_blank');
+  win.focus();
   }
 
   handleClose = (event, reason) => {
@@ -285,7 +311,7 @@ class App extends Component {
           style={{ boxShadow: '0px 24px 32px 0px rgba(0,0,0,.12)' }}
         >
           <CardContent style={{ margin: '0px 24px', padding: '32px 0px' }}>
-            <div className="mb2">{airbnbLogo}</div>
+            <div className="mb2 center">{airbnbLogo}</div>
             {content}
           </CardContent>
         </Card>
