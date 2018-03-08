@@ -41,7 +41,7 @@ const styles = {
 }
 
 class ButtonOutline extends PureComponent {
-  static PropTypes = {
+  static propTypes = {
     classes: PropTypes.object.isRequired,
     className: PropTypes.string,
     color: PropTypes.oneOf([

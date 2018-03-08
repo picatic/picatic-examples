@@ -32,7 +32,7 @@ const styles = {
 }
 
 class Badge extends PureComponent {
-  static PropTypes = {
+  static propTypes = {
     className: PropTypes.string,
     classes: PropTypes.object.isRequired,
     color: PropTypes.oneOf([

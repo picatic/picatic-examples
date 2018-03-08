@@ -92,7 +92,7 @@ const styles = {
 }
 
 class Button extends PureComponent {
-  static PropTypes = {
+  static propTypes = {
     classes: PropTypes.object.isRequired,
     className: PropTypes.string,
     color: PropTypes.oneOf([

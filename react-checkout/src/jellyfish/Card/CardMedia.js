@@ -26,7 +26,7 @@ const styles = {
 const MEDIA_COMPONENTS = ['video', 'audio', 'picture', 'iframe', 'img']
 
 class CardMedia extends PureComponent {
-  static PropTypes = {
+  static propTypes = {
     classes: PropTypes.object.isRequired,
     className: PropTypes.string,
     component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
