@@ -1,6 +1,4 @@
 import React from 'react'
-import TextField from 'material-ui/TextField'
-import { MenuItem } from 'material-ui/Menu'
 import Text from '../jellyfish/Text'
 import Select from '../jellyfish/Select'
 import injectSheet from 'react-jss'
