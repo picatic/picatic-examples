@@ -5,8 +5,15 @@ import Text from './jellyfish/Text'
 import Card, { CardContent } from './jellyfish/Card'
 
 import TextField from 'material-ui/TextField'
-import List, { ListItem, ListItemText } from 'material-ui/List'
-import Switch from 'material-ui/Switch';
+import List, {
+  ListItem,
+  ListItemText,
+  ListItemSecondaryAction,
+} from 'material-ui/List'
+import Switch from 'material-ui/Switch'
+import Snackbar from 'material-ui/Snackbar'
+
+const airbnbCustomJS = `<script async src='https://storage.googleapis.com/picatic/injectwidget-div-css.js'></script><script async src='https://storage.googleapis.com/picatic/latest/js/main.js'></script>`
 
 const picaticAPIFetch = (url, method = 'GET', apiKey, body) =>
   fetch(url, {
@@ -22,19 +29,15 @@ const picaticAPIFetch = (url, method = 'GET', apiKey, body) =>
     .catch(error => ({ error }))
 
 const HOST_PICATIC = 'https://api.picatic.com/v2'
-//const HOST_PICATIC = 'https://api-staging.picatic.com/v2'
-const PICATIC_API_KEY = 'sk_live_e007e558626178f2fe755e7ae53e24a1'
-const STORE_PICATIC_EVENT_ID = 199666
 
 class App extends Component {
   state = {
     picaticAPIKey: null,
     picaticUserID: null,
     events: [],
-    checkProcess: null,
     error: null,
-    checkedA: true,
-    checkedB: false,
+    openSnackbar: false,
+    messageSnackbar: '',
   }
 
   componentWillMount() {
@@ -64,11 +67,10 @@ class App extends Component {
     const { picaticAPIKey } = this.state
     if (originValue) {
       this.removeAirbnb(picaticAPIKey, eventId)
-    }
-    else {
+    } else {
       this.addAirbnb(picaticAPIKey, eventId)
     }
-  };
+  }
 
   handleSubmit = ev => {
     ev.preventDefault()
@@ -94,12 +96,13 @@ class App extends Component {
 
   addAirbnb = async (apiKey, eventID) => {
     const { events } = this.state
+    const event = events.find(({ id }) => id === eventID)
+
     const url = `${HOST_PICATIC}/event/${eventID}`
     const body = JSON.stringify({
       data: {
         attributes: {
-          custom_js:
-            "<script async src='https://storage.googleapis.com/picatic/injectwidget-div-css.js'></script><script async src='https://storage.googleapis.com/picatic/latest/js/main.js'></script>",
+          custom_js: `${event.attributes.custom_js}${airbnbCustomJS}`,
         },
         id: eventID,
         type: 'event',
@@ -108,11 +111,20 @@ class App extends Component {
     const { json, error } = await picaticAPIFetch(url, 'PATCH', apiKey, body)
 
     if (json) {
-      const index = events.map(event => event.id).indexOf(eventID);
-      events[index].attributes.custom_js = true
-      events[index].find = true
-      this.setState({events})
-      // window.location.href = `http://www.picatic.com/${eventID}`
+      const newEvents = events.map(ev => {
+        if (ev.id === event.id) {
+          return {
+            ...ev,
+            find: true,
+          }
+        }
+        return ev
+      })
+      this.setState({
+        events: newEvents,
+        openSnackbar: true,
+        messageSnackbar: 'Added Airbnb',
+      })
     } else if (error) {
       this.setState({ error })
     }
@@ -121,10 +133,12 @@ class App extends Component {
   removeAirbnb = async (apiKey, eventID) => {
     const { events } = this.state
     const url = `${HOST_PICATIC}/event/${eventID}`
+    const event = events.find(({ id }) => id === eventID)
+    const custom_js = event.attributes.custom_js.replace(airbnbCustomJS, '')
     const body = JSON.stringify({
       data: {
         attributes: {
-          custom_js:null
+          custom_js,
         },
         id: eventID,
         type: 'event',
@@ -133,11 +147,20 @@ class App extends Component {
     const { json, error } = await picaticAPIFetch(url, 'PATCH', apiKey, body)
 
     if (json) {
-      const index = events.map(event => event.id).indexOf(eventID);
-      events[index].attributes.custom_js = null
-      events[index].find = false
-      this.setState({events})
-      // window.location.href = `http://www.picatic.com/${eventID}`
+      const newEvents = events.map(ev => {
+        if (ev.id === event.id) {
+          return {
+            ...ev,
+            find: false,
+          }
+        }
+        return ev
+      })
+      this.setState({
+        events: newEvents,
+        openSnackbar: true,
+        messageSnackbar: 'Removed Airbnb',
+      })
     } else if (error) {
       this.setState({ error })
     }
@@ -150,38 +173,45 @@ class App extends Component {
     const { json, error } = await picaticAPIFetch(url, 'GET', picaticAPIKey)
 
     if (json) {
-      this.setState({ events: json.data })
-      this.checkEventstatus()
+      const events = json.data
+      this.checkEventsCustomJS(events)
     } else if (error) {
       this.setState({ error })
     }
   }
 
-  checkEventstatus = async () => {
-    const { events } = this.state
-    
-    for (let i = 0; i < events.length; i++) {
-      let eventJs = events[i].attributes.custom_js
-      if (eventJs) {
-        events[i].find = true
-      } else {
-        events[i].find = false
+  checkEventsCustomJS = events => {
+    const checkedEvents = events.map(event => {
+      const { custom_js } = event.attributes
+      let hasWidget = false
+      if (custom_js) {
+        hasWidget = custom_js.indexOf('injectwidget') >= 0
       }
-      if (i === events.length - 1) {
-        this.setState({ checkProcess: true })
+      return {
+        ...event,
+        find: hasWidget,
       }
-    }
-    this.setState({ events })
+    })
+
+    this.setState({ events: checkedEvents })
   }
 
-  viewEvent = (eventId) => {
-    const url = `https://www.picatic.com/${eventId}`
-    const win = window.open(url, '_blank');
-    win.focus();
+  viewEvent = id => {
+    window.location.href = `http://www.picatic.com/${id}`
+  }
+
+  handleClose = (event, reason) => {
+    this.setState({ openSnackbar: false })
   }
 
   render() {
-    const { picaticAPIKey, picaticUserID, events, checkProcess, error } = this.state
+    const {
+      picaticUserID,
+      events,
+      error,
+      openSnackbar,
+      messageSnackbar,
+    } = this.state
 
     let content
     if (!picaticUserID) {
@@ -216,33 +246,31 @@ class App extends Component {
       content = (
         <Text>
           You have no active events. Let's now create one on{' '}
-          <a href="https://www.picatic.com/">picatic.com</a>
+          <a
+            href="https://www.picatic.com/"
+            style={{ textDecoration: 'none', color: 'inherit' }}
+          >
+            picatic.com
+          </a>
         </Text>
       )
-    } else if (events && checkProcess) {
+    } else if (events) {
       content = (
         <List>
           {events.map(event => {
             return (
               <ListItem
                 key={event.id}
+                onClick={() => this.viewEvent(event.id)}
+                button
               >
                 <ListItemText primary={event.attributes.title} />
-                <Switch
-                  checked={event.find}
-                  onChange={() => this.toggleChange(event.id, event.find)}
-                />
-                <Button
-                  color="amaranth"
-                  appearance="raised"
-                  size="small"
-                  className="mt2"
-                  style={{ margin: 'auto' }}
-                  type="submit"
-                  onClick={() => this.viewEvent(event.id)}
-                >
-                  VIEW
-            </Button>
+                <ListItemSecondaryAction>
+                  <Switch
+                    checked={event.find}
+                    onChange={() => this.toggleChange(event.id, event.find)}
+                  />
+                </ListItemSecondaryAction>
               </ListItem>
             )
           })}
@@ -257,7 +285,7 @@ class App extends Component {
           style={{ boxShadow: '0px 24px 32px 0px rgba(0,0,0,.12)' }}
         >
           <CardContent style={{ margin: '0px 24px', padding: '32px 0px' }}>
-            {airbnbLogo}
+            <div className="mb2">{airbnbLogo}</div>
             {content}
           </CardContent>
         </Card>
@@ -266,8 +294,9 @@ class App extends Component {
           <div className="flex">
             <Text color="extraMuted" className="pl2">
               <a
-                href="https://www.picatic.com/p/support"
+                href="https://help.picatic.com/"
                 target="_blank"
+                rel="noopener noreferrer"
                 style={{ textDecoration: 'none', color: 'inherit' }}
               >
                 Help
@@ -277,6 +306,7 @@ class App extends Component {
               <a
                 href="https://www.picatic.com/p/privacy-policy"
                 target="_blank"
+                rel="noopener noreferrer"
                 style={{ textDecoration: 'none', color: 'inherit' }}
               >
                 Privacy
@@ -286,11 +316,25 @@ class App extends Component {
               <a
                 href="https://www.picatic.com/p/terms"
                 target="_blank"
+                rel="noopener noreferrer"
                 style={{ textDecoration: 'none', color: 'inherit' }}
               >
                 Terms
               </a>
             </Text>
+            <Snackbar
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={openSnackbar}
+              autoHideDuration={3000}
+              onClose={this.handleClose}
+              SnackbarContentProps={{
+                'aria-describedby': 'message-id',
+              }}
+              message={<span id="message-id">{messageSnackbar}</span>}
+            />
           </div>
         </div>
       </section>
