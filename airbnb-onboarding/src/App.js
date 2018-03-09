@@ -324,7 +324,16 @@ class App extends Component {
             </CardContent>
           </Card>
           <div className="flex justify-between mt3">
-            <Text color="extraMuted">© 2018 Picatic E-Ticket Inc.</Text>
+            <Text color="extraMuted" className="pl2">
+              <a
+                href="https://www.picatic.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ textDecoration: 'none', color: 'inherit' }}
+              >
+                © 2018 Picatic E-Ticket Inc.
+              </a>
+            </Text>
             <div className="flex">
               <Text color="extraMuted" className="pl2">
                 <a
