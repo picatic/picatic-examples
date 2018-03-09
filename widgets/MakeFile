@@ -13,3 +13,5 @@ deploy:
 	
 	-gsutil rm -r ${BUCKET_URL}/${LATEST}/
 	gsutil -h "Cache-Control:public, max-age=60" cp -Z -r -a public-read ${BUCKET_URL}/${FOLDER}/* ${BUCKET_URL}/${LATEST}/
+
+	gsutil cors set cors-json-file.json ${BUCKET_URL}

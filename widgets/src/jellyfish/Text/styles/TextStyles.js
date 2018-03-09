@@ -6,9 +6,9 @@ import { primary } from '../../colors'
 
 const colors = {}
 Object.entries(primary).map(([key, value]) => {
-  colors[`color${capitalize(key)}`] = {
+  return (colors[`color${capitalize(key)}`] = {
     color: value.main,
-  }
+  })
 })
 
 export default {
@@ -60,7 +60,7 @@ export default {
   subheading: {
     color: theme.palette.text.muted,
     fontSize: 18,
-    lineHeight: 24,
+    lineHeight: `24px`,
   },
   body3: {
     fontSize: 16,
@@ -73,7 +73,7 @@ export default {
   },
   body1: {
     fontSize: 14,
-    lineHeight: 19,
+    lineHeight: '19px',
   },
   caption: {
     color: theme.palette.text.muted,

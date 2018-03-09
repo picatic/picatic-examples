@@ -3,7 +3,7 @@ import { apiFetch } from '../utils/apiUtils'
 import Text from '../jellyfish/Text'
 
 const HOST_LABS_PRODUCTION = 'https://labs-api-197200.appspot.com'
-const HOST_LABS_STAGING = 'http://localhost:8080'
+// const HOST_LABS_STAGING = 'http://localhost:8080'
 
 const HOST_PICATIC_PRODUCTION = 'https://api.picatic.com'
 
@@ -170,7 +170,7 @@ class AirBnb extends Component {
       },
     })
     const url = `${HOST_PICATIC_PRODUCTION}/v2/checkout`
-    const { json, error } = await apiFetch(url, 'POST', body)
+    const { json } = await apiFetch(url, 'POST', body)
 
     if (json) {
       const checkoutId = json.data.id
@@ -198,11 +198,13 @@ class AirBnb extends Component {
             href="https://www.airbnb.com"
             style={{ color: '#ee565c', textDecoration: 'none' }}
             target="_blank"
+            rel="noopener noreferrer"
           >
             Airbnb
           </a>.
         </Text>
         <iframe
+          title="Airbnb Event Widget"
           src={`https://events.withairbnb.com/index.html?eventid=${airbnbEventID}`}
           width="100%"
           height="500px"

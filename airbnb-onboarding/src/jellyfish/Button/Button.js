@@ -112,7 +112,7 @@ class Button extends PureComponent {
       'secondary',
       ...Object.getOwnPropertyNames(primary),
     ]),
-    component: PropTypes.oneOf([PropTypes.string, PropTypes.func]),
+    component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
     disabled: PropTypes.bool,
     fullWidth: PropTypes.bool,
     href: PropTypes.string,

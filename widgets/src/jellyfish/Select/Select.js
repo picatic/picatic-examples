@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import injectSheet from 'react-jss'
 import classNames from 'classnames'
-import Text from '../Text'
 import TextStyles from '../Text/styles'
 
 class ArrowDropDown extends PureComponent {
