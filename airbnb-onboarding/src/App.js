@@ -413,7 +413,7 @@ const airbnbLogo = (
 
 const picaticLogo = (
   <svg height="3em" width="3em" viewBox="0 0 30 26">
-    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
       <g transform="translate(-46.000000, -47.000000)" fill="#3F51B5">
         <g id="create-/-user-menu" transform="translate(40.000000, 40.000000)">
           <g id="picatic-logo">
