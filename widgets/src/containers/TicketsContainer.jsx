@@ -17,10 +17,13 @@ const mapStateToProps = ({
       return false
     }
 
-    if (selectedDay.day === 'All Dates') {
+    const { activeIndex, days, tickets: ticketsDays } = selectedDay
+    const { key } = days[activeIndex]
+
+    if (key === 'All Dates') {
       return allDates
     }
-    return selectedDay.tickets.find(({ id }) => id === ticket.id)
+    return ticketsDays.find(({ id }) => id === ticket.id)
   })
 
   const tickets = ticketsOnDay.map(ticket => {

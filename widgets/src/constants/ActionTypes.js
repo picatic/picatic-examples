@@ -27,7 +27,7 @@ export const UPDATE_WIDGET = 'UPDATE_WIDGET'
 // Selected Day
 export const SELECT_DAY = 'SELECT_DAY'
 export const SET_DAYS = 'SET_DAYS'
-export const HAS_ALL_DATES = 'HAS_ALL_DATES'
+export const SET_DAY_TICKETS = 'SET_DAY_TICKETS'
 
 // Waitlist
 export const TOGGLE_WAITLIST = 'TOGGLE_WAITLIST'
