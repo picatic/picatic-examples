@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import TicketsContainer from '../containers/TicketsContainer'
-import PromoCode from '../components/PromoCode'
+import PromoCodeContainer from '../container/PromoCodeContainer'
 import Text from '../jellyfish/Text'
 import Button, { ButtonOutline } from '../jellyfish/Button'
 import Card, {
@@ -25,7 +25,7 @@ class TicketList extends Component {
       postCheckoutId,
       promoCode,
       selectDay,
-      selectedDay,
+      eventSchedules,
       checkoutTotalQty,
       handleClosePromoCode,
       widget,
@@ -61,14 +61,13 @@ class TicketList extends Component {
         />
 
         <CardContent style={{ display: 'flex' }}>
-          {selectedDay.days.map((day, index) => {
+          {eventSchedules.days.map((day, index) => {
             const { displayName, badge } = day
-            console.log(day)
             return (
               <ButtonOutline
                 key={index}
                 className="mr2"
-                isActive={selectedDay.activeIndex === index}
+                isActive={eventSchedules.activeIndex === index}
                 badge={
                   badge > 0 && (
                     <Badge color="dodger" pill>
@@ -89,7 +88,7 @@ class TicketList extends Component {
         </CardContent>
 
         <CardAction align="between">
-          <PromoCode {...this.props} error={promoCode.error} />
+          <PromoCodeContainer />
           <div style={{ width: 248 }}>
             <Button
               appearance="fill"

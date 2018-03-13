@@ -7,7 +7,7 @@ import tickets from './tickets'
 import checkout from './checkout'
 import waitlist from './waitlist'
 import promoCode from './promoCode'
-import selectedDay from './selectedDay'
+import eventSchedules from './eventSchedules'
 import selectedTickets from './selectedTickets'
 
 const rootReducer = combineReducers({
@@ -17,7 +17,7 @@ const rootReducer = combineReducers({
   waitlist,
   checkout,
   promoCode,
-  selectedDay,
+  eventSchedules,
   selectedTickets,
 })
 
