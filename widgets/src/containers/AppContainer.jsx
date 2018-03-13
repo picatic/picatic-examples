@@ -9,7 +9,7 @@ import {
   handleClosePromoCode,
 } from '../actions/PromoCodeActions'
 import { selectDay } from '../actions/DayActions'
-import { getTicketsOnDay } from '../utils/ticketUtils'
+import { getSelectedDays } from '../selectors/DaySelectors'
 
 const AppComponent = props => {
   const { app } = props.widget
@@ -25,15 +25,16 @@ const AppComponent = props => {
   }
 }
 
-const mapStateToProps = ({
-  event,
-  widget,
-  tickets,
-  checkout,
-  selectedDay: selectedDayState,
-  selectedTickets,
-  promoCode,
-}) => {
+const mapStateToProps = state => {
+  const {
+    event,
+    widget,
+    tickets,
+    checkout,
+    selectedDay,
+    selectedTickets,
+    promoCode,
+  } = state
   const hasSelectedTickets = Object.entries(selectedTickets).reduce(
     (qty, ticket) => (qty += ticket[1]),
     0,
@@ -44,26 +45,16 @@ const mapStateToProps = ({
     return sum
   }, 0)
 
-  const selectedDay = {
-    ...selectedDayState,
-    days: selectedDayState.days.map(day => ({
-      ...day,
-      badge: selectedTickets.reduce((sum, ticket) => {
-        if (day.tickets.find(({ id }) => id === ticket.id)) {
-          sum += ticket.quantity
-        }
-        return sum
-      }, 0),
-    })),
-  }
-
   return {
     event,
     tickets,
     widget,
     checkout,
     checkoutTotalQty,
-    selectedDay,
+    selectedDay: {
+      ...selectedDay,
+      days: getSelectedDays(state),
+    },
     hasSelectedTickets,
     promoCode,
   }

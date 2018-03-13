@@ -62,10 +62,11 @@ class TicketList extends Component {
 
         <CardContent style={{ display: 'flex' }}>
           {selectedDay.days.map((day, index) => {
-            const { key, displayName, badge } = day
+            const { displayName, badge } = day
+            console.log(day)
             return (
               <ButtonOutline
-                key={key}
+                key={index}
                 className="mr2"
                 isActive={selectedDay.activeIndex === index}
                 badge={
