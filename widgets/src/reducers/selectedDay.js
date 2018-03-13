@@ -1,7 +1,6 @@
 import * as types from '../constants/ActionTypes'
 
 const initialState = {
-  tickets: [],
   activeIndex: 0,
   days: [],
 }
@@ -11,7 +10,7 @@ const selectedDay = (state = initialState, action) => {
     case types.SELECT_DAY:
       return {
         ...state,
-        ...action.payload,
+        activeIndex: action.payload,
       }
 
     case types.SET_DAYS:
@@ -20,10 +19,18 @@ const selectedDay = (state = initialState, action) => {
         days: action.payload,
       }
 
-    case types.SET_DAY_TICKETS:
+    case types.UPDATE_BADGE:
       return {
         ...state,
-        tickets: action.payload,
+        days: state.days.map(day => {
+          if (day.key === action.key) {
+            return {
+              ...day,
+              badge: action.badge,
+            }
+          }
+          return day
+        }),
       }
 
     default:

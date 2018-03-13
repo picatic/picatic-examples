@@ -30,7 +30,7 @@ const mapStateToProps = ({
   widget,
   tickets,
   checkout,
-  selectedDay,
+  selectedDay: selectedDayState,
   selectedTickets,
   promoCode,
 }) => {
@@ -44,24 +44,26 @@ const mapStateToProps = ({
     return sum
   }, 0)
 
-  const ticketsOnDay = getTicketsOnDay(event, tickets, 'All Dates')
-
-  const allDatesSum = selectedTickets.reduce((sum, ticket) => {
-    if (ticketsOnDay.find(({ id }) => id === ticket.id)) {
-      sum += ticket.quantity
-    }
-    return sum
-  }, 0)
+  const selectedDay = {
+    ...selectedDayState,
+    days: selectedDayState.days.map(day => ({
+      ...day,
+      badge: selectedTickets.reduce((sum, ticket) => {
+        if (day.tickets.find(({ id }) => id === ticket.id)) {
+          sum += ticket.quantity
+        }
+        return sum
+      }, 0),
+    })),
+  }
 
   return {
     event,
     tickets,
-    allDatesSum,
     widget,
     checkout,
     checkoutTotalQty,
     selectedDay,
-    selectedTickets,
     hasSelectedTickets,
     promoCode,
   }

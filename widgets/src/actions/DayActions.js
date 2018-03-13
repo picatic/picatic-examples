@@ -3,13 +3,7 @@ import * as types from '../constants/ActionTypes'
 import { getTicketsOnDay } from '../utils/ticketUtils'
 import moment from 'moment'
 
-export const selectDay = index => (dispatch, getState) => {
-  const { event, tickets, selectedDay } = getState()
-  const day = selectedDay.days[index].key
-  const ticketsOnDay = getTicketsOnDay(event, tickets, day)
-  const payload = { activeIndex: index, tickets: ticketsOnDay }
-  dispatch({ type: types.SELECT_DAY, payload })
-}
+export const selectDay = index => ({ type: types.SELECT_DAY, payload: index })
 
 export const setActiveDays = (event, tickets, hasAllDates) => dispatch => {
   const activeSchedules = event.schedules.filter(schedule => {
@@ -42,22 +36,22 @@ export const setActiveDays = (event, tickets, hasAllDates) => dispatch => {
       key: start_date,
       displayName,
       badge: 0,
+      tickets: getTicketsOnDay(event, tickets, start_date),
     }
   })
 
   if (hasAllDates) {
+    const key = 'All Dates'
     days = [
       {
-        key: 'All Dates',
-        displayName: 'All Dates',
+        key,
+        displayName: key,
         badge: 0,
+        tickets: getTicketsOnDay(event, tickets, key),
       },
       ...days,
     ]
   }
 
-  const ticketsOnDay = getTicketsOnDay(event, tickets, days[0].key)
-
   dispatch({ type: types.SET_DAYS, payload: days })
-  dispatch({ type: types.SET_DAY_TICKETS, payload: ticketsOnDay })
 }
