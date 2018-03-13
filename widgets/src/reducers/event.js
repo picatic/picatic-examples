@@ -5,14 +5,9 @@ const event = (state = null, action) => {
     case types.FETCH_EVENT_SUCCESS:
       return {
         ...state,
-        ...action.event
+        ...action.payload,
       }
 
-    case types.FETCH_EVENT_SCHEDULES_SUCCESS:
-      return {
-        ...state,
-        schedules: action.schedules
-      }
     default:
       return state
   }

@@ -2,7 +2,7 @@ import * as types from '../constants/ActionTypes'
 
 const initialState = {
   attributes: { event_id: null, tickets: [] },
-  type: 'checkout'
+  type: 'checkout',
 }
 
 const checkout = (state = initialState, action) => {
@@ -12,10 +12,10 @@ const checkout = (state = initialState, action) => {
         ...state,
         attributes: {
           ...state.attributes,
-          [action.attribute]: action.value
-        }
+          [action.attribute]: action.eventID,
+        },
       }
-    
+
     case types.FETCH_CREATE_CHECKOUT_SUCCESS:
       return action.checkout
 

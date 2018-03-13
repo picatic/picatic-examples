@@ -13,27 +13,26 @@ const tickets = (state = [], action) => {
             attributes: {
               ...ticket.attributes,
               discount_price: action.discount_price,
-              ticket_discount_price_id: action.ticket_price_discount_id
-            }
+              ticket_discount_price_id: action.ticket_price_discount_id,
+            },
           }
         } else {
           return ticket
         }
       })
 
-    case types.UPDATE_TICKET_WAITLIST:
+    case types.ADD_WAITLIST_ENABLED_ATTR:
       return state.map(ticket => {
         if (ticket.id === action.ticket_price_id) {
           return {
             ...ticket,
             attributes: {
               ...ticket.attributes,
-              waitlist_enabled: true
-            }
+              waitlist_enabled: true,
+            },
           }
-        } else {
-          return ticket
         }
+        return ticket
       })
 
     default:
