@@ -7,13 +7,12 @@ const TicketsComponent = props => <Tickets {...props} />
 
 const mapStateToProps = ({
   tickets: ticketsState,
-  event,
   selectedTickets,
   selectedDay,
   waitlist,
 }) => {
   const ticketsOnDay = ticketsState.filter(ticket =>
-    selectedDay.find(({ id }) => id === ticket.id),
+    selectedDay.tickets.find(({ id }) => id === ticket.id),
   )
 
   const tickets = ticketsOnDay.map(ticket => {
