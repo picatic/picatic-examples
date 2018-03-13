@@ -17,19 +17,20 @@ const mapStateToProps = ({
       return false
     }
 
-    const { activeIndex, days, tickets: ticketsDays } = selectedDay
-    const { key } = days[activeIndex]
+    const { activeIndex, days } = selectedDay
+    const activeDay = days[activeIndex]
 
-    if (key === 'All Dates') {
+    if (activeDay.key === 'All Dates') {
       return allDates
     }
-    return ticketsDays.find(({ id }) => id === ticket.id)
+    return activeDay.tickets.find(({ id }) => id === ticket.id)
   })
 
   const tickets = ticketsOnDay.map(ticket => {
     const { id, attributes } = ticket
 
     let disabled = false
+
     // Disable ticket if opposite of waitlist
     const { waitlist_enabled } = attributes
     if (waitlist.enabled && !waitlist_enabled) {
@@ -47,6 +48,7 @@ const mapStateToProps = ({
       value: selectedTicket ? selectedTicket.quantity : '',
     }
   })
+
   return {
     selectedDay,
     tickets,

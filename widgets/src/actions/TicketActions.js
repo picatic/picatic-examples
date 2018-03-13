@@ -71,13 +71,13 @@ export const fetchTickets = event => async (dispatch, getState) => {
 }
 
 export const selectTicket = (value, ticket) => (dispatch, getState) => {
-  const { waitlist } = getState
+  const { waitlist } = getState()
   const { start_date, end_date, id } = ticket
   const payload = {
     start_date,
     end_date,
-    quantity: Number(value),
     id,
+    quantity: Number(value),
   }
   dispatch({ type: types.SELECT_TICKET_PRICE, payload })
   dispatch(updateCheckoutTickets())
