@@ -66,41 +66,13 @@ class TicketList extends Component {
         />
 
         <CardContent style={{ display: 'flex' }}>
-          <ButtonOutline
-            className="mr2"
-            isActive={selectedDay.day === 'All Dates'}
-            badge={
-              allDatesSum > 0 && (
-                <Badge color="dodger" pill>
-                  {allDatesSum}
-                </Badge>
-              )
-            }
-            onClick={() => selectDay('All Dates')}
-          >
-            All Dates
-          </ButtonOutline>
-          {event.schedules.map((schedule, index) => {
-            const { start_date } = schedule.attributes
-
-            const ticketsOnDay = getTicketsOnDay(event, tickets, start_date)
-
-            const badge = selectedTickets.reduce((sum, ticket) => {
-              if (ticketsOnDay.find(({ id }) => id === ticket.id)) {
-                sum += ticket.quantity
-              }
-              return sum
-            }, 0)
-
-            const dayOfWeek = moment(start_date).format('ddd')
-            const month = moment(start_date).format('MMM')
-            const dayOfMonth = moment(start_date).format('D')
-
+          {selectedDay.days.map((day, index) => {
+            const { key, displayName, badge } = day
             return (
               <ButtonOutline
-                key={index}
+                key={key}
                 className="mr2"
-                isActive={start_date === selectedDay.day}
+                isActive={selectedDay.activeIndex === index}
                 badge={
                   badge > 0 && (
                     <Badge color="dodger" pill>
@@ -108,11 +80,9 @@ class TicketList extends Component {
                     </Badge>
                   )
                 }
-                onClick={() => selectDay(start_date)}
+                onClick={() => selectDay(key)}
               >
-                {dayOfWeek}
-                <br />
-                {month} {dayOfMonth}
+                {displayName}
               </ButtonOutline>
             )
           })}

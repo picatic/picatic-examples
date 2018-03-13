@@ -11,9 +11,17 @@ const mapStateToProps = ({
   selectedDay,
   waitlist,
 }) => {
-  const ticketsOnDay = ticketsState.filter(ticket =>
-    selectedDay.tickets.find(({ id }) => id === ticket.id),
-  )
+  const ticketsOnDay = ticketsState.filter(ticket => {
+    const { status, allDates } = ticket.attributes
+    if (status === 'closed' || status === 'hidden') {
+      return false
+    }
+
+    if (selectedDay.day === 'All Dates') {
+      return allDates
+    }
+    return selectedDay.tickets.find(({ id }) => id === ticket.id)
+  })
 
   const tickets = ticketsOnDay.map(ticket => {
     const { id, attributes } = ticket
