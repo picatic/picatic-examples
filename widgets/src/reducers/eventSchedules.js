@@ -5,7 +5,7 @@ const initialState = {
   days: [],
 }
 
-const selectedDay = (state = initialState, action) => {
+const eventSchedules = (state = initialState, action) => {
   switch (action.type) {
     case types.SELECT_DAY:
       return {
@@ -38,4 +38,4 @@ const selectedDay = (state = initialState, action) => {
   }
 }
 
-export default selectedDay
+export default eventSchedules
