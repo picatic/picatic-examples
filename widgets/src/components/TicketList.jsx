@@ -10,8 +10,6 @@ import Card, {
   CardMessage,
 } from '../jellyfish/Card'
 import Badge from '../jellyfish/Badge'
-import moment from 'moment'
-import { getTicketsOnDay } from '../utils/ticketUtils'
 
 class TicketList extends Component {
   state = {
@@ -23,9 +21,6 @@ class TicketList extends Component {
   render() {
     const {
       event,
-      tickets,
-      selectedTickets,
-      allDatesSum,
       hasSelectedTickets,
       postCheckoutId,
       promoCode,
@@ -80,7 +75,7 @@ class TicketList extends Component {
                     </Badge>
                   )
                 }
-                onClick={() => selectDay(key)}
+                onClick={() => selectDay(index)}
               >
                 {displayName}
               </ButtonOutline>

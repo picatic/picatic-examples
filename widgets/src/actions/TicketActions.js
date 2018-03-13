@@ -1,5 +1,6 @@
 import * as types from '../constants/ActionTypes'
 import { TICKET_PRICE_URL } from '../constants/ApiConstants'
+
 import { apiFetch } from '../utils/apiUtils'
 import {
   sortByAttribute,
@@ -7,47 +8,10 @@ import {
   getTicketDates,
 } from '../utils/ticketUtils'
 import { getWaitlists } from '../utils/waitlistUtils'
-import { updateCheckoutTickets } from '../actions/CheckoutActions'
-import {
-  toggleWaitlist,
-  toggleWaitlistSelected,
-} from '../actions/WaitlistActions'
-import moment from 'moment'
 
-const setActiveDays = (event, tickets) => dispatch => {
-  const activeSchedules = event.schedules.filter(schedule => {
-    let isActive = false
-    tickets.map(ticket => {
-      return ticket.relationships.event_schedules.data.find(({ id }) => {
-        if (id === schedule.id) {
-          return (isActive = true)
-        }
-      })
-    })
-    return isActive
-  })
-  const days = activeSchedules.map(schedule => {
-    const { start_date } = schedule
-
-    const dayOfWeek = moment(start_date).format('ddd')
-    const month = moment(start_date).format('MMM')
-    const dayOfMonth = moment(start_date).format('D')
-
-    const displayName = `
-      <div>
-        ${dayOfWeek}
-        <br />
-        ${month} ${dayOfMonth}
-      </div>`
-
-    return {
-      key: start_date,
-      displayName,
-      badge: 0,
-    }
-  })
-  dispatch({ type: types.SET_DAYS, payload: days })
-}
+import { updateCheckoutTickets } from './CheckoutActions'
+import { toggleWaitlist, toggleWaitlistSelected } from './WaitlistActions'
+import { setActiveDays } from './DayActions'
 
 export const fetchTickets = event => async (dispatch, getState) => {
   const url = TICKET_PRICE_URL.replace(':eventId', event.id)
@@ -58,14 +22,13 @@ export const fetchTickets = event => async (dispatch, getState) => {
       ({ relationships }) => relationships.event_schedules,
     )
 
-    dispatch(setActiveDays(event, ticketsRes))
-
     let hasAllDates = false
 
     // Add ticket dates to ticket attributes
     let tickets = ticketsRes.map(ticket => {
       const ticketSchedules = getTicketSchedules(ticket, event)
 
+      // Check if All Dates should be enabled
       if (ticketSchedules.length === event.schedules.length) {
         hasAllDates = true
       }
@@ -85,10 +48,7 @@ export const fetchTickets = event => async (dispatch, getState) => {
       }
     })
 
-    // Add all dates option if a ticket is on all days
-    if (hasAllDates) {
-      dispatch({ type: types.HAS_ALL_DATES })
-    }
+    dispatch(setActiveDays(event, ticketsRes, hasAllDates))
 
     tickets = sortByAttribute(tickets, 'order')
 
