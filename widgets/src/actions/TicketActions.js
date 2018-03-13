@@ -12,6 +12,42 @@ import {
   toggleWaitlist,
   toggleWaitlistSelected,
 } from '../actions/WaitlistActions'
+import moment from 'moment'
+
+const setActiveDays = (event, tickets) => dispatch => {
+  const activeSchedules = event.schedules.filter(schedule => {
+    let isActive = false
+    tickets.map(ticket => {
+      return ticket.relationships.event_schedules.data.find(({ id }) => {
+        if (id === schedule.id) {
+          return (isActive = true)
+        }
+      })
+    })
+    return isActive
+  })
+  const days = activeSchedules.map(schedule => {
+    const { start_date } = schedule
+
+    const dayOfWeek = moment(start_date).format('ddd')
+    const month = moment(start_date).format('MMM')
+    const dayOfMonth = moment(start_date).format('D')
+
+    const displayName = `
+      <div>
+        ${dayOfWeek}
+        <br />
+        ${month} ${dayOfMonth}
+      </div>`
+
+    return {
+      key: start_date,
+      displayName,
+      badge: 0,
+    }
+  })
+  dispatch({ type: types.SET_DAYS, payload: days })
+}
 
 export const fetchTickets = event => async (dispatch, getState) => {
   const url = TICKET_PRICE_URL.replace(':eventId', event.id)
@@ -22,9 +58,18 @@ export const fetchTickets = event => async (dispatch, getState) => {
       ({ relationships }) => relationships.event_schedules,
     )
 
+    dispatch(setActiveDays(event, ticketsRes))
+
+    let hasAllDates = false
+
     // Add ticket dates to ticket attributes
     let tickets = ticketsRes.map(ticket => {
       const ticketSchedules = getTicketSchedules(ticket, event)
+
+      if (ticketSchedules.length === event.schedules.length) {
+        hasAllDates = true
+      }
+
       const { start_date, end_date, allDates } = getTicketDates(
         ticketSchedules,
         event,
@@ -39,6 +84,11 @@ export const fetchTickets = event => async (dispatch, getState) => {
         },
       }
     })
+
+    // Add all dates option if a ticket is on all days
+    if (hasAllDates) {
+      dispatch({ type: types.HAS_ALL_DATES })
+    }
 
     tickets = sortByAttribute(tickets, 'order')
 
