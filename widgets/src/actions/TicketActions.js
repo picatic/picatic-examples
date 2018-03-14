@@ -2,16 +2,13 @@ import * as types from '../constants/ActionTypes'
 import { TICKET_PRICE_URL } from '../constants/ApiConstants'
 
 import { apiFetch } from '../utils/apiUtils'
-import {
-  sortByAttribute,
-  getTicketSchedules,
-  getTicketDates,
-} from '../utils/ticketUtils'
+import { sortByAttribute } from '../utils/commonUtils'
+import { getTicketSchedules, getTicketDates } from '../utils/ticketUtils'
 import { getWaitlists } from '../utils/waitlistUtils'
 
 import { updateCheckoutTickets } from './CheckoutActions'
 import { toggleWaitlist, toggleWaitlistSelected } from './WaitlistActions'
-import { setActiveDays } from './DayActions'
+import { setActiveDays } from './EventScheduleActions'
 
 export const fetchTickets = event => async (dispatch, getState) => {
   const url = TICKET_PRICE_URL.replace(':eventId', event.id)
