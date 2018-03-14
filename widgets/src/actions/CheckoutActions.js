@@ -2,6 +2,12 @@ import * as types from '../constants/ActionTypes'
 import { apiFetch } from '../utils/apiUtils'
 import { CREATE_CHECKOUT_URL } from '../constants/ApiConstants'
 
+export const updateCheckoutAttribute = eventID => ({
+  type: types.UPDATE_CHECKOUT_ATTRIBUTE,
+  attribute: 'event_id',
+  eventID: Number(eventID),
+})
+
 export const updateCheckoutTickets = () => (dispatch, getState) => {
   const { selectedTickets } = getState()
   const tickets = Object.entries(selectedTickets).reduce(

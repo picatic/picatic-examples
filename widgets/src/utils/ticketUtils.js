@@ -1,34 +1,11 @@
-const getFirstSelectedTicketId = selectedTickets => {
-  let id = false
-  Object.values(selectedTickets).map((val, i) => {
-    if (val > 0) {
-      return (id = Object.keys(selectedTickets)[i])
-    } else {
-      return false
-    }
-  })
-  return id
-}
-
-export const isWaitlistSelected = (tickets, selectedTickets) => {
-  const firstSelectedTicketId = getFirstSelectedTicketId(selectedTickets)
-  if (tickets.length > 0 && firstSelectedTicketId) {
-    const { waitlist_enabled } = tickets.find(
-      ({ id }) => id === firstSelectedTicketId,
-    ).attributes
-    return waitlist_enabled ? waitlist_enabled : false
-  } else {
-    return null
-  }
-}
-
 export const getTicketSchedules = (ticket, event) => {
   const arrValidEventScheduleIds = ticket.relationships.event_schedules.data.reduce(
     (arr, sch) => [...arr, sch.id],
     [],
   )
-  const sortedTicketSchedules = sortSchedules(
+  const sortedTicketSchedules = sortByAttribute(
     event.schedules.filter(({ id }) => arrValidEventScheduleIds.includes(id)),
+    'order',
   )
   return sortedTicketSchedules
 }
@@ -95,29 +72,13 @@ export const getDisabledState = (ticket, waitListSelected) => {
   }
 }
 
-export const getSelectedTicketsByDay = (event, day, selectedTickets) => {}
-
-export const sortSchedules = schedules => {
-  return schedules.sort((a, b) => {
-    const dateA = a.attributes.start_date
-    const dateB = b.attributes.start_date
+export const sortByAttribute = (list, attribute) => {
+  return list.sort((a, b) => {
+    const dateA = a.attributes[attribute]
+    const dateB = b.attributes[attribute]
     if (dateA < dateB) {
       return -1
     } else if (dateA > dateB) {
-      return 1
-    } else {
-      return 0
-    }
-  })
-}
-
-export const sortTickets = tickets => {
-  return tickets.sort((a, b) => {
-    const orderA = a.attributes.order
-    const orderB = b.attributes.order
-    if (orderA < orderB) {
-      return -1
-    } else if (orderA > orderB) {
       return 1
     } else {
       return 0

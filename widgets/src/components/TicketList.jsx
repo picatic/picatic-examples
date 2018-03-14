@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import TicketsContainer from '../containers/TicketsContainer'
-import PromoCode from '../components/PromoCode'
+import PromoCodeContainer from '../container/PromoCodeContainer'
 import Text from '../jellyfish/Text'
 import Button, { ButtonOutline } from '../jellyfish/Button'
 import Card, {
@@ -10,8 +10,6 @@ import Card, {
   CardMessage,
 } from '../jellyfish/Card'
 import Badge from '../jellyfish/Badge'
-import moment from 'moment'
-import { getTicketsOnDay } from '../utils/ticketUtils'
 
 class TicketList extends Component {
   state = {
@@ -23,14 +21,11 @@ class TicketList extends Component {
   render() {
     const {
       event,
-      tickets,
-      selectedTickets,
-      allDatesSum,
       hasSelectedTickets,
       postCheckoutId,
       promoCode,
       selectDay,
-      selectedDay,
+      eventSchedules,
       checkoutTotalQty,
       handleClosePromoCode,
       widget,
@@ -66,41 +61,13 @@ class TicketList extends Component {
         />
 
         <CardContent style={{ display: 'flex' }}>
-          <ButtonOutline
-            className="mr2"
-            isActive={selectedDay.day === 'All Dates'}
-            badge={
-              allDatesSum > 0 && (
-                <Badge color="dodger" pill>
-                  {allDatesSum}
-                </Badge>
-              )
-            }
-            onClick={() => selectDay('All Dates')}
-          >
-            All Dates
-          </ButtonOutline>
-          {event.schedules.map((schedule, index) => {
-            const { start_date } = schedule.attributes
-
-            const ticketsOnDay = getTicketsOnDay(event, tickets, start_date)
-
-            const badge = selectedTickets.reduce((sum, ticket) => {
-              if (ticketsOnDay.find(({ id }) => id === ticket.id)) {
-                sum += ticket.quantity
-              }
-              return sum
-            }, 0)
-
-            const dayOfWeek = moment(start_date).format('ddd')
-            const month = moment(start_date).format('MMM')
-            const dayOfMonth = moment(start_date).format('D')
-
+          {eventSchedules.days.map((day, index) => {
+            const { displayName, badge } = day
             return (
               <ButtonOutline
                 key={index}
                 className="mr2"
-                isActive={start_date === selectedDay.day}
+                isActive={eventSchedules.activeIndex === index}
                 badge={
                   badge > 0 && (
                     <Badge color="dodger" pill>
@@ -108,11 +75,9 @@ class TicketList extends Component {
                     </Badge>
                   )
                 }
-                onClick={() => selectDay(start_date)}
+                onClick={() => selectDay(index)}
               >
-                {dayOfWeek}
-                <br />
-                {month} {dayOfMonth}
+                {displayName}
               </ButtonOutline>
             )
           })}
@@ -123,7 +88,7 @@ class TicketList extends Component {
         </CardContent>
 
         <CardAction align="between">
-          <PromoCode {...this.props} error={promoCode.error} />
+          <PromoCodeContainer />
           <div style={{ width: 248 }}>
             <Button
               appearance="fill"

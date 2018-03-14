@@ -1,38 +1,58 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Tickets from '../components/Tickets'
-import {
-  isWaitlistSelected,
-  getTicketSchedules,
-  getTicketDates,
-  getDisabledState,
-} from '../utils/ticketUtils'
 import { selectTicket } from '../actions/TicketActions'
 
 const TicketsComponent = props => <Tickets {...props} />
 
-const mapStateToProps = ({ tickets, event, selectedTickets, selectedDay }) => {
-  const waitListSelected = isWaitlistSelected(tickets, selectedTickets)
+const mapStateToProps = ({
+  tickets: ticketsState,
+  selectedTickets,
+  selectedDay,
+  waitlist,
+}) => {
+  console.log(selectedDay)
+  const ticketsOnDay = ticketsState.filter(ticket => {
+    const { status, allDates } = ticket.attributes
+    if (status === 'closed' || status === 'hidden') {
+      return false
+    }
+
+    const { activeIndex, days } = selectedDay
+    const activeDay = days[activeIndex]
+
+    if (activeDay.key === 'All Dates') {
+      return allDates
+    }
+    return activeDay.tickets.find(({ id }) => id === ticket.id)
+  })
+
+  const tickets = ticketsOnDay.map(ticket => {
+    const { id, attributes } = ticket
+
+    let disabled = false
+
+    // Disable ticket if opposite of waitlist
+    const { waitlist_enabled } = attributes
+    if (waitlist.enabled && !waitlist_enabled) {
+      disabled = true
+    } else if (!waitlist_enabled && waitlist_enabled) {
+      disabled = true
+    }
+
+    const selectedTicket = selectedTickets.find(({ id }) => id === ticket.id)
+
+    return {
+      ...attributes,
+      id,
+      disabled,
+      value: selectedTicket ? selectedTicket.quantity : '',
+    }
+  })
 
   return {
     selectedDay,
-    tickets: tickets.map(ticket => {
-      const ticketSchedules = getTicketSchedules(ticket, event)
-      const ticketDates = getTicketDates(ticketSchedules, event)
-      const disabled = getDisabledState(ticket, waitListSelected)
-      const onDay =
-        selectedDay.tickets.filter(({ id }) => id === ticket.id).length > 0
-      const selectedTicket = selectedTickets.find(({ id }) => id === ticket.id)
-
-      return {
-        id: ticket.id,
-        onDay,
-        disabled,
-        value: selectedTicket ? selectedTicket.quantity : '',
-        ...ticket.attributes,
-        ...ticketDates,
-      }
-    }),
+    tickets,
   }
 }
 

@@ -37,6 +37,7 @@ class Badge extends PureComponent {
     color: PropTypes.oneOf([
       'primary',
       'secondary',
+      'neutral',
       ...Object.getOwnPropertyNames(primary),
     ]),
     pill: PropTypes.bool,

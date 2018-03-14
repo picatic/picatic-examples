@@ -1,15 +1,21 @@
 import React from 'react'
 import { connect } from 'react-redux'
+
+// Components
 import TicketList from '../components/TicketList'
 import Anywhere from '../components/Anywhere'
 import AirBnb from '../components/AirBnb'
+
+// Actions
 import { postCheckoutId } from '../actions/CheckoutActions'
+import { selectDay } from '../actions/EventScheduleActions'
+
+// Selectors
+import { getSelectedDays } from '../selectors/EventScheduleSelectors'
 import {
-  applyPromoCode,
-  handleClosePromoCode,
-} from '../actions/PromoCodeActions'
-import { selectDay } from '../actions/DayActions'
-import { getTicketsOnDay } from '../utils/ticketUtils'
+  hasSelectedTickets,
+  getCheckoutTotal,
+} from '../selectors/TicketSelectors'
 
 const AppComponent = props => {
   const { app } = props.widget
@@ -25,51 +31,21 @@ const AppComponent = props => {
   }
 }
 
-const mapStateToProps = ({
-  event,
-  widget,
-  tickets,
-  checkout,
-  selectedDay,
-  selectedTickets,
-  promoCode,
-}) => {
-  const hasSelectedTickets = Object.entries(selectedTickets).reduce(
-    (qty, ticket) => (qty += ticket[1]),
-    0,
-  )
-
-  const checkoutTotalQty = selectedTickets.reduce((sum, ticket) => {
-    sum += ticket.quantity
-    return sum
-  }, 0)
-
-  const ticketsOnDay = getTicketsOnDay(event, tickets, 'All Dates')
-
-  const allDatesSum = selectedTickets.reduce((sum, ticket) => {
-    if (ticketsOnDay.find(({ id }) => id === ticket.id)) {
-      sum += ticket.quantity
-    }
-    return sum
-  }, 0)
-
+const mapStateToProps = state => {
+  const { event, widget, eventSchedules } = state
   return {
     event,
-    tickets,
-    allDatesSum,
     widget,
-    checkout,
-    checkoutTotalQty,
-    selectedDay,
-    selectedTickets,
-    hasSelectedTickets,
-    promoCode,
+    eventSchedules: {
+      activeIndex: eventSchedules.activeIndex,
+      days: getSelectedDays(state),
+    },
+    hasSelectedTickets: hasSelectedTickets(state),
+    checkoutTotalQty: getCheckoutTotal(state),
   }
 }
 
 export default connect(mapStateToProps, {
   postCheckoutId,
-  applyPromoCode,
   selectDay,
-  handleClosePromoCode,
 })(AppComponent)

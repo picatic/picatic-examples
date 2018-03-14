@@ -187,7 +187,7 @@ class AirBnb extends Component {
     }
     return (
       <div>
-        <Text variant="title">Where to stay</Text>
+        <Text variant="headline">Where to stay</Text>
         <Text
           variant="body2"
           color="muted"
