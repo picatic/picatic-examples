@@ -1,13 +1,13 @@
 import { createSelector } from 'reselect'
 import { getSelectedTickets } from './CommonSelectors'
 
-export const getDays = state => state.selectedDay.days
+export const getDays = state => state.eventSchedules.days
 
-export const getSelectedDays = createSelector(
+export const getEventScheduleDays = createSelector(
   getSelectedTickets,
   getDays,
-  (selectedTickets, selectedDays) =>
-    selectedDays.map(day => {
+  (selectedTickets, eventScheduleDays) =>
+    eventScheduleDays.map(day => {
       const badge = selectedTickets.reduce((sum, ticket) => {
         if (day.tickets.find(({ id }) => id === ticket.id)) {
           sum += ticket.quantity

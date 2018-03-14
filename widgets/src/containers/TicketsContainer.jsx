@@ -8,17 +8,16 @@ const TicketsComponent = props => <Tickets {...props} />
 const mapStateToProps = ({
   tickets: ticketsState,
   selectedTickets,
-  selectedDay,
+  eventSchedules,
   waitlist,
 }) => {
-  console.log(selectedDay)
   const ticketsOnDay = ticketsState.filter(ticket => {
     const { status, allDates } = ticket.attributes
     if (status === 'closed' || status === 'hidden') {
       return false
     }
 
-    const { activeIndex, days } = selectedDay
+    const { activeIndex, days } = eventSchedules
     const activeDay = days[activeIndex]
 
     if (activeDay.key === 'All Dates') {
@@ -51,7 +50,7 @@ const mapStateToProps = ({
   })
 
   return {
-    selectedDay,
+    eventSchedules,
     tickets,
   }
 }

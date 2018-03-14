@@ -11,7 +11,7 @@ import { postCheckoutId } from '../actions/CheckoutActions'
 import { selectDay } from '../actions/EventScheduleActions'
 
 // Selectors
-import { getSelectedDays } from '../selectors/EventScheduleSelectors'
+import { getEventScheduleDays } from '../selectors/EventScheduleSelectors'
 import {
   hasSelectedTickets,
   getCheckoutTotal,
@@ -38,7 +38,7 @@ const mapStateToProps = state => {
     widget,
     eventSchedules: {
       activeIndex: eventSchedules.activeIndex,
-      days: getSelectedDays(state),
+      days: getEventScheduleDays(state),
     },
     hasSelectedTickets: hasSelectedTickets(state),
     checkoutTotalQty: getCheckoutTotal(state),

@@ -1,3 +1,5 @@
+import { sortByAttribute } from './commonUtils'
+
 export const getTicketSchedules = (ticket, event) => {
   const arrValidEventScheduleIds = ticket.relationships.event_schedules.data.reduce(
     (arr, sch) => [...arr, sch.id],
@@ -8,14 +10,6 @@ export const getTicketSchedules = (ticket, event) => {
     'order',
   )
   return sortedTicketSchedules
-}
-
-export const isOnDay = (selectedDay, ticketSchedules) => {
-  const isOnDay =
-    ticketSchedules.filter(
-      ({ attributes }) => attributes.start_date === selectedDay,
-    ).length > 0
-  return isOnDay
 }
 
 export const getTicketsOnDay = (event, tickets, day) => {
@@ -56,32 +50,18 @@ export const getTicketDates = (ticketSchedules, event) => {
   return { start_date, end_date, allDates }
 }
 
-export const getDisabledState = (ticket, waitListSelected) => {
-  if (waitListSelected !== null) {
-    const { waitlist_enabled } = ticket.attributes
-    if (
-      (waitListSelected && !waitlist_enabled) ||
-      (!waitListSelected && waitlist_enabled)
-    ) {
-      return true
-    } else {
-      return false
-    }
-  } else {
-    return false
-  }
-}
-
-export const sortByAttribute = (list, attribute) => {
-  return list.sort((a, b) => {
-    const dateA = a.attributes[attribute]
-    const dateB = b.attributes[attribute]
-    if (dateA < dateB) {
-      return -1
-    } else if (dateA > dateB) {
-      return 1
-    } else {
-      return 0
-    }
-  })
-}
+// export const getDisabledState = (ticket, waitListSelected) => {
+//   if (waitListSelected !== null) {
+//     const { waitlist_enabled } = ticket.attributes
+//     if (
+//       (waitListSelected && !waitlist_enabled) ||
+//       (!waitListSelected && waitlist_enabled)
+//     ) {
+//       return true
+//     } else {
+//       return false
+//     }
+//   } else {
+//     return false
+//   }
+// }
