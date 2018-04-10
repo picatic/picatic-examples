@@ -8,7 +8,9 @@ class Login extends PureComponent {
       <DialogTextInput
         open
         title="Enter Picatic API Key"
-        value={user.apiKey}
+        value={
+          user.apiKey ? user.apiKey : 'sk_live_b71fbeade74128e358b5a1c24c91deb7'
+        }
         errorMessage={user.errorMessage}
         placeholder="sk_live_210eb57e6b95e5143c492a219091c4e5"
         handleClick={fetchUser}

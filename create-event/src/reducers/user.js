@@ -5,7 +5,7 @@ import * as types from '../constants/ActionTypes'
 const initialState = {
   attributes: {},
   id: null,
-  apiKey: '',
+  apiKey: null,
   errorMessage: null,
   isFetching: false,
 }
