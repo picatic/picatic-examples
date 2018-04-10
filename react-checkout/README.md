@@ -4,7 +4,7 @@ This project performs the checkout process of selling a ticket with the Picatic 
 
 Built with [create-react-app](https://github.com/facebookincubator/create-react-app), a global command-line utility used to create React projects.
 
-Check out the demo [here](https://picatic-react-demo.now.sh/).
+Check out the demo [here](picatic-react-demo.now.sh).
 
 # Getting Started
 
