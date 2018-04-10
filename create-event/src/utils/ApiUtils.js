@@ -8,11 +8,8 @@ const callApi = (url, method, apiKey, body) => {
     body: JSON.stringify(body),
   }
   return fetch(url, options)
-    .then(response => {
-      const json = response.json()
-      return response.ok ? json : json.then(Promise.reject.bind(Promise))
-    })
-    .then(json => ({ json }), errors => errors)
+    .then(response => response.json())
+    .then(json => json)
     .catch(error => ({ error }))
 }
 

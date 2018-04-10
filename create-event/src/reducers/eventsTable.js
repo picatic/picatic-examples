@@ -7,6 +7,11 @@ const initialState = {
   orderBy: 'start_date',
   rowsPerPage: 5,
   page: 0,
+  isFetching: false,
+  error: {
+    message: '',
+    status: null,
+  },
 }
 
 const eventsTable = (state = initialState, action) => {
@@ -16,6 +21,28 @@ const eventsTable = (state = initialState, action) => {
         ...state,
         [action.name]: action.value,
       }
+
+    case types.FETCH_EVENTS_REQUEST:
+      return {
+        ...state,
+        isFetching: true,
+      }
+
+    case types.FETCH_EVENTS_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+      }
+
+    case types.FETCH_EVENTS_ERROR:
+      return {
+        ...state,
+        error: {
+          message: action.message,
+          status: action.status,
+        },
+      }
+
     default:
       return state
   }

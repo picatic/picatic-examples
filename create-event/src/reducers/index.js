@@ -1,18 +1,22 @@
 /* @flow */
 
 import { combineReducers } from 'redux'
+import user from '../reducers/user'
 import events from '../reducers/events'
 import eventsTable from '../reducers/eventsTable'
-import user from '../reducers/user'
+import eventEditor from '../reducers/eventEditor'
 import snackbar from '../reducers/snackbar'
+import tickets from '../reducers/tickets'
 
 import { routerReducer as router } from 'react-router-redux'
 
 const rootReducer = combineReducers({
+  user,
   events,
   eventsTable,
-  user,
+  eventEditor,
   snackbar,
+  tickets,
   router,
 })
 

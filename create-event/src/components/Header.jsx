@@ -11,7 +11,7 @@ import Button from 'material-ui/Button'
 
 class Header extends Component {
   state = {
-    open: false
+    open: false,
   }
   handleRequestClose = () => {
     this.setState({ open: false })
@@ -21,7 +21,7 @@ class Header extends Component {
       <header>
         <AppBar position="static">
           <Toolbar>
-            <span className="header-title">Event Creator</span>
+            <span className="header-title">Picatic Example Event Creator</span>
             <Button
               color="contrast"
               className="nav-button"

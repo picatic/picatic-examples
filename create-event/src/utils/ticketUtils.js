@@ -1,30 +1,3 @@
-export const newTicketAttributes = type => ({
-  attributes: {
-    name: '',
-    price: type === 'free' ? '0.00' : '',
-    quantity: 0,
-    type,
-  },
-})
-
-export const createTicketBody = (ticket, eventId) => {
-  const { name, price, quantity } = ticket.attributes
-  return {
-    data: {
-      type: 'ticket_price',
-      attributes: {
-        name,
-        price,
-        quantity,
-        status: 'open',
-        event_id: Number(eventId),
-        who_pays_fees: 'promoter',
-        type: price === '0.00' ? 'free' : 'regular',
-      },
-    },
-  }
-}
-
 export const updateTicketBody = ticket => ({
   data: {
     attributes: {

@@ -1,8 +1,6 @@
 /* @flow */
 
 import * as types from '../constants/ActionTypes'
-import _ from 'lodash'
-import update from 'immutability-helper'
 import { createTicketBody, updateTicketBody } from '../utils/ticketUtils'
 import {
   CREATE_TICKET_PRICE_URL,
@@ -10,50 +8,71 @@ import {
 } from '../constants/ApiConstants'
 import { postApi, patchApi } from '../utils/ApiUtils'
 
-const fetchTicketSuccess = ticket => async (dispatch, getState) => {
-  const { events } = getState()
-  const eventIndex = _.findIndex(events, [
-    'id',
-    ticket.attributes.event_id.toString(),
-  ])
-  const { tickets } = events[eventIndex]
-  let ticketIndex = _.findIndex(tickets, ['id', ticket.id])
-  ticketIndex = ticketIndex >= 0 ? ticketIndex : tickets.length
-
-  const updatedTickets = update(tickets, {
-    [ticketIndex]: { $set: ticket },
-  })
-
-  const updatedEvents = update(events, {
-    [eventIndex]: {
-      tickets: { $set: updatedTickets },
-    },
-  })
-
-  dispatch({ type: types.UPDATE_EVENTS, updatedEvents })
+export const fetchTicketsSuccess = included => dispatch => {
+  const tickets = included.filter(({ type }) => type === 'ticket_price')
+  dispatch({ type: types.FETCH_TICKETS_SUCCESS, tickets })
 }
 
-export const fetchCreateTicket = (ticket, eventId) => async (
-  dispatch,
-  getState,
-) => {
+export const fetchTicketSuccess = ticket => ({
+  type: types.FETCH_TICKET_SUCCESS,
+  ticket,
+})
+
+export const fetchTicketCreateSuccess = ticket => ({
+  type: types.FETCH_CREATE_TICKET_SUCCESS,
+  ticket,
+})
+
+export const fetchCreateTicket = ticket => async (dispatch, getState) => {
   const { user } = getState()
-  const body = createTicketBody(ticket, eventId)
-  const { json } = await postApi(CREATE_TICKET_PRICE_URL, user.apiKey, body)
+  const body = { data: ticket }
+  const json = await postApi(CREATE_TICKET_PRICE_URL, user.apiKey, body)
+
   if (json) {
-    dispatch(fetchTicketSuccess(json.data))
+    const { data, errors } = json
+
+    if (data) {
+      dispatch(fetchTicketCreateSuccess(data))
+    }
   }
 }
 
 export const fetchUpdateTicket = ticket => async (dispatch, getState) => {
   const { user } = getState()
   const body = updateTicketBody(ticket)
-  const { json } = await patchApi(
+  const json = await patchApi(
     UPDATE_TICKET_PRICE_URL.replace(':id', ticket.id),
     user.apiKey,
     body,
   )
   if (json) {
-    dispatch(fetchTicketSuccess(json.data))
+    const { data, errors } = json
+
+    if (data) {
+      dispatch(fetchTicketSuccess(data))
+    }
   }
 }
+
+export const handleUpdateTicket = (name, value, ticket) => ({
+  type: types.HANDLE_UPDATE_TICKET,
+  name,
+  value,
+  ticket,
+})
+
+// validateTickets = () => {
+//   const { tickets } = this.state
+//   let error = false
+//   tickets.map(ticket => {
+//     const { name, price } = ticket.attributes
+//     const noName = name.length < 3
+//     const badPrice = price < 3 && price != 0
+//     if (noName || badPrice) {
+//       return (error = true)
+//     } else {
+//       return true
+//     }
+//   })
+//   return error
+// }

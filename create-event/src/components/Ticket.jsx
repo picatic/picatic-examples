@@ -4,13 +4,21 @@ import React from 'react'
 
 import TextField from 'material-ui/TextField'
 
-const Ticket = ({ ticket, submitted, handleChangeTicket, index }) => {
+const Ticket = ({ ticket, submitted, handleChangeTicket }) => {
   const handleChange = ev => {
     ev.preventDefault()
     const { name, value, type } = ev.target
-    const updatedValue = type === 'number' ? Number(value) : value
 
-    handleChangeTicket(name, updatedValue, index)
+    let updatedValue = value
+
+    if (type === 'number') {
+      updatedValue = Number(value)
+      if (updatedValue < 0) {
+        return
+      }
+    }
+
+    handleChangeTicket(name, updatedValue, ticket)
   }
 
   if (!ticket.attributes) {

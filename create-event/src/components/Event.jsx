@@ -1,189 +1,69 @@
 /* @flow */
 
 import React, { Component } from 'react'
-import update from 'immutability-helper'
-import _ from 'lodash'
 import Tickets from '../components/Tickets'
 
 import TextField from 'material-ui/TextField'
-import { FormControlLabel } from 'material-ui/Form'
-import Checkbox from 'material-ui/Checkbox'
 import Button from 'material-ui/Button'
 import Tooltip from 'material-ui/Tooltip'
 
-import { newTicketAttributes } from '../utils/ticketUtils'
-
-const initialState = {
-  attributes: null,
-  tickets: {},
-  id: null,
-  type: 'event',
-  submitted: false,
-  eventChanged: false,
-  ticketsChanged: [],
-  hasStripeAcc: null
-}
-
 class Event extends Component {
-  state = initialState
-
   componentWillMount() {
-    this.initEvent()
-    const hasStripeAcc = this.props.user.attributes.stripe_api_key !== null
-    this.setState({ hasStripeAcc })
+    const { event } = this.props
+    if (!event) return
+    this.setState({ event })
   }
 
-  componentWillUpdate(nextProps) {
-    const newEvent = nextProps.event.id !== this.state.id
-    if (newEvent) {
-      this.initEvent()
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.event.id !== this.state.event.id) {
+      this.props.resetEventEditor()
+      this.setState({ event: nextProps.event })
     }
-  }
-
-  initEvent = () => {
-    const { attributes, tickets, id } = this.props.event
-    this.setState({ attributes, tickets, id })
-  }
-
-  componentWillUnmount() {
-    this.setState({ initialState })
   }
 
   handleChangeEvent = ev => {
-    ev.preventDefault()
-    let { name, value, type } = ev.target
-    let { attributes } = this.state
+    this.props.eventEditorChange('eventChanged')
 
-    const isTime = type === 'time'
-    if (isTime && value) {
-      value = `${value}:00`
-    }
-
-    const end_date = name === 'start_date' ? value : attributes.start_date
-
+    const { name, value } = ev.target
     this.setState(prevState => ({
-      attributes: {
-        ...prevState.attributes,
-        [name]: value,
-        end_date
+      event: {
+        ...prevState.event,
+        attributes: {
+          ...prevState.event.attributes,
+          [name]: value,
+        },
       },
-      eventChanged: true
     }))
   }
 
-  handleChangeTicket = (name, value, index) => {
-    const newTickets = update(this.state.tickets, {
-      [index]: { attributes: { [name]: { $set: value } } }
-    })
-
-    let { ticketsChanged } = this.state
-    const newChangedTicket = ticketsChanged.indexOf(index) < 0
-    if (newChangedTicket) {
-      ticketsChanged = ticketsChanged.concat(index)
-    }
-
-    this.setState({ tickets: newTickets, ticketsChanged })
-  }
-
-  addTicket = type => {
-    const newTicket = newTicketAttributes(type)
-    const newTicketIndex = this.state.tickets.length
-    this.setState(prevState => ({
-      tickets: prevState.tickets.concat(newTicket),
-      ticketsChanged: prevState.ticketsChanged.concat(newTicketIndex)
-    }))
-  }
-
-  handleToggleTime = checked => {
-    const { attributes } = this.state
-    const value = checked ? '' : null
-
-    attributes['start_time'] = value
-    attributes['end_time'] = value
-
-    this.setState({ attributes, eventChanged: true })
-  }
-
-  validateTickets = () => {
-    const { tickets } = this.state
-    let error = false
-    tickets.map(ticket => {
-      const { name, price } = ticket.attributes
-      const noName = name.length < 3
-      const badPrice = price < 3 && price != 0
-      if (noName || badPrice) {
-        return (error = true)
-      } else {
-        return true
-      }
-    })
-    return error
-  }
-
-  handleSave = errorEvent => {
+  handleSaveEvent = () => {
+    const { event } = this.state
+    const { tickets } = this.props
     const {
       fetchUpdateEvent,
-      fetchUpdateTicket,
       fetchCreateTicket,
-      openSnackbar
+      fetchUpdateTicket,
     } = this.props
 
-    let {
-      attributes,
-      id,
-      tickets,
-      eventChanged,
-      ticketsChanged,
-      hasStripeAcc
-    } = this.state
-
-    const paidTickets =
-      _.findIndex(tickets, ticket => ticket.attributes.type === 'regular') >= 0
-    const freeEvent = attributes.type === 'free'
-
-    if (paidTickets && !hasStripeAcc) {
-      openSnackbar('No Stripe Account, remove paid tickets')
-      return false
+    const eventObj = {
+      ...event,
+      attributes: {
+        ...event.attributes,
+        end_date: event.attributes.start_date,
+      },
     }
 
-    const eventType = type => {
-      attributes['type'] = type
-      eventChanged = true
-    }
+    fetchUpdateEvent(eventObj)
 
-    !paidTickets && !freeEvent && eventType('free')
-    paidTickets && freeEvent && eventType('regular')
-
-    const errorTicket = this.validateTickets()
-    if (errorEvent || errorTicket) {
-      this.setState({ submitted: true })
-      openSnackbar('Incomplete Form')
-      return false
-    } else {
-      if (eventChanged) {
-        fetchUpdateEvent({ attributes, id }).then(() => this.initEvent())
-      }
-      ticketsChanged.map(index => {
-        const ticket = tickets[index]
-        if (ticket.id) {
-          fetchUpdateTicket(ticket).then(() => this.initEvent())
-        } else {
-          fetchCreateTicket(ticket, id).then(() => this.initEvent())
-        }
-        return true
-      })
-      this.setState({
-        submitted: false,
-        eventChanged: false,
-        ticketsChanged: []
-      })
-      return true
-    }
+    tickets.map(ticket => {
+      fetchUpdateTicket(ticket)
+      return
+    })
   }
 
-  handleActivate = async errorEvent => {
-    const { event, fetchActivateEvent, openSnackbar } = this.props
-    const { tickets } = this.state
+  handleActivate = () => {
+    const { event } = this.state
+    const { tickets, fetchActivateEvent, openSnackbar } = this.props
 
     const noTickets = tickets.length <= 0
     if (noTickets) {
@@ -191,46 +71,51 @@ class Event extends Component {
       return false
     }
 
-    const response = await this.handleSave(errorEvent)
-    if (response) {
-      fetchActivateEvent(event)
+    fetchActivateEvent(event)
+  }
+
+  handleChangeTicket = (name, value, ticket) => {
+    const { handleUpdateTicket, eventEditorChange } = this.props
+    eventEditorChange('ticketChanged')
+    handleUpdateTicket(name, value, ticket)
+  }
+
+  addTicket = type => () => {
+    const { event } = this.state
+    const { fetchCreateTicket, eventEditorChange } = this.props
+
+    const ticket = {
+      type: 'ticket_price',
+      attributes: {
+        name: 'General Admission',
+        price: type === 'free' ? '0.00' : '3.00',
+        quantity: 0,
+        status: 'open',
+        event_id: Number(event.id),
+        who_pays_fees: 'promoter',
+        type,
+      },
     }
+
+    eventEditorChange('ticketChanged')
+    fetchCreateTicket(ticket)
   }
 
   render() {
-    const {
-      attributes,
-      tickets,
-      eventChanged,
-      ticketsChanged,
-      submitted,
-      hasStripeAcc
-    } = this.state
+    const { event } = this.state
+    const { eventEditor, user, tickets } = this.props
+
+    const { attributes } = event
 
     if (!attributes) {
       return 'No Event Found'
     }
 
-    const {
-      title,
-      start_date,
-      start_time,
-      end_time,
-      venue_name,
-      venue_street,
-      status
-    } = attributes
+    const { title, start_date, venue_name, venue_street, status } = attributes
 
-    // Error Handling
-    const allDay = start_time === null && end_time === null
-    const noTitle = title.length < 3
-    const noTime = allDay ? false : !start_time || !end_time
-    const endBeforeStart = end_time < start_time && !!end_time
+    const { eventChanged, ticketChanged } = eventEditor
 
-    let errorEvent = false
-    if (noTitle || !start_date || noTime || endBeforeStart) {
-      errorEvent = true
-    }
+    const hasStripeAcc = user.attributes.stripe_api_key !== null
 
     return (
       <div className="w-75 mx-auto">
@@ -242,16 +127,15 @@ class Event extends Component {
               name="title"
               value={title}
               onChange={this.handleChangeEvent}
-              error={submitted && noTitle}
               fullWidth
             />
           </div>
           <div className="col">
             <Button
+              disabled={!eventChanged && !ticketChanged}
               raised
-              onClick={() => this.handleSave(errorEvent)}
+              onClick={this.handleSaveEvent}
               className="mr-3"
-              disabled={!eventChanged && ticketsChanged.length <= 0}
             >
               Save
             </Button>
@@ -264,7 +148,7 @@ class Event extends Component {
                 <button className="event-active-dot" />
               </Tooltip>
             ) : (
-              <Button raised onClick={() => this.handleActivate(errorEvent)}>
+              <Button raised onClick={this.handleActivate}>
                 Go Live
               </Button>
             )}
@@ -274,7 +158,7 @@ class Event extends Component {
         <section className="row">
           <div className="col-md-6">
             <div className="row">
-              <div className="col-12">
+              <div className="col-12 mb-4">
                 <TextField
                   type="date"
                   label="Event Date"
@@ -282,71 +166,13 @@ class Event extends Component {
                   value={start_date}
                   onChange={this.handleChangeEvent}
                   InputLabelProps={{
-                    shrink: true
+                    shrink: true,
                   }}
-                  error={submitted && !start_date}
                   fullWidth
-                />
-              </div>
-              <div className="col">
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={allDay}
-                      onChange={() => this.handleToggleTime(allDay)}
-                    />
-                  }
-                  label="All day"
                 />
               </div>
             </div>
           </div>
-
-          {!allDay && (
-            <div className="col-md-3 mb-4">
-              <TextField
-                type="time"
-                label="Start Time"
-                name="start_time"
-                value={!start_time ? '' : start_time}
-                onChange={this.handleChangeEvent}
-                inputProps={{
-                  step: 300 // 5 min
-                }}
-                InputLabelProps={{
-                  shrink: true
-                }}
-                helperText={
-                  submitted && !start_time && 'Must have a start time'
-                }
-                error={submitted && !start_time}
-                fullWidth
-              />
-            </div>
-          )}
-          {!allDay && (
-            <div className="col-md-3 mb-4">
-              <TextField
-                type="time"
-                label="End Time"
-                name="end_time"
-                value={!end_time ? '' : end_time}
-                onChange={this.handleChangeEvent}
-                inputProps={{
-                  step: 300 // 5 min
-                }}
-                InputLabelProps={{
-                  shrink: true
-                }}
-                helperText={
-                  (submitted && !end_time && 'Must have an end time') ||
-                  (endBeforeStart && 'End time must be after start time')
-                }
-                error={(submitted && !end_time) || endBeforeStart}
-                fullWidth
-              />
-            </div>
-          )}
         </section>
         <section className="row">
           <div className="col-md-6 mb-4">
@@ -373,7 +199,6 @@ class Event extends Component {
         <Tickets
           tickets={tickets}
           paid={hasStripeAcc}
-          submitted={submitted}
           addTicket={this.addTicket}
           handleChangeTicket={this.handleChangeTicket}
         />
