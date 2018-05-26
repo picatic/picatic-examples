@@ -8,7 +8,6 @@
   },
   "license": "MIT",
   "scripts": {
-    "start:local": "source .env && npm run start",
     "start": "node src/server"
   },
   "repository": {},

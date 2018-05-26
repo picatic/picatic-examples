@@ -7,21 +7,19 @@ const buttonResponse = require('./buttonResponse')
 
 //Copy & Paste from rapid api slack code section: https://rapidapi.com/package/Slack/functions/getUserProfile
 const RapidAPI = require('rapidapi-connect')
-const rapid = new RapidAPI("Your-Rapidapi-project-id", "Rapid-api-project-key")
+const rapid = new RapidAPI('Your-Rapidapi-project-id', 'Rapid-api-project-key')
 
-rapid.listen('Slack', 'slashCommand', {
-  'token': "Your-Slack-App-Token", //Slack_App_Verification_Token: Create your slack app here https://api.slack.com/apps and then get its token
-  'command': '/p'
-})
-  .on('join', () => {
+rapid
+  .listen('Slack', 'slashCommand', {
+    token: 'Your-Slack-App-Token', //Slack_App_Verification_Token: Create your slack app here https://api.slack.com/apps and then get its token
+    command: '/p',
   })
-  .on('message', (message) => {
+  .on('join', () => {})
+  .on('message', message => {
     commandResponse(message)
   })
-  .on('error', (error) => {
-  })
-  .on('close', (reason) => {
-  });
+  .on('error', error => {})
+  .on('close', reason => {})
 
 //Get Button Response
 const app = new Express()
@@ -31,12 +29,12 @@ const port = 8080
 
 app.post('/', (req, res) => {
   res.status(200).end()
-  var url = JSON.parse(req.body.payload).response_url
-  var message = {
-    "text": "You just registered! Ticket will be sent to you via Slack.",
-    "replace_original": false
+  const url = JSON.parse(req.body.payload).response_url
+  const message = {
+    text: 'You just registered! Ticket will be sent to you via Slack.',
+    replace_original: false,
   }
-  var data = JSON.parse(req.body.payload)
+  const data = JSON.parse(req.body.payload)
   post(message, url)
   buttonResponse(data)
 })
