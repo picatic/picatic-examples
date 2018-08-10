@@ -9,10 +9,10 @@ class Login extends PureComponent {
         open
         title="Enter Picatic API Key"
         value={
-          user.apiKey ? user.apiKey : 'sk_live_b71fbeade74128e358b5a1c24c91deb7'
+          user.apiKey ? user.apiKey : ''
         }
         errorMessage={user.errorMessage}
-        placeholder="sk_live_210eb57e6b95e5143c492a219091c4e5"
+        placeholder="sk_live_xxxxxxxxxxxxxxxxxxxxxxxxxx"
         handleClick={fetchUser}
         buttonText="Login"
         required
