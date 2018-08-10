@@ -9,9 +9,9 @@ Visit http://developer.picatic.com to learn more.
 
 # Demos
 
-Picatic Anywhere: http://promo.picatic.com/anywhere/
+Picatic Anywhere: https://www.picatic.com/m/feature/anywhere
 
-Event Page: https://react-event-page.now.sh/
+Event Page: https://event-creator.picatic.io/
 
-React Checkout: https://picatic-react-demo.now.sh/
-[![Checkout Gif](/assets/react-checkout.gif)](https://picatic-react-demo.now.sh/)
+React Checkout: https://checkout.picatic.io/
+[![Checkout Gif](/assets/react-checkout.gif)](https://checkout.picatic.io/)
